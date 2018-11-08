@@ -1,10 +1,10 @@
-Requirements Specification	%age	Proofread by
-Overview and Justification	5	    Kristian
-Scope	                      5	    Jake
-System Description	        15	  Frank
-Solution Requirements	      35	  Jake, Matt
-Open Issues	                10	  Chris
-Development Approach	      10	  Frank
-Terms and References	      5	    Kristian
-Project Schedule	          10	  Jake
-Presentation of Document	  5	    Chris
+Requirements Specification	%age	Proofread by<br />
+Overview and Justification	5	    Kristian<br />
+Scope	                      5	    Jake<br />
+System Description	        15	  Frank<br />
+Solution Requirements	      35	  Jake, Matt<br />
+Open Issues	                10	  Chris<br />
+Development Approach	      10	  Frank<br />
+Terms and References	      5	    Kristian<br />
+Project Schedule	          10	  Jake<br />
+Presentation of Document	  5	    Chris<br />
