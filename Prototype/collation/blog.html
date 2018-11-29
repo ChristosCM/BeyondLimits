@@ -1,58 +1,74 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<!-- Optional theme -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<link rel = "stylesheet" type = "text/css" href = "main.css" />
 	</head>
 	<body>
-		<nav class="navbar navbar-default navbar-top">
-		  <div class="container">
-		    <a class="title navbar-brand" style = "color:white;font-weight:bold;">BeyondLimits</a>
-		    <ul class="nav navbar-nav">
-	        <li><a href="#">Home</a></li>
-	        <li><a href="#">About Us</a></li>
-	        <li><a href="#">Events</a></li>
-	        <li><a href="#">How we can help</a></li>
-	        <li><a href="#">Volunteer</a></li>
-	        <li class="active"><a href="#">Blog</a></li>
-	        <form class="navbar-form navbar-left">
-	        <div class="form-group">
-	          <input type="text" class="form-control" placeholder="Search">
-	        </div>
-	        <button type="submit" class="btn btn-default">Submit</button>
-	      </form>
-		</nav>
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="title navbar-brand mb-0 h1" style = "color:white;font-weight:bold;">BeyondLimits</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">About Us</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Events</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">How we can help</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Volunteer</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Blog</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
 		<div class = "container">
-			<div class = "row">
-				<div class="col-md-6 offset-md-3" id = "blueblock">
+			<div class = "row mt-5">
+				<div class="col" id = "blueblock">
 					<h3 id = "whiteh4" class = "blueH">Posts</h3>
 					<ul class="timeline">
 						<li>
-							<a target="_blank" href="#">Post Title 1, </a>
+							<a target="_blank" href="#">Post Title 1 </a>
 							<a href="#" class="float-right">21 March, 2014</a>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper, et elementum lorem ornare. Maecenas placerat facilisis mollis. Duis sagittis ligula in sodales vehicula....</p>
 						</li>
 						<li>
-							<a target="_blank" href="#">Post Title 2, </a>
+							<a target="_blank" href="#">Post Title 2 </a>
 							<a href="#" class="float-right">20 March, 2014</a>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper, et elementum lorem ornare. Maecenas placerat facilisis mollis. Duis sagittis ligula in sodales vehicula....</p>
 						</li>
 						<li>
-							<a target="_blank" href="#">Post Title 2, </a>
+							<a target="_blank" href="#">Post Title 2 </a>
 							<a href="#" class="float-right">19 March, 2014</a>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper, et elementum lorem ornare. Maecenas placerat facilisis mollis. Duis sagittis ligula in sodales vehicula....</p>
 						</li>
 					</ul>
 				</div>
-				<div class = "col-md-auto">
+				<div class = "col">
 					<h3 class = "blueH">Testimonials</h3>
-					<div class = "ml-20 testimonials">
-						<div class="media" style = "float:bottom;"><div class="media-left media-middle"><a href="#"><img class="media-object" src="ppexample.png" alt="Picture User" height = 100, width = 100></a></div><div class="media-body"><h4 class="media-heading"><a href = "#">John Smith</a></h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper, et elementum lorem ornare. Maecenas placerat facilisis mollis. Duis sagittis ligula in sodales vehicula....</div></div>
+					<div class = "ml-1 testimonials">
+						<div class="media" style = "float:bottom;"><div class="media-left media-middle"><a href="#"><img class="media-object mr-3" src="ppexample.png" alt="Picture User" height = 100, width = 100></a></div><div class="media-body"><h4 class="media-heading"><a href = "#">John Smith</a></h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper, et elementum lorem ornare. Maecenas placerat facilisis mollis. Duis sagittis ligula in sodales vehicula....</div></div>
 					</div>
 				</div>
 			</div>
