@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<head>
+    <title>Volunteer</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type=text/css href="stylesheet1.css">
+</head>
+
+<body>
+    <h1>Become A Volunteer</h1>
+    
+<div class="container">
+        <h2>Find Information about how to become a volunteer</h2>
+        <p></p>
+      
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#home">How Do I Apply?</a></li>
+          <li><a data-toggle="tab" href="#apply">Online Application</a></li>
+          <li><a data-toggle="tab" href="#moreInfo">More Information</a></li>
+        </ul>
+      
+        <div class="tab-content">
+          <div id="home" class="tab-pane fade in active">
+            <h3>How Do I Apply?</h3>
+            <dl class="dl-vertical">
+              <dt>1. Fill out your details</dt>
+              <dd>Complete the form online.</dd>
+              <dt>2. We'll review your application</dt>
+              <dd>A member of our admin team will review your application and get in touch with you using the contact details you have provided.</dd>
+              <dt>3. We'll ask you to help out</dt>
+              <dd>We will check your availability for the upcoming events. Please let us know what life skills you have that you can bring to Beyond Limits.</dd>
+              <dt>4. Volunteering Day</dt>
+              <dd>On this day with a Team Leader, we will provide you with training to do the task you have volunteered to do.</dd>
+              
+            </dl>
+          </div>
+          <div id="apply" class="tab-pane fade">
+            <h3>Apply To Become A Volunteer!</h3>
+            <p>Some more info and the online form</p>
+            <form class="form-horizontal">
+              <!--The following is a list with all the form fileds-->
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="fname">First Name:</label>
+                <div class="col-xs-2">
+                  <input type="text" class="form-control" id="fname" placeholder="Enter First Name" name="fname">
+                </div>
+              </div>
+              <!--Form field for last name-->
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="lname">Last Name:</label>
+                <div class="col-xs-3">          
+                  <input type="text" class="form-control" id="lname" placeholder="Enter Last Name" name="lname">
+                </div>
+              </div>
+              <!--Form field for email-->
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="email">Email:</label>
+                <div class="col-xs-4">
+                <input type="email" class="form-control" id="email" placeholder="Enter Email" name="email">
+                </div>
+              </div>
+              <div class = "form-group">
+                <label class="control-label col-sm-2" for="address1">Address Line 1:</label>
+                <div class = "col-xs-3">
+                  <input type="text" class="form-control" id="address1" placeholder="Street Address Line 1" name="address1">
+                </div>
+              </div>
+              <div class = "form-group">
+                <label class="control-label col-sm-2" for="address2">Address Line 2:</label>
+                <div class = "col-xs-3">
+                  <input type="text" class="form-control" id="address2" placeholder="Street Address Line 2" name="address2">
+                </div>
+              </div>
+              <div class = "form-group">
+                <label class="control-label col-sm-2" for="county">County:</label>
+                <div class = "col-xs-2">
+                  <input type="text" class="form-control" id="county" placeholder="County" name="county">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="info">Your Message:</label>
+                <div class="col-sm-10">
+                  <textarea class="form-control" rows="5" id="info"></textarea>
+                </div>
+              </div>
+
+              <div class="form-group">        
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="moreInfo" class="tab-pane fade">
+            <h3>More Information</h3>
+            <p>Contact information and maybe some FAQ</p>
+          </div>
+        </div>
+      </div>
+      
+</body>
