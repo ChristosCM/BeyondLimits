@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>AdminPrototype1</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+    <li><a data-toggle="tab" href="#aboutus">About us</a></li>
+    <li><a data-toggle="tab" href="#events">Events</a></li>
+
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">How we can help
+        <span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a data-toggle="tab" href="#wehelpmain">Main</a></li>
+        <li><a data-toggle="tab" href="#wehelptesti">Testimonials</a></li>
+      </ul>
+    </li>
+
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">How you can help
+        <span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a data-toggle="tab" href="#youhelpmain">Main</a></li>
+        <li><a data-toggle="tab" href="#youhelptesti">Testimonials</a></li>
+      </ul>
+    </li>
+
+    <li><a data-toggle="tab" href="#blog">Blog</a></li>
+    <li><a data-toggle="tab" href="#stats">Statistics</a></li>
+  </ul>
+
+  <div class="tab-content">
+
+    <div id="home" class="tab-pane fade in active">
+      <h3>Home</h3>
+      <p>Welcome to beyond limits' admin page</p>
+    </div>
+
+    <div id="aboutus" class="tab-pane fade">
+      <h3>About Us</h3>
+      <p>Some content in menu 1.</p>
+    </div>
+
+    <div id="events" class="tab-pane fade">
+      <h3>Events</h3>
+      <p>Some content in menu 2.</p>
+      <button data-toggle="collapse" data-target="#eventsView">View</button>
+      <div id="eventsView" class="collapse">
+        This will show a list of the events currently scheduled
+      </div>
+
+      <button data-toggle="collapse" data-target="#eventsCreate">Create event</button>
+      <div id="eventsCreate" class="collapse">
+        Form to create a new event
+        <form class="form-inline" action="/action_page.php">
+          <div class="form-group">
+            <label for="eventTitle">Event Title</label>
+            <input type="eventTitle" class="form-control" id="eventTitle">
+          </div>
+          <div class="form-group">
+            <label for="eventDate">eventDate</label>
+            <input type="eventDate" class="form-control" id="eventDate">
+          </div>
+        </form>
+      </div>
+
+      <button data-toggle="collapse" data-target="#eventsEdit">Edit event</button>
+      <div id="eventsEdit" class="collapse">
+        This will allow editing and deleting of current events
+      </div>
+    </div>
+
+    <div id="wehelpmain" class="tab-pane fade">
+      <h3>How we can help</h3>
+      <p>Some content in menu 2.</p>
+    </div>
+
+    <div id="youhelpmain" class="tab-pane fade">
+      <h3>How you can help</h3>
+      <p>Some content in menu 2.</p>
+    </div>
+
+    <div id="blog" class="tab-pane fade">
+      <h3>Blog</h3>
+      <p>Some content in menu 2.</p>
+    </div>
+
+    <div id="wehelptesti" class="tab-pane fade">
+      <h3>'User' Testimonials</h3>
+      <p>Some content in menu 2.</p>
+    </div>
+
+    <div id="youhelptesti" class="tab-pane fade">
+      <h3>Volunteer Testimonials</h3>
+      <p>Some content in menu 2.</p>
+    </div>
+
+    <div id="stats" class="tab-pane fade">
+      <h3>Fancy graphs</h3>
+      <p>yeeeeeeeet</p>
+    </div>
+  </div>
+
+</body>
+</html>
