@@ -1,0 +1,33 @@
+
+Tasks for Prototype/Minutes of meeting
+
+	- PHP for the form - 					Christos 
+	- User stories (either 3 or 4) -		 Frank(Admin and general one) and Jake (Volunteer and person seeking help)
+	- Create presentation 
+		create powerpoint 
+		write what we need to say
+
+	- Presenting 						Matt and Christos
+	
+	- Create a general style-sheet: 			Frank
+	
+	- Home page redesign close to final		 Matt
+
+	- Sheet for review 						Christos
+ 
+	- Footer (use blue colour)				 Christos
+
+	- Navbar: Jake
+
+	Complete these by Sunday:
+
+	- Each html page write what you want to say about it (your idea for it and how do you picture it moving forward)
+	- Introduction to project: 				Jake
+	- Outline Aims and Goals: 				Christos
+	- Review the plan: 						Frank
+	- Summarising the deliverables agreed in the requirements specification: Matt
+
+	+ if you think we need anything else write it down
+
+
+Wednesday at 10am-12
