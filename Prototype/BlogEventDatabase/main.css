@@ -1,3 +1,23 @@
+#whiteh4{
+    color:white;
+}
+#blueblock{
+    color:white;
+    background-color:#87CEEB;
+    margin-right:30px;
+}
+.title{
+    background-color:#87CEEB;
+    color:#000;
+}
+.title:hover{
+    background-color:#87CEEB;
+}
+.blueH{
+    color:#87CEEB;
+    font-size:38px;
+    font-weight:bold;
+}
 ul.timeline {
     list-style-type: none;
     position: relative;
