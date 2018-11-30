@@ -12,6 +12,7 @@
 .title{
     background-color:#87CEEB;
     color:#000;
+    border-radius: 10px;
 }
 .title:hover{
     background-color:#87CEEB;
@@ -20,6 +21,7 @@
     color:#87CEEB;
     font-size:38px;
     font-weight:bold;
+    text-align:center;
 }
 ul.timeline {
     list-style-type: none;
