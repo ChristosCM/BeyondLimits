@@ -7,3 +7,8 @@ the set of 3 panels. I also made a database. This currently stores details about
 , etc. It also stores volunteer information, and has a linking table between the events and volunteers; what \n
 events did a volunteer take part in. In the final product this could be linked to a page; on the admin page\n
 which shows graphs of correlations between statistics. I have demonstrated this in the chartexample.html file.
+
+I see the charts being combined into the admin page and being linked to data coming from the database. The \n
+blog page will be able to link to the database on the backend which will be updated; adding posts and testimonials,\n
+on the admin page. The events page will also be fully customisable from the admin page; pictures will be changeable, \n
+event titles, text, etc.
