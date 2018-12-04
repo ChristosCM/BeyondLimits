@@ -1,0 +1,118 @@
+<!doctype html>
+<head>
+  <title>How We Can Help</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel = "stylesheet" type = "text/css" href = "stylesheets/main.css"
+</head>
+
+<body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="title navbar-brand mb-0 h1" style = "color:white;font-weight:bold;">BeyondLimits</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="home.htm">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="aboutus.htm">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="events.html">Events</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#">How we can help <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="volunteer.htm">Volunteer</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="blog.html">Blog</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+  <div class="container mt-3">
+    <h1>Need a helping hand?</h1>
+    <h2 style = "color:#87CEEB; text-align:center;">Find ways that we can help you...</h2>
+
+    <ul class="nav nav-tabs">
+      <li class="nav-item"><a class = "nav-link active" data-toggle="tab" href="#home">What we can do for you</a></li>
+      <li class = "nav-item"><a class = "nav-link" data-toggle="tab" href="#apply">Send us your message</a></li>
+      <li class = "nav-item"><a class = "nav-link" data-toggle="tab" href="#moreInfo">More Information</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="home" class="tab-pane active">
+        <h3>About Our Services</h3>
+        <p>Beyond Limits aims to provide a place of peace or retreat to relieve anyone in poverty or distress by reason of youth, age, ill-health, disability, financial hardship or other disadvantage by providing the facilities to allow individuals and families to spend time away from home to reconnect with themselves, their families or with others.</p>
+        <p>
+          We also promote learning through the continued development of individual capabilities, competencies, skills and understanding in subjects of educational & personal value by providing training and development of skills and knowledge to those attending the retreat as a result of youth, age, ill-health, disability, financial hardship or other disadvantage allowing them to succeed beyond their limits.
+        </p>
+        <p>
+          We provide relief of financial hardship by providing such persons with goods, which they could not otherwise afford through lack of means. We operate with a Christian Ethos.
+        </p>
+      </div>
+      <div id="apply" class="tab-pane fade">
+        <h3>Send us your message!</h3>
+        <p>Here is our contact info if you want to get in touch</p>
+        <form class="form-horizontal">
+          <!--The following is a list with all the form fileds-->
+          <div class="form-group row">
+            <label class="control-label col-sm-2" for="fname">First Name:</label>
+            <div class="col-xs-2">
+              <input type="text" class="form-control" id="fname" placeholder="First Name" name="fname">
+            </div>
+          </div>
+          <!--Form field for last name-->
+          <div class="form-group row">
+            <label class="control-label col-sm-2" for="lname">Last Name:</label>
+            <div class="col-xs-3">
+              <input type="text" class="form-control" id="lname" placeholder="Last Name" name="lname">
+            </div>
+          </div>
+          <!--Form field for email-->
+          <div class="form-group row">
+            <label class="control-label col-sm-2" for="email">Email:</label>
+            <div class="col-xs-4">
+              <input type="email" class="form-control" id="email" placeholder="Email" name="email">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2" for="info">Your Message:</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" rows="5" id="info"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id="moreInfo" class="tab-pane fade">
+        <p>More information depending on what they want to say</p>
+
+      </div>
+    </div>
+  </div>
+  <!-- have a link for the form that they can help -->
+
+  <!-- ask them for more information regarding either this specific page or the content that will go in this -->
+</body>
