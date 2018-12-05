@@ -23,7 +23,7 @@ if(isset($_POST['submit'])){
     // }
     
 
-    $to = "nai.chris5@gmail.com.com"; // this is your Email address
+    $to = "nai.chris5@gmail.com"; // this is your Email address
     $from = $_POST['email']; // this is the sender's Email address
     $first_name = $_POST['fname'];
     $last_name = $_POST['lname'];
