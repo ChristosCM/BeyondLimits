@@ -59,6 +59,7 @@ dt {
     background-color:#87CEEB;
     color:#000;
     border-radius: 10px;
+    padding:10px;
 }
 .event-image{
     float:left;
