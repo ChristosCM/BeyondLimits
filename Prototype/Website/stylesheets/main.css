@@ -44,6 +44,9 @@ dt {
     font-weight: bold;
     padding: 5px;
 }
+.tabAdmin{
+    width:100%;
+}
 #whiteh4{
     color:white;
 }
