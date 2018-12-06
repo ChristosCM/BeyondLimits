@@ -23,17 +23,23 @@ if(isset($_POST['submit'])){
         $mail->SetFrom('testingemailCM@gmail.com', 'Mailer');
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
+        $address1 = $_POST["address1"];
         $email = $_POST['email'];
+        $address2 = $_POST["address2"];
+        $county = $_POST["county"];
         $info = $_POST["info"];
         
-        $mail->Subject    = "Seeking Help Form by: " . $fname;
+        $mail->Subject    = "Volunteer Form by: " . $fname;
 
 
-        $email_message = "Person Seeking Help<br/><br/>";
+        $email_message = "VOLUTEER<br/><br/>";
         $email_message .= "Form details below.<br/><br/>";
         $email_message .= "<b>First Name:</b> ".($fname)."<br/>";
         $email_message .= "<b>Last Name: </b>".($lname)."<br/>";
         $email_message .= "<b>Email: </b>".($email)."<br/>";
+        $email_message .= "<b>Address: </b>".($address1)." ";
+        $email_message .= ($address2)." ";
+        $email_message .= ($county)."<br/>";
         $email_message .= "<b>Message:</b> ".($info)."<br/>";
 
         $mail->isHTML(true);
@@ -52,5 +58,6 @@ if(isset($_POST['submit'])){
             echo 'Message could not be sent. We apologise for the incovinience. Error: ' , $mail->ErrorInfo;
     }
 }
+header( "Location: http://localhost:80/website/volunteer.htm" )
 ?>
 
