@@ -9,10 +9,13 @@
   <link rel = "stylesheet" type = "text/css" href = "stylesheets/main.css"/>
 </head>
 <body>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script src = "activeWorkaround.js"></script>
+  <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
+  <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css"
 
   <nav class="navbar navbar-light bg-light">
     <a class="title navbar-brand mb-0 h1" style = "color:white;font-weight:bold;">BeyondLimits Administrator Controls</a>
@@ -55,10 +58,17 @@
 
     <div id="home" class="tab-pane fade show active container">
       <h3>Home</h3>
-      <div class="form-group">
-        <label for="homemain">Homepage message:</label>
-        <textarea class="form-control" rows="5" id="homemain">Welcome to Beyond Limits,</textarea>
-      </div>
+      <textarea id="editorhome">
+        <div style="text-align: center;">Welcome to beyond limits</div>
+        </div>
+      </textarea>
+      <script type="text/javascript">
+        $(document).ready(function () {
+          $("#editorhome").editor({
+            uiLibrary: 'bootstrap4'
+          });
+        });
+      </script>
       <button type="button" class="btn btn-primary">Submit</button>
       <form>
         <div class="form-group">
@@ -67,18 +77,27 @@
         </div>
         <button type="button" class="btn btn-primary">Submit</button>
       </form>
+
     </div>
+
 
     <div id="aboutus" class="tab-pane fade container">
       <h3>About Us</h3>
-      <div class="form-group">
-        <label for="aboutus">About us text:</label>
-        <textarea class="form-control" rows="5" id="aboutus">Beyond Limits aims to provide a place of peace or retreat to relieve anyone in poverty or distress by reason of youth, age, ill-health, disability, financial hardship or other disadvantage by providing the facilities to allow individuals and families to spend time away from home to reconnect with themselves, their families or with others.
+      <textarea id="editoraboutus">
+        <div style="text-align: center;">Beyond Limits aims to provide a place of peace or retreat to relieve anyone in poverty or distress by reason of youth, age, ill-health, disability, financial hardship or other disadvantage by providing the facilities to allow individuals and families to spend time away from home to reconnect with themselves, their families or with others.
 
 We also promote learning through the continued development of individual capabilities, competencies, skills and understanding in subjects of educational & personal value by providing training and development of skills and knowledge to those attending the retreat as a result of youth, age, ill-health, disability, financial hardship or other disadvantage allowing them to succeed beyond their limits.
 
-We provide relief of financial hardship by providing such persons with goods, which they could not otherwise afford through lack of means. We operate with a Christian Ethos.</textarea>
-      </div>
+We provide relief of financial hardship by providing such persons with goods, which they could not otherwise afford through lack of means. We operate with a Christian Ethos.</div>
+        </div>
+      </textarea>
+      <script type="text/javascript">
+        $(document).ready(function () {
+          $("#editoraboutus").editor({
+            uiLibrary: 'bootstrap4'
+          });
+        });
+      </script>
       <button type="button" class="btn btn-primary">Submit</button>
     </div>
 
@@ -149,9 +168,18 @@ We provide relief of financial hardship by providing such persons with goods, wh
 
     <div id="volunteermain" class="tab-pane fade container">
       <h3>How you can help</h3>
+      <p>How do I apply</p>
       <div class="form-group">
         <label for="volunteermain">Text:</label>
-        <textarea class="form-control" rows="5" id="volunteermain">Volunteering opportunities</textarea>
+        <textarea class="form-control" rows="5" id="volunteermain">
+1. Fill out your details
+    Complete the form online.
+2. We'll review your application
+    A member of our admin team will review your application and get in touch with you using the contact details you have provided.
+3. We'll ask you to help out
+    We will check your availability for the upcoming events. Please let us know what life skills you have that you can bring to Beyond Limits.
+4. Volunteering Day
+    On this day with a Team Leader, we will provide you with training to do the task you have volunteered to do. </textarea>
         </div>
       <button type="button" class="btn btn-primary">Submit</button>
     </div>
