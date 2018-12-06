@@ -30,15 +30,7 @@
     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#events">Events</a></li>
 
     <li class="dropdown nav-item">
-      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">How we can help<span class="caret"></span></a>
-      <ul class="dropdown-menu">
-        <li><a class = "nav-tabs"  data-toggle="tab" href="#wehelpmain">What we can do for you</a></li>
-        <li><a class = "nav-tabs" data-toggle="tab" href="#wehelpmore">More information</a></li>
-      </ul>
-    </li>
-
-    <li class="dropdown nav-item">
-      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">How we can help<span class="caret"></span></a>
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">How we can help</a>
       <ul class="dropdown-menu">
         <li><a class="nav-tabs dropdown-tabs" data-toggle="tab" href="#wehelpmain">What we can do for you</a></li>
         <li><a class="nav-tabs dropdown-tabs" data-toggle="tab" href="#wehelpmore">More information</a></li>
@@ -63,17 +55,22 @@
 
     <div id="home" class="tab-pane fade show active container">
       <h3>Home</h3>
-      <p>Edit the main text</p>
       <div class="form-group">
         <label for="homemain">Homepage message:</label>
         <textarea class="form-control" rows="5" id="homemain">Welcome to Beyond Limits,</textarea>
       </div>
       <button type="button" class="btn btn-primary">Submit</button>
+      <form>
+        <div class="form-group">
+          <label for="exampleFormControlFile1">Image to be added to carousel</label>
+          <input type="file" class="form-control-file" id="exampleFormControlFile1">
+        </div>
+        <button type="button" class="btn btn-primary">Submit</button>
+      </form>
     </div>
 
     <div id="aboutus" class="tab-pane fade container">
       <h3>About Us</h3>
-      <p>Edit contents of About us page</p>
       <div class="form-group">
         <label for="aboutus">About us text:</label>
         <textarea class="form-control" rows="5" id="aboutus">Beyond Limits aims to provide a place of peace or retreat to relieve anyone in poverty or distress by reason of youth, age, ill-health, disability, financial hardship or other disadvantage by providing the facilities to allow individuals and families to spend time away from home to reconnect with themselves, their families or with others.
@@ -100,8 +97,8 @@ We provide relief of financial hardship by providing such persons with goods, wh
             <input type="eventDate" class="form-control" id="eventDate">
           </div>
         </form>
+        <button type="button" class="btn btn-primary">Submit</button>
       </div>
-      <p></p>
       <button class="btn btn-primary" data-toggle="collapse" data-target="#eventsEdit">Edit event</button>
       <div id="eventsEdit" class="collapse container">
         This will allow editing and deleting of current events
@@ -130,7 +127,6 @@ We provide relief of financial hardship by providing such persons with goods, wh
 
     <div id="wehelpmain" class="tab-pane fade container">
       <h3>How we can help</h3>
-      <p>What we can do for you:</p>
       <div class="form-group">
         <label for="wehelpmain">Text:</label>
         <textarea class="form-control" rows="5" id="wehelpmain">Beyond Limits aims to provide a place of peace or retreat to relieve anyone in poverty or distress by reason of youth, age, ill-health, disability, financial hardship or other disadvantage by providing the facilities to allow individuals and families to spend time away from home to reconnect with themselves, their families or with others.
@@ -274,6 +270,7 @@ We provide relief of financial hardship by providing such persons with goods, wh
           </script>
         </p>
       </div>
+    </div>
     </div>
 
     <div id="database" class="tab-pane fade container">
