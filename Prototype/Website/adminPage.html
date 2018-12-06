@@ -12,7 +12,19 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src = "activeWorkaround.js"></script>
 
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="title navbar-brand mb-0 h1" style = "color:white;font-weight:bold;">BeyondLimits Administrator Controls</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href = "#">Logged in as $ADMIN$</a>
+        </li>
+      </ul>
+  </nav>
 
   <!--NAV TABS-->
   <ul class="nav nav-tabs nav-justified">
@@ -21,7 +33,7 @@
     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#events">Events</a></li>
 
     <li class="dropdown nav-item">
-      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Dropdown<span class="caret"></span></a>
+      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">How we can help<span class="caret"></span></a>
       <ul class="dropdown-menu">
         <li><a data-toggle="tab" href="#wehelpmain">What we can do for you</a></li>
         <li><a data-toggle="tab" href="#wehelpmore">More information</a></li>
@@ -56,8 +68,8 @@
       <h3>Home</h3>
       <p>Edit the main text</p>
       <div class="form-group">
-        <label for="homeMain">Homepage message:</label>
-        <textarea class="form-control" rows="5" id="homeMain">Welcome to Beyond Limits,</textarea>
+        <label for="homemain">Homepage message:</label>
+        <textarea class="form-control" rows="5" id="homemain">Welcome to Beyond Limits,</textarea>
       </div>
       <button type="button" class="btn btn-primary">Submit</button>
     </div>
@@ -66,8 +78,8 @@
       <h3>About Us</h3>
       <p>Edit contents of About us page</p>
       <div class="form-group">
-        <label for="homeMain">About us text:</label>
-        <textarea class="form-control" rows="5" id="homeMain">Beyond Limits aims to provide a place of peace or retreat to relieve anyone in poverty or distress by reason of youth, age, ill-health, disability, financial hardship or other disadvantage by providing the facilities to allow individuals and families to spend time away from home to reconnect with themselves, their families or with others.
+        <label for="aboutus">About us text:</label>
+        <textarea class="form-control" rows="5" id="aboutus">Beyond Limits aims to provide a place of peace or retreat to relieve anyone in poverty or distress by reason of youth, age, ill-health, disability, financial hardship or other disadvantage by providing the facilities to allow individuals and families to spend time away from home to reconnect with themselves, their families or with others.
 
 We also promote learning through the continued development of individual capabilities, competencies, skills and understanding in subjects of educational & personal value by providing training and development of skills and knowledge to those attending the retreat as a result of youth, age, ill-health, disability, financial hardship or other disadvantage allowing them to succeed beyond their limits.
 
@@ -124,7 +136,7 @@ We provide relief of financial hardship by providing such persons with goods, wh
       <p>What we can do for you:</p>
       <div class="form-group">
         <label for="wehelpmain">Text:</label>
-        <textarea class="form-control" rows="5" id="homeMain">Beyond Limits aims to provide a place of peace or retreat to relieve anyone in poverty or distress by reason of youth, age, ill-health, disability, financial hardship or other disadvantage by providing the facilities to allow individuals and families to spend time away from home to reconnect with themselves, their families or with others.
+        <textarea class="form-control" rows="5" id="wehelpmain">Beyond Limits aims to provide a place of peace or retreat to relieve anyone in poverty or distress by reason of youth, age, ill-health, disability, financial hardship or other disadvantage by providing the facilities to allow individuals and families to spend time away from home to reconnect with themselves, their families or with others.
 
 We also promote learning through the continued development of individual capabilities, competencies, skills and understanding in subjects of educational & personal value by providing training and development of skills and knowledge to those attending the retreat as a result of youth, age, ill-health, disability, financial hardship or other disadvantage allowing them to succeed beyond their limits.
 
@@ -137,23 +149,36 @@ We provide relief of financial hardship by providing such persons with goods, wh
       <p></p>
       <div class="form-group">
         <label for="wehelpmore">Text:</label>
-        <textarea class="form-control" rows="5" id="homeMain">More information goes here</textarea>
+        <textarea class="form-control" rows="5" id="wehelpmore">More information goes here</textarea>
       </div>
       <button type="button" class="btn btn-primary">Submit</button>
     </div>
 
     <div id="volunteermain" class="tab-pane fade container">
       <h3>How you can help</h3>
-      <p>Some content in menu 2.</p>
+      <div class="form-group">
+        <label for="volunteermain">Text:</label>
+        <textarea class="form-control" rows="5" id="volunteermain">Volunteering opportunities
+        </div>
+      <button type="button" class="btn btn-primary">Submit</button>
     </div>
     <div id="volunteermore" class="tab-pane fade container">
       <h3>Volunteer Testimonials</h3>
-      <p>Some content in menu 2.</p>
+      <div class="form-group">
+        <label for="volunteermore">Text:</label>
+        <textarea class="form-control" rows="5" id="volunteermore">MORE Volunteering opportunities
+        </div>
+      <button type="button" class="btn btn-primary">Submit</button>
     </div>
 
     <div id="blog" class="tab-pane fade container">
       <h3>Blog</h3>
-      <p>Some content in menu 2.</p>
+      <p>Create new blog post</p>
+      <div class="form-group">
+        <label for="blog">Text:</label>
+        <textarea class="form-control" rows="5" id="blog" label="Write blog post here">
+        </div>
+      <button type="button" class="btn btn-primary">Submit</button>
     </div>
 
     <div id="stats" class="tab-pane fade container">
