@@ -69,7 +69,7 @@
       <div id="apply" class="tab-pane fade">
         <h3>Send us your message!</h3>
         <p>Here is our contact info if you want to get in touch</p>
-        <form class="form-horizontal" action = "http://localhost:80/wehelp.php" method = "$_POST">
+        <form class="form-horizontal" id = "helpForm" action = "http://localhost:80/helpEmail" method = "post">
           <!--The following is a list with all the form fileds-->
           <div class="form-group row">
             <label class="control-label col-sm-2" for="fname">First Name:</label>
@@ -95,7 +95,7 @@
           <div class="form-group row">
             <label class="control-label col-sm-2" for="info">Your Message:</label>
             <div class="col-sm-10">
-              <textarea class="form-control" rows="5" id="info"></textarea>
+              <textarea form = "helpForm" class="form-control" rows="5" id="info" name = "info"></textarea>
             </div>
           </div>
 
