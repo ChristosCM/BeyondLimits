@@ -1,4 +1,6 @@
 var mysql = require('mysql');
+var express = require('express');
+var app = express();
 
 function plotGraph(labels, data, ylabel, coloursBackground, coloursBorder){
 	var ctx = document.getElementById("myChart").getContext('2d');
@@ -30,15 +32,28 @@ function plotGraph(labels, data, ylabel, coloursBackground, coloursBorder){
 		});
 }
 
-function randRGB(i,a){
+function randRGB(i){
 	var colours = []
+	var borderColours
 	for(var x = 0; x<i; x++){
 		var r = Math.floor((Math.random()*255)+1);
 		var g = Math.floor((Math.random()*255)+1);
 		var b = Math.floor((Math.random()*255)+1);
-		colours.push('rgba('+ r +', ' + g + ', ' + b + ',' + a + ')');
+		colours.push('rgba('+ r +', ' + g + ', ' + b + ', 0.4)');
+		borderColours.push('rgba('+ r +', ' + g + ', ' + b + ', 1)');
 	}
-	return colours
+	return colours, borderColours
+}
+
+function queryDB(con, sql, callback){
+	con.connect(function(err){
+		if(err) throw err;
+		con.query(sql, function(error, res){
+			if(error) throw error;
+			callback(error, res);
+		});
+		console.log("Connected");
+	});
 }
 
 //Takes in some value from an input; can program this later
@@ -50,12 +65,28 @@ function freqPlot(x,y){
 	var con = mysql.createConnection({
 		host: "localhost",
 		user: "root",
-		password: ""
+		password: "password",
+		database: 'blDB'
 	});
 	//use the connection to get data, get colours depending on number of people, and then plot graph
 	if(x == "Event"){
 		if(y == "Volunteers"){
-
+			var sql = "SELECT events.eventName, COUNT(volunteerevents.idEvents) as numberPeople FROM events INNER JOIN volunteerevents ON events.idEvents = volunteerevents.idEvents";
+			queryDB(con, sql, function(err, res){
+				if(err) throw err;
+				var c = randRGB(res.length);
+				var colours = c[0];
+				var borderColours = c[1];
+				var labels = [];
+				var data = [];
+				var ylabel = "#Volunteers";
+				for(var object in res){
+					labels.push(res[object]['eventName']);
+					data.push(res[object]['numberPeople']);
+				}
+				plotGraph(labels,data,ylabel,colours,borderColours);
+				con.end();
+			});
 		} else if(y == "Attendance"){
 
 		}
@@ -63,7 +94,14 @@ function freqPlot(x,y){
 	} else if(x == "Volunteers") {
 		//Do something else here.
 	}
-
-
-	
 }
+app.get('/plotGraph', (req, res) =>{
+	freqPlot('Event', 'Volunteers');
+	//Find a way to render a graph on the page. This is working but
+	//Is sending the user to another page. This should not be happening.
+	res.sendStatus(200);
+});
+
+
+app.listen(80);
+module.exports = app;
