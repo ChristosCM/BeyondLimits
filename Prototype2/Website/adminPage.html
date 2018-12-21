@@ -211,8 +211,9 @@ We provide relief of financial hardship by providing such persons with goods, wh
             <canvas id="myChart" width="500" height="500"></canvas>
           </div>
           <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
-          <form method = "get" action = "http://localhost:80/plotGraph">
-            <input type = "submit" value = "clickme!">
+          <script src = "graphIt.js"></script>
+          <form>
+            <input id="clickMe" type="button" value="Click!" onclick="main();" />
           </form>
         </p>
       </div>
