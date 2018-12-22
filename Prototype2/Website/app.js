@@ -30,6 +30,7 @@ function queryDB(con, sql, callback){
 //x is the field from the dropdown that they are plotting against frequency
 //y defines what we will compare x to; attendees, volunteers, ...
 //Would be stored on the server side; would need to be addressed in html as such.
+//Add in more graphs later in development as needed. This is very easy.
 function freqPlot(x,y,callback){
 	//x the dropdown option refers to the table we are using.
 	var con = mysql.createConnection({
@@ -39,7 +40,7 @@ function freqPlot(x,y,callback){
 		database: 'blDB'
 	});
 	//use the connection to get data, get colours depending on number of people, and then plot graph
-	if(x == "Event"){
+	if(x == "Events"){
 		if(y == "Volunteers"){
 			var sql = "SELECT events.eventName, COUNT(volunteerevents.idEvents) as numberPeople FROM events INNER JOIN volunteerevents ON events.idEvents = volunteerevents.idEvents";
 			queryDB(con, sql, function(err, res){
@@ -65,15 +66,63 @@ function freqPlot(x,y,callback){
 				con.end();
 			});
 		} else if(y == "Attendance"){
-
+			var sql = "SELECT eventName, attendance FROM events";
+			queryDB(con, sql, function(err, res){
+				if(err) throw err;
+				var c = randRGB(res.length);
+				var colours = c[0];
+				var borderColours = c[1];
+				var labels = [];
+				var data = [];
+				var ylabel = "#Volunteers";
+				for(var object in res){
+					labels.push(res[object]['eventName']);
+					data.push(res[object]['attendance']);
+				}
+				var graphComponents = {
+					labels: labels,
+					data: data,
+					ylabel:ylabel,
+					colours:colours,
+					borderColours:borderColours
+				};
+				return callback(graphComponents);
+				con.end();
+			});
+		} else if("VolunteersSplit"){
+			//Potentially add in a split feature for male/female later.
 		}
 		
 	} else if(x == "Volunteers") {
-		//Do something else here.
+		if(y == "MF"){
+			var sql = "SELECT Sex, COUNT(Sex) as numberSex FROM volunteer GROUP BY Sex";
+			queryDB(con, sql, function(err, res){
+				if(err) throw err;
+				var c = randRGB(res.length);
+				var colours = c[0];
+				var borderColours = c[1];
+				var labels = [];
+				var data = [];
+				var ylabel = "#Volunteers";
+				for(var object in res){
+					labels.push(res[object]['Sex']);
+					data.push(res[object]['numberSex']);
+				}
+				var graphComponents = {
+					labels: labels,
+					data: data,
+					ylabel:ylabel,
+					colours:colours,
+					borderColours:borderColours
+				};
+				return callback(graphComponents);
+				con.end();
+			});
+		}
 	}
 }
-app.get('/plotGraph', (req, res) =>{
-	var graphComponents = freqPlot('Event', 'Volunteers', function(gC){
+app.get('/plotGraph/:one/:two', (req, res) =>{
+	var graphComponents = freqPlot(req.params.one, req.params.two, function(gC){
 		res.status(200).send(gC);
 	});
 });

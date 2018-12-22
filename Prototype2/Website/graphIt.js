@@ -31,9 +31,9 @@ function plotGraph(labels, data, ylabel, coloursBackground, coloursBorder){
 		}
 	});
 }
-function main(){
+function main(x,y){
 	$.ajax({
-		url:'http://localhost:80/plotGraph',
+		url:'http://localhost:80/plotGraph/'+x+'/'+y,
 		type: 'GET',
 		datatype: 'json',
 		success: (data)=>{
