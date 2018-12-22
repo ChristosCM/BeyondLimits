@@ -195,11 +195,14 @@ We provide relief of financial hardship by providing such persons with goods, wh
     <div id="blog" class="tab-pane fade container">
       <h3>Blog</h3>
       <p>Create new blog post</p>
-      <div class="form-group">
-        <label for="blog">Text:</label>
-        <textarea class="form-control" rows="5" id="blog" label="Write blog post here"></textarea>
-        </div>
-      <button type="button" class="btn btn-primary">Submit</button>
+      <form id = "blogForm" action = "/blogPost" method = "post">
+        <b>Title:</b> <input type = "text" name = "title" label = "Title" />
+        <br>
+        <label for="blog"><b>Text:</b></label>
+        <textarea form = "blogForm" class="form-control" rows="5" id="blog" name = "content" label="Write blog post here"></textarea>
+        <br>
+        <input type="submit" value = "Submit" class="btn btn-primary" />
+      </form>
     </div>
 
     <div id="stats" class="tab-pane fade container">

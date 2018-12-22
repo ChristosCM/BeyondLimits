@@ -1,8 +1,15 @@
+const nodemailer = require('nodemailer');
 const express = require('express');
 const bodyParser = require('body-parser');
-var mysql = require('mysql');
+const mysql = require('mysql');
 const app = express();
-const email = require('./email.js');
+var con = mysql.createConnection({
+	host: "localhost",
+	user: "root",
+	password: "password",
+	database: 'blDB'
+});
+
 function randRGB(i){
 	var colours = []
 	var borderColours = [];
@@ -15,6 +22,14 @@ function randRGB(i){
 	}
 	return [colours, borderColours]
 }
+//need to edit the format function to wrap arguments in ""
+function format(string) {
+  var args = arguments;
+  var pattern = new RegExp("%([1-" + arguments.length + "])", "g");
+  return String(string).replace(pattern, function(match, index) {
+    return args[index];
+  });
+};
 
 function queryDB(con, sql, callback){
 	con.connect(function(err){
@@ -33,12 +48,6 @@ function queryDB(con, sql, callback){
 //Add in more graphs later in development as needed. This is very easy.
 function freqPlot(x,y,callback){
 	//x the dropdown option refers to the table we are using.
-	var con = mysql.createConnection({
-		host: "localhost",
-		user: "root",
-		password: "password",
-		database: 'blDB'
-	});
 	//use the connection to get data, get colours depending on number of people, and then plot graph
 	if(x == "Events"){
 		if(y == "Volunteers"){
@@ -125,6 +134,103 @@ app.get('/plotGraph/:one/:two', (req, res) =>{
 	var graphComponents = freqPlot(req.params.one, req.params.two, function(gC){
 		res.status(200).send(gC);
 	});
+});
+
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+app.post('/volunteerEmail', (req, res)=>{
+	const transporter = nodemailer.createTransport({
+		service: 'gmail',
+		auth: {
+			user: 'testingemailCM@gmail.com',
+			pass: 'testing13.'
+		}
+	});
+	var fname = req.body.fname;
+	var lname = req.body.lname;
+	var address1 = req.body.address1;
+	var address2 = req.body.address2;
+	var email = req.body.email;
+	var county = req.body.county;
+	var info = req.body.info;
+	var message = 'VOLUNTEER<br><br>Form details below.<br><br><b>First Name:</b> '+ fname+'<br><b>Last Name:</b> '+ lname+'<br><b>Email:</b> '+ email +'<br><b>Address:</b> '+ address1 +'<br>' + address2 + '<br>' + county + '<br><b>Message:</b> '+ info;
+	
+	const mailOptions = {
+		from: 'testingemailCM@gmail.com',
+		to: 'mortimer907@gmail.com',
+		subject: 'Volunteer Form by: ' + fname,
+		html: message
+	};
+
+
+	transporter.sendMail(mailOptions, function(err,inf){
+		if(err){
+			console.log(err);
+		} else {
+			console.log('Email sent: ' + inf.response);
+			res.sendStatus(200);
+			//Would redirect to the correct place on the server; home.htm. This can
+			//Be done quite easily
+			//Send the receipt -> transporter.sendMail();
+		}
+	});
+});
+app.post('/helpEmail', (req, res)=>{
+	const transporter = nodemailer.createTransport({
+		service: 'gmail',
+		auth: {
+			user: 'testingemailCM@gmail.com',
+			pass: 'testing13.'
+		}
+	});
+	var fname = req.body.fname;
+	var lname = req.body.lname;
+	var email = req.body.email;
+	var info = req.body.info;
+	var message = 'Person Seeking Help<br><br>Form details below.<br><br><b>First Name:</b> '+ fname+'<br><b>Last Name:</b> '+ lname+'<br><b>Email:</b> '+ email + '<br><b>Message:</b> '+ info;
+	
+	const mailOptions = {
+		from: 'testingemailCM@gmail.com',
+		to: 'mortimer907@gmail.com',
+		subject: 'Seeking Help Form by: ' + fname,
+		html: message
+	};
+
+
+	transporter.sendMail(mailOptions, function(err,inf){
+		if(err){
+			console.log(err);
+		} else {
+			console.log('Email sent: ' + inf.response);
+			res.sendStatus(200);
+			//Would redirect to the correct place on the server; home.htm. This can
+			//Be done quite easily
+			//Send the receipt -> transporter.sendMail();
+		}
+	});
+});
+app.post('/blogPost', (req,res) =>{
+	var title = req.body.title;
+	var content = req.body.content;
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+
+	if(dd<10) {
+	    dd = '0'+dd
+	} 
+
+	if(mm<10) {
+	    mm = '0'+mm
+	} 
+
+	today = mm + '/' + dd + '/' + yyyy;
+	var sql = format("INSERT INTO customers (title, content, date) VALUES (%1,%2,%3)", title,content,today);
+	console.log(sql)
+	return res.sendStatus(200);
 });
 app.set('view engine', 'html');
 var options = {
