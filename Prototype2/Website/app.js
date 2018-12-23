@@ -277,12 +277,81 @@ app.post('/blogDelete/:postID', (req,res)=>{
 //* Transition to page where just details of the event in question is shown.
 //* Store the id in question for the event and DELETE the current details of the event from the table.
 //* Values in the input boxes on the screen. These input boxes are in a form which POSTS
-//to the same method as above in "Creating events".
+//to the same method as above in "Creating events". 
 //* Take the details from the page using req params.
 //* INSERT these into the database.
 //* Should automatically update with AJAX on the events page.
 
+//deletes the event
+function deleteEvent(req,res){
+	var eID = req.params.id;
+	//Delete the event by ID
+	var sql = format("DELETE FROM events WHERE idEvents = %1", eID);
+	queryDB(con, sql, function(err,result){
+		if(err) throw err;
+		console.log("Deleted!");
+		return res.sendStatus(200);
+	});
+}
 
+//This will get all of the events from the DB with an eventName matching. More specific handlers later on.
+app.get('/eventsAll/:name', (req, res)=>{
+	var eventName = req.params.name;
+	var sql = format("SELECT * FROM events WHERE eventName = %1",eventName);
+	queryDB(con, sql, function(err,result){
+		if(err) throw err;
+		//Using this on the client side could create JS to iterate over all posts.
+		return res.send(result);
+	});
+});
+
+//This will get all of the events from the DB.
+app.get('/eventsAll', (req, res)=>{
+	var sql = "SELECT * FROM events";
+	queryDB(con, sql, function(err,result){
+		if(err) throw err;
+		//Using this on the client side could create JS to iterate over all posts.
+		return res.send(result);
+	});
+});
+
+//This is the version for the editing events.
+app.post('/createEvent/:name/:attendance/:vTotal/:vMale/:vFemale/:id', (req,res)=>{
+	//This will be created later on. Almost identical to the below route.
+	var eID = req.params.id;
+	var eventName = req.params.name;
+	var attendance = req.params.attendance;
+	var volunteerTotal = req.params.vTotal;
+	var volunteerMale = req.params.vMale;
+	var volunteerFemale = req.params.vFemale;
+	//This should work but needs further testing.
+	deleteEvent(req,res);
+	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5,%6)", eID, eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
+	queryDB(con, sql, function(err,result){
+		if(err) throw err;
+		//Using this on the client side could create JS to iterate over all posts.
+		console.log("Posted!");
+		return res.sendStatus(200);
+	});
+});
+
+//This is the version for creating events.
+app.post('/createEvent/:name/:attendance/:vTotal/:vMale/:vFemale/', (req,res)=>{
+	var eventName = req.params.name;
+	var attendance = req.params.attendance;
+	var volunteerTotal = req.params.vTotal;
+	var volunteerMale = req.params.vMale;
+	var volunteerFemale = req.params.vFemale;
+	var sql = format("INSERT INTO events (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
+	queryDB(con, sql, function(err,result){
+		if(err) throw err;
+		//Using this on the client side could create JS to iterate over all posts.
+		console.log("Posted!");
+		return res.sendStatus(200);
+	});
+});
+
+app.post('/deleteEvent/:id', deleteEvent);
 //*********************************************************VIEW*************************************************************
 app.set('view engine', 'html');
 var options = {
