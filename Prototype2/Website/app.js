@@ -22,12 +22,16 @@ function randRGB(i){
 	}
 	return [colours, borderColours]
 }
-//need to edit the format function to wrap arguments in ""
+
 function format(string) {
   var args = arguments;
   var pattern = new RegExp("%([1-" + arguments.length + "])", "g");
   return String(string).replace(pattern, function(match, index) {
-    return args[index];
+  	if(Number.isInteger(args[index])){
+  		return args[index];
+  	} else {
+  		return '"'+args[index]+'"';
+  	}
   });
 };
 
@@ -211,6 +215,16 @@ app.post('/helpEmail', (req, res)=>{
 		}
 	});
 });
+
+//Could easily set up a handler to get more specific posts
+app.get('blogShow', (req,res)=>{
+	var sql = "SELECT * FROM posts";
+	queryDB(con, sql, function(err,result){
+		if(err) throw err;
+		//Using this on the client side could create JS to iterate over all posts.
+		return res.send(result);
+	});
+});
 app.post('/blogPost', (req,res) =>{
 	var title = req.body.title;
 	var content = req.body.content;
@@ -228,9 +242,22 @@ app.post('/blogPost', (req,res) =>{
 	} 
 
 	today = mm + '/' + dd + '/' + yyyy;
-	var sql = format("INSERT INTO customers (title, content, date) VALUES (%1,%2,%3)", title,content,today);
-	console.log(sql)
-	return res.sendStatus(200);
+	var sql = format("INSERT INTO posts (title, content, date) VALUES (%1,%2,%3)", title,content,today);
+	queryDB(con, sql, function(err, result){
+		if(err) throw err;
+		console.log("Posted!");
+	});
+	return res.sendFile(__dirname + '/adminPage.html');
+});
+//This would be triggered by clicking on the post in a list on the admin page. Scrollable region???
+app.post('/blogDelete/:postID', (req,res)=>{
+	var pID = req.params.postID;
+	var sql = format("DELETE FROM posts WHERE postID = %1;", pID);
+	queryDB(con, sql, function(err, result){
+		if(err) throw err;
+		console.log("Removed!");
+	});
+	return res.sendFile(__dirname + '/adminPage.html');
 });
 app.set('view engine', 'html');
 var options = {
