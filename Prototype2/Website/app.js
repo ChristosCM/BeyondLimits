@@ -352,6 +352,7 @@ app.post('/createEvent/:name/:attendance/:vTotal/:vMale/:vFemale/', (req,res)=>{
 });
 
 app.post('/deleteEvent/:id', deleteEvent);
+
 //*********************************************************VIEW*************************************************************
 app.set('view engine', 'html');
 var options = {
