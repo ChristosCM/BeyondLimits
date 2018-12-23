@@ -14,6 +14,17 @@ function setupConnection(host, user, password, database){
 	});
 	return con;
 }
+function format(string) {
+  var args = arguments;
+  var pattern = new RegExp("%([1-" + arguments.length + "])", "g");
+  return String(string).replace(pattern, function(match, index) {
+  	if(Number.isInteger(args[index])){
+  		return args[index];
+  	} else {
+  		return '"'+args[index]+'"';
+  	}
+  });
+};
 
 
 //*********************************************************STATISTICS*************************************************************
@@ -215,18 +226,6 @@ app.post('/helpEmail', (req, res)=>{
 });
 
 //*********************************************************BLOG*************************************************************
-function format(string) {
-  var args = arguments;
-  var pattern = new RegExp("%([1-" + arguments.length + "])", "g");
-  return String(string).replace(pattern, function(match, index) {
-  	if(Number.isInteger(args[index])){
-  		return args[index];
-  	} else {
-  		return '"'+args[index]+'"';
-  	}
-  });
-};
-
 //Could easily set up a handler to get more specific posts
 app.get('blogShow', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
