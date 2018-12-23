@@ -10,6 +10,7 @@ var con = mysql.createConnection({
 	database: 'blDB'
 });
 
+//*********************************************************STATISTICS*************************************************************
 function randRGB(i){
 	var colours = []
 	var borderColours = [];
@@ -22,18 +23,6 @@ function randRGB(i){
 	}
 	return [colours, borderColours]
 }
-
-function format(string) {
-  var args = arguments;
-  var pattern = new RegExp("%([1-" + arguments.length + "])", "g");
-  return String(string).replace(pattern, function(match, index) {
-  	if(Number.isInteger(args[index])){
-  		return args[index];
-  	} else {
-  		return '"'+args[index]+'"';
-  	}
-  });
-};
 
 function queryDB(con, sql, callback){
 	con.connect(function(err){
@@ -140,6 +129,8 @@ app.get('/plotGraph/:one/:two', (req, res) =>{
 	});
 });
 
+
+//*********************************************************EMAIL*************************************************************
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -216,6 +207,19 @@ app.post('/helpEmail', (req, res)=>{
 	});
 });
 
+//*********************************************************BLOG*************************************************************
+function format(string) {
+  var args = arguments;
+  var pattern = new RegExp("%([1-" + arguments.length + "])", "g");
+  return String(string).replace(pattern, function(match, index) {
+  	if(Number.isInteger(args[index])){
+  		return args[index];
+  	} else {
+  		return '"'+args[index]+'"';
+  	}
+  });
+};
+
 //Could easily set up a handler to get more specific posts
 app.get('blogShow', (req,res)=>{
 	var sql = "SELECT * FROM posts";
@@ -259,6 +263,8 @@ app.post('/blogDelete/:postID', (req,res)=>{
 	});
 	return res.sendFile(__dirname + '/adminPage.html');
 });
+
+//*********************************************************VIEW*************************************************************
 app.set('view engine', 'html');
 var options = {
 	extensions:['css', 'js', 'png', 'json', 'html']
