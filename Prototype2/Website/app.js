@@ -265,6 +265,22 @@ app.post('/blogDelete/:postID', (req,res)=>{
 });
 
 //*********************************************************EVENTS*************************************************************
+//Creating events:
+//* Take the details from the page using req params.
+//* INSERT these into the database.
+//* Should automatically update with AJAX on the events page.
+//Deleting events:
+//* Take the id of the event to delete using req params.
+//* DELETE this from the database.
+//* Should automatically update with AJAX on the events page.
+//Editing events:
+//* Transition to page where just details of the event in question is shown.
+//* Store the id in question for the event and DELETE the current details of the event from the table.
+//* Values in the input boxes on the screen. These input boxes are in a form which POSTS
+//to the same method as above in "Creating events".
+//* Take the details from the page using req params.
+//* INSERT these into the database.
+//* Should automatically update with AJAX on the events page.
 
 
 //*********************************************************VIEW*************************************************************
@@ -273,6 +289,8 @@ var options = {
 	extensions:['css', 'js', 'png', 'json', 'html']
 };
 app.use(express.static('./', options));
-
+app.get('/', (req,res)=>{
+	return res.sendFile(__dirname+'/home.htm');
+});
 
 app.listen(80);
