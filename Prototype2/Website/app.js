@@ -3,12 +3,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const app = express();
-var con = mysql.createConnection({
-	host: "localhost",
-	user: "root",
-	password: "password",
-	database: 'blDB'
-});
+
+//*********************************************************SETUP*************************************************************
+function setupConnection(host, user, password, database){
+	var con = mysql.createConnection({
+		host: host,
+		user: user,
+		password: password,
+		database: database
+	});
+	return con;
+}
+
 
 //*********************************************************STATISTICS*************************************************************
 function randRGB(i){
@@ -42,6 +48,7 @@ function queryDB(con, sql, callback){
 function freqPlot(x,y,callback){
 	//x the dropdown option refers to the table we are using.
 	//use the connection to get data, get colours depending on number of people, and then plot graph
+	var con = setupConnection("localhost", "root", "password", "blDB");
 	if(x == "Events"){
 		if(y == "Volunteers"){
 			var sql = "SELECT events.eventName, COUNT(volunteerevents.idEvents) as numberPeople FROM events INNER JOIN volunteerevents ON events.idEvents = volunteerevents.idEvents";
@@ -222,14 +229,18 @@ function format(string) {
 
 //Could easily set up a handler to get more specific posts
 app.get('blogShow', (req,res)=>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
 	var sql = "SELECT * FROM posts";
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		//Using this on the client side could create JS to iterate over all posts.
+		con.end();
 		return res.send(result);
 	});
 });
+
 app.post('/blogPost', (req,res) =>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
 	var title = req.body.title;
 	var content = req.body.content;
 	var today = new Date();
@@ -249,16 +260,19 @@ app.post('/blogPost', (req,res) =>{
 	var sql = format("INSERT INTO posts (title, content, date) VALUES (%1,%2,%3)", title,content,today);
 	queryDB(con, sql, function(err, result){
 		if(err) throw err;
+		con.end();
 		console.log("Posted!");
 	});
 	return res.sendFile(__dirname + '/adminPage.html');
 });
 //This would be triggered by clicking on the post in a list on the admin page. Scrollable region???
 app.post('/blogDelete/:postID', (req,res)=>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
 	var pID = req.params.postID;
 	var sql = format("DELETE FROM posts WHERE postID = %1;", pID);
 	queryDB(con, sql, function(err, result){
 		if(err) throw err;
+		con.end();
 		console.log("Removed!");
 	});
 	return res.sendFile(__dirname + '/adminPage.html');
@@ -282,35 +296,28 @@ app.post('/blogDelete/:postID', (req,res)=>{
 //* INSERT these into the database.
 //* Should automatically update with AJAX on the events page.
 
-//deletes the event
-function deleteEvent(req,res){
-	var eID = req.params.id;
-	//Delete the event by ID
-	var sql = format("DELETE FROM events WHERE idEvents = %1", eID);
-	queryDB(con, sql, function(err,result){
-		if(err) throw err;
-		console.log("Deleted!");
-		return res.sendStatus(200);
-	});
-}
 
 //This will get all of the events from the DB with an eventName matching. More specific handlers later on.
 app.get('/eventsAll/:name', (req, res)=>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
 	var eventName = req.params.name;
 	var sql = format("SELECT * FROM events WHERE eventName = %1",eventName);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		//Using this on the client side could create JS to iterate over all posts.
+		con.end();
 		return res.send(result);
 	});
 });
 
 //This will get all of the events from the DB.
 app.get('/eventsAll', (req, res)=>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
 	var sql = "SELECT * FROM events";
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		//Using this on the client side could create JS to iterate over all posts.
+		con.end();
 		return res.send(result);
 	});
 });
@@ -318,6 +325,7 @@ app.get('/eventsAll', (req, res)=>{
 //This is the version for the editing events.
 app.post('/createEvent/:name/:attendance/:vTotal/:vMale/:vFemale/:id', (req,res)=>{
 	//This will be created later on. Almost identical to the below route.
+	var con = setupConnection("localhost", "root", "password", "blDB");
 	var eID = req.params.id;
 	var eventName = req.params.name;
 	var attendance = req.params.attendance;
@@ -325,18 +333,27 @@ app.post('/createEvent/:name/:attendance/:vTotal/:vMale/:vFemale/:id', (req,res)
 	var volunteerMale = req.params.vMale;
 	var volunteerFemale = req.params.vFemale;
 	//This should work but needs further testing.
-	deleteEvent(req,res);
-	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5,%6)", eID, eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
+	var sql = format("DELETE FROM events WHERE idEvents = %1;", eID);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
+		con.end();
+		var con1 = setupConnection("localhost", "root", "password", "blDB");
+		var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5,%6)", eID, eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
+		queryDB(con1,sql,function(err1,result1){
+			if(err1) throw err1;
+			console.log("Posted!")
+			con1.end();
+		});
 		//Using this on the client side could create JS to iterate over all posts.
-		console.log("Posted!");
+		console.log("Deleted!");
+		
 		return res.sendStatus(200);
 	});
 });
 
 //This is the version for creating events.
 app.post('/createEvent/:name/:attendance/:vTotal/:vMale/:vFemale/', (req,res)=>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
 	var eventName = req.params.name;
 	var attendance = req.params.attendance;
 	var volunteerTotal = req.params.vTotal;
@@ -347,11 +364,23 @@ app.post('/createEvent/:name/:attendance/:vTotal/:vMale/:vFemale/', (req,res)=>{
 		if(err) throw err;
 		//Using this on the client side could create JS to iterate over all posts.
 		console.log("Posted!");
+		con.end()
 		return res.sendStatus(200);
 	});
 });
 
-app.post('/deleteEvent/:id', deleteEvent);
+app.post('/deleteEvent/:id', (req, res)=>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
+	var eID = req.params.id;
+	//Delete the event by ID
+	var sql = format("DELETE FROM events WHERE idEvents = %1", eID);
+	queryDB(con, sql, function(err,result){
+		if(err) throw err;
+		console.log("Deleted!");
+		con.end();
+		return res.sendStatus(200);
+	});
+});
 
 //*********************************************************VIEW*************************************************************
 app.set('view engine', 'html');
