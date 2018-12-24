@@ -5,6 +5,7 @@ const mysql = require('mysql');
 const app = express();
 
 //*********************************************************SETUP*************************************************************
+//Sets up the connection to the database with the provided parameters.
 function setupConnection(host, user, password, database){
 	var con = mysql.createConnection({
 		host: host,
@@ -14,6 +15,8 @@ function setupConnection(host, user, password, database){
 	});
 	return con;
 }
+
+//Formats strings; subs in the parameters
 function format(string) {
   var args = arguments;
   var pattern = new RegExp("%([1-" + arguments.length + "])", "g");
@@ -237,7 +240,43 @@ app.get('blogShow', (req,res)=>{
 		return res.send(result);
 	});
 });
+//This is the version for the editing blog post.
+app.post('/blogPost/:id', (req,res)=>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
+	var bID = req.params.id;
+	var title = req.body.title;
+	var content = req.body.content;
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
 
+	if(dd<10) {
+	    dd = '0'+dd
+	} 
+
+	if(mm<10) {
+	    mm = '0'+mm
+	} 
+
+	today = mm + '/' + dd + '/' + yyyy;
+	var sql = format("DELETE FROM posts WHERE idPosts = %1;", bID);
+	queryDB(con, sql, function(err,result){
+		if(err) throw err;
+		con.end();
+		var con1 = setupConnection("localhost", "root", "password", "blDB");
+		var sql = format("INSERT INTO posts (idposts,title,content,date) VALUES (%1,%2,%3,%4)", bID, title, content, today);
+		queryDB(con1,sql,function(err1,result1){
+			if(err1) throw err1;
+			console.log("Posted!")
+			con1.end();
+		});
+		//Using this on the client side could create JS to iterate over all posts.
+		console.log("Deleted!");
+		
+		return res.sendStatus(200);
+	});
+});
 app.post('/blogPost', (req,res) =>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var title = req.body.title;
@@ -322,15 +361,14 @@ app.get('/eventsAll', (req, res)=>{
 });
 
 //This is the version for the editing events.
-app.post('/createEvent/:name/:attendance/:vTotal/:vMale/:vFemale/:id', (req,res)=>{
-	//This will be created later on. Almost identical to the below route.
+app.post('/createEvent/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var eID = req.params.id;
-	var eventName = req.params.name;
-	var attendance = req.params.attendance;
-	var volunteerTotal = req.params.vTotal;
-	var volunteerMale = req.params.vMale;
-	var volunteerFemale = req.params.vFemale;
+	var eventName = req.body.name;
+	var attendance = req.body.attendance;
+	var volunteerTotal = req.body.vTotal;
+	var volunteerMale = req.body.vMale;
+	var volunteerFemale = req.body.vFemale;
 	//This should work but needs further testing.
 	var sql = format("DELETE FROM events WHERE idEvents = %1;", eID);
 	queryDB(con, sql, function(err,result){
@@ -351,13 +389,13 @@ app.post('/createEvent/:name/:attendance/:vTotal/:vMale/:vFemale/:id', (req,res)
 });
 
 //This is the version for creating events.
-app.post('/createEvent/:name/:attendance/:vTotal/:vMale/:vFemale/', (req,res)=>{
+app.post('/createEvent', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
-	var eventName = req.params.name;
-	var attendance = req.params.attendance;
-	var volunteerTotal = req.params.vTotal;
-	var volunteerMale = req.params.vMale;
-	var volunteerFemale = req.params.vFemale;
+	var eventName = req.body.name;
+	var attendance = req.body.attendance;
+	var volunteerTotal = req.body.vTotal;
+	var volunteerMale = req.body.vMale;
+	var volunteerFemale = req.body.vFemale;
 	var sql = format("INSERT INTO events (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
