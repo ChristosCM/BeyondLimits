@@ -7,13 +7,26 @@ const app = express();
 //*********************************************************SETUP*************************************************************
 //Sets up the connection to the database with the provided parameters.
 function setupConnection(host, user, password, database){
-	var con = mysql.createConnection({
+	var con = mysql.createPool({
+		connectionLimit:10,
 		host: host,
 		user: user,
 		password: password,
 		database: database
 	});
 	return con;
+}
+
+
+function queryDB(con, sql, callback){
+	con.getConnection(function(err,connection){
+		if(err) throw err;
+		connection.query(sql, function(error, res){
+			connection.release();
+			if(error) throw error;
+			callback(error, res, connection);
+		});
+	});
 }
 
 //Formats strings; subs in the parameters
@@ -42,16 +55,6 @@ function randRGB(i){
 		borderColours.push('rgba('+ r +', ' + g + ', ' + b + ', 1)');
 	}
 	return [colours, borderColours]
-}
-
-function queryDB(con, sql, callback){
-	con.connect(function(err){
-		if(err) throw err;
-		con.query(sql, function(error, res){
-			if(error) throw error;
-			callback(error, res);
-		});
-	});
 }
 
 //Takes in some value from an input; can program this later
@@ -419,6 +422,59 @@ app.post('/deleteEvent/:id', (req, res)=>{
 	});
 });
 
+//*********************************************************DATABASE*************************************************************
+//Receive the type of query, columns to send back, and conditions.
+//gets and returns all columns for all tables
+//1st element is the list of tables in order
+//2nd element is the list of columns in the respective tables.
+app.get('/colSQL', (req, res)=>{
+	var cols = []
+	function addToCols(x){
+		cols.push(x);
+	}
+	function viewCols(){
+		return cols;
+	}
+	var con = setupConnection("localhost", "root", "password", "blDB");
+	var tableSQL = "SHOW TABLES;"
+	queryDB(con, tableSQL, function(err,result,connection){
+		if(err) throw err;
+		var tables = []
+		for(var object in result){
+			tables.push(result[object]['Tables_in_bldb']);
+		}
+		var i = 1;
+		for(var object in tables){
+			var colSQL = "SHOW COLUMNS FROM " + tables[object];
+			//queryDB(con, colSQL, function(err1,result1){
+			connection.query(colSQL, function(err1,rows,fields){
+				if(err1) throw err1;
+				var columns = [];
+				for(var object1 in rows){
+					columns.push(rows[object1]['Field']);
+				}
+				addToCols(columns);
+				if(i == tables.length){
+					return res.status(200).send([tables,viewCols()]);
+				}
+				i+=1;
+			});
+		}
+		con.end()
+	});
+});
+//Called from a form and would take the following data:
+//* Type of query; INSERT, SELECT, UPDATE, DELETE,... (Use the form name: qType)
+//* Depending on the type of query this would require different values:
+//	-INSERT would require values for all rows from corresponding table
+//	-SELECT would require the table on which to query, and the query parameter
+//		...
+//This is going to be incredibly complicated; should attempt to keep this section
+//Of the website as uniform as possible to limit the number of cases that need to 
+//be programmed individually.
+app.all('/query', (req,res)=>{
+
+});
 //*********************************************************VIEW*************************************************************
 app.set('view engine', 'html');
 var options = {
