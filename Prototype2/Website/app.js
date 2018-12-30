@@ -338,7 +338,6 @@ app.post('/blogDelete/:postID', (req,res)=>{
 //* INSERT these into the database.
 //* Should automatically update with AJAX on the events page.
 
-
 //This will get all of the events from the DB with an eventName matching. More specific handlers later on.
 app.get('/eventsAll/:name', (req, res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
@@ -470,18 +469,32 @@ app.get('/colSQL', (req, res)=>{
 //	-INSERT would require values for all rows from corresponding table
 //	-SELECT would require the table on which to query, and the query parameter
 //		...
-//This is going to be incredibly complicated; should attempt to keep this section
-//Of the website as uniform as possible to limit the number of cases that need to 
-//be programmed individually. Can change at a later date to implement columns select;
-//this shouldn't be too hard.
+
+//Instructions:
+//* For the SELECT query, the form should submit to a separate JS script which formats
+//the data correctly. The type of query(in this case "SELECT") should be placed into 
+//body.qtype in the request, the table should be placed into the body.qTable in the
+//request. The conditions and operators need to be separated. If only one condition
+//then the body.operator list will be empty, and conditions are stored in body.conditions.
+//If more than one condition then store the operators in the list in order.
+//* The DELETE query is very similar in setup to the SELECT query and should be supplied
+//with the data in the same way.
+//* For the INSERT query, the form should submit to a separate JS script which formats the
+//data correctly. Type("INSERT") should be placed into body.qType in the request, and
+//the table should be placed into body.qTable in the request. The fields and what to set their
+//values to in the record should be stored in a list of lists in body.conditions in the 
+//request. "body.conditions[0]" will contain the fields and "body.conditions[1]" the corresponding
+//values.
+//The UPDATE query is very similar in setup to the INSERT query and should be supplied with
+//the data in the same way.
 app.all('/query', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 
 	//This is a testing example. How the query data would be formatted.
-	req.body.qType = "SELECT";
+	req.body.qType = "DELETE";
 	req.body.qTable = "events";
-	req.body.conditions = ["attendance < 50", "volunteerTotal < 20"];
-	req.body.operators = ["AND"];
+	req.body.conditions = ["idEvents=7"];
+	req.body.operators = [];
 
 	//***QUERYBUILDERS***
 	//Conditions may be a JSON object which is passed to the function from the switch.
