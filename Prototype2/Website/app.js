@@ -1,5 +1,6 @@
 //Need to go back over these methods to ensure that they can only be called by DOM elements or people
 //with adequate level of clearance to do so.
+const mime = require('mime-types');
 const nodemailer = require('nodemailer');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -280,7 +281,7 @@ app.post('/blogPost/:id', (req,res)=>{
 		//Using this on the client side could create JS to iterate over all posts.
 		console.log("Deleted!");
 		
-		return res.sendStatus(200);
+		return res.status(200).sendFile(__dirname + '/adminPage.html');
 	});
 });
 app.post('/blogPost', (req,res) =>{
@@ -307,7 +308,7 @@ app.post('/blogPost', (req,res) =>{
 		con.end();
 		console.log("Posted!");
 	});
-	return res.sendFile(__dirname + '/adminPage.html');
+	return res.status(200).sendFile(__dirname + '/adminPage.html');
 });
 //This would be triggered by clicking on the post in a list on the admin page. Scrollable region???
 app.post('/blogDelete/:postID', (req,res)=>{
@@ -319,7 +320,7 @@ app.post('/blogDelete/:postID', (req,res)=>{
 		con.end();
 		console.log("Removed!");
 	});
-	return res.sendFile(__dirname + '/adminPage.html');
+	return res.status(200).sendFile(__dirname + '/adminPage.html');
 });
 
 //*********************************************************TESTIMONIALS*************************************************************
@@ -383,7 +384,45 @@ app.post('/testimonialsDelete/:id', (req,res)=>{
 		con.end();
 		console.log("Removed!");
 	});
-	return res.sendFile(__dirname + '/adminPage.html');
+	return res.status(200).sendFile(__dirname + '/adminPage.html');
+});
+
+app.post('/fileUpload', (req,res) => {
+	if(req.files){
+		var file = req.files.filename;
+		if(String(mime.lookup(file)).includes("image")){
+			var fileName = file.name;
+			file.mv("./img/" + fileName, function(err){
+				if(err){
+					console.log(err);
+					return res.sendStatus(404);
+				} else {
+					
+					fs.readFile('pmdbUsers.json', function(err, data){
+						var json = JSON.parse(data);
+						for(u in json){
+							if(json[u]['username']==req.session['user']['username']){
+								var userID = json[u]['id'];
+							}
+						}
+						if(json[userID-1]['ppicture'] != "ppexample.png"){
+							fs.unlink(json[userID-1]['ppicture'],function(err){
+								if(err){
+									console.log(err);
+								}
+							});
+						}
+						json[userID-1]['ppicture'] = "/img/"+fileName;
+						fs.writeFile('pmdbUsers.json', JSON.stringify(json), function(err){if(err) console.log(err);});
+					});
+					return res.redirect('/adminPage.htm');
+				}
+			});
+		} else {
+			return res.redirect(403,'/adminPage.htm');
+		}
+		
+	}
 });
 
 //*********************************************************EVENTS*************************************************************
