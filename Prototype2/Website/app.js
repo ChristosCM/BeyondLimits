@@ -1,3 +1,5 @@
+//Need to go back over these methods to ensure that they can only be called by DOM elements or people
+//with adequate level of clearance to do so.
 const nodemailer = require('nodemailer');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -234,7 +236,7 @@ app.post('/helpEmail', (req, res)=>{
 
 //*********************************************************BLOG*************************************************************
 //Could easily set up a handler to get more specific posts
-app.get('blogShow', (req,res)=>{
+app.get('/blogShow', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var sql = "SELECT * FROM posts";
 	queryDB(con, sql, function(err,result){
@@ -312,6 +314,70 @@ app.post('/blogDelete/:postID', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var pID = req.params.postID;
 	var sql = format("DELETE FROM posts WHERE postID = %1;", pID);
+	queryDB(con, sql, function(err, result){
+		if(err) throw err;
+		con.end();
+		console.log("Removed!");
+	});
+	return res.sendFile(__dirname + '/adminPage.html');
+});
+
+//*********************************************************TESTIMONIALS*************************************************************
+app.get('/testimonialsShow', (req,res)=>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
+	var sql = "SELECT * FROM testimonials";
+	queryDB(con, sql, function(err,result){
+		if(err) throw err;
+		//Using this on the client side could create JS to iterate over all posts.
+		con.end();
+		return res.status(200).send(result);
+	});
+});
+
+//This is the version for editing the testimonials.
+app.post('/testimonialsPost/:id', (req,res)=>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
+	//Implement picture upload. I have a copy of this on my PP coursework.
+	var tID = req.params.id;
+	var name = req.body.tName;
+	var content = req.body.content;
+	var picPath = req.body.pPath;
+	var sql = format("DELETE FROM testimonials WHERE idtestimonials = %1;", tID);
+	queryDB(con, sql, function(err,result){
+		if(err) throw err;
+		con.end();
+		var con1 = setupConnection("localhost", "root", "password", "blDB");
+		var sql = format("INSERT INTO testimonials (idtestimonials,name,content,picture) VALUES (%1,%2,%3,%4)", tID, name, content, picPath);
+		queryDB(con1,sql,function(err1,result1){
+			if(err1) throw err1;
+			console.log("Posted!")
+			con1.end();
+		});
+		//Using this on the client side could create JS to iterate over all posts.
+		console.log("Deleted!");
+		
+		return res.status(200).sendFile(__dirname + '/adminPage.html');;
+	});
+});
+app.post('/testimonialsPost', (req,res) =>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
+	//Implement picture upload. I have a copy of this on my PP coursework.
+	var name = req.body.tName;
+	var content = req.body.content;
+	var picPath = req.body.pPath;
+	var sql = format("INSERT INTO testimonials (name,content,picture) VALUES (%1,%2,%3)", name, content, picPath);
+	queryDB(con, sql, function(err, result){
+		if(err) throw err;
+		con.end();
+		console.log("Posted!");
+	});
+	return res.status(200).sendFile(__dirname + '/adminPage.html');
+});
+//This would be triggered by clicking on the post in a list on the admin page. Scrollable region???
+app.post('/testimonialsDelete/:id', (req,res)=>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
+	var tID = req.params.id;
+	var sql = format("DELETE FROM testimonials WHERE idtestimonials = %1;", tID);
 	queryDB(con, sql, function(err, result){
 		if(err) throw err;
 		con.end();
@@ -606,6 +672,7 @@ app.all('/query', (req,res)=>{
 			break;
 	}
 });
+
 //*********************************************************VIEW*************************************************************
 app.set('view engine', 'html');
 var options = {
