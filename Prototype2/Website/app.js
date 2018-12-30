@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const app = express();
+var squel = require("squel");
 
 //*********************************************************SETUP*************************************************************
 //Sets up the connection to the database with the provided parameters.
@@ -471,9 +472,126 @@ app.get('/colSQL', (req, res)=>{
 //		...
 //This is going to be incredibly complicated; should attempt to keep this section
 //Of the website as uniform as possible to limit the number of cases that need to 
-//be programmed individually.
+//be programmed individually. Can change at a later date to implement columns select;
+//this shouldn't be too hard.
 app.all('/query', (req,res)=>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
 
+	//This is a testing example. How the query data would be formatted.
+	req.body.qType = "SELECT";
+	req.body.qTable = "events";
+	req.body.conditions = ["attendance < 50", "volunteerTotal < 20"];
+	req.body.operators = ["AND"];
+
+	//***QUERYBUILDERS***
+	//Conditions may be a JSON object which is passed to the function from the switch.
+	function selectQ(conditions){
+		//Table to perform the query on
+		var table = req.body.qTable;
+		var operators = req.body.operators;
+		var s = squel.select();
+		s.from(table);
+		//s.field(...)
+		//This for loop will give away the desired structurefor conditions.
+		var whereStream = ""
+		var i = 0;
+		for(var cond in conditions){
+			//Supply conditions in one list. Make sure the conditions are safe, legal statements on client-side.
+			//If more than one condition then second list "operators" will not be empty.
+			//This list will specify AND or OR between conditions.
+			if(conditions.length>1 && i > 0){
+				whereStream += " " + operators[i-1] + " ";
+			}
+			whereStream += conditions[cond];
+			i+=1;
+		}
+		s.where(whereStream);
+		return s.toString();
+	}
+	function insertQ(fields, values){
+		var table = req.body.qTable;
+		var s = squel.insert();
+		s.into(table);
+		for(var i = 0; i<values.length; i++){
+			s.set(fields[i], values[i]);
+		}
+		return s.toString();
+	}
+	function deleteQ(conditions){
+		var table = req.body.qTable;
+		var operators = req.body.operators;
+		var s = squel.delete();
+		s.from(table);
+		//This for loop will give away the desired structure for conditions.
+		var whereStream = ""
+		var i = 0;
+		for(var cond in conditions){
+			//Supply conditions in one list. Make sure the conditions are safe, legal statements on client-side.
+			//If more than one condition then second list "operators" will not be empty.
+			//This list will specify AND or OR between conditions.
+			if(conditions.length>1 && i > 0){
+				whereStream += " " + operators[i-1] + " ";
+			}
+			whereStream += conditions[cond];
+			i+=1;
+		}
+		s.where(whereStream);
+		return s.toString();
+	}
+	function updateQ(fields, values){
+		var table = req.body.qTable;
+		var s = squel.update();
+		s.table(table);
+		for(var i = 0; i<values.length; i++){
+			s.set(fields[i], values[i]);
+		}
+		return s.toString();
+	}
+
+
+	//Type of query is passed
+	var type = req.body.qType;
+	//Switch based on type
+	switch(type){
+		case "SELECT":
+			//Get all the conditions together on the client side. The format required
+			//is given above in the selectQ function.
+			var conditions = req.body.conditions;
+			var query = selectQ(conditions);
+			queryDB(con, query, function(err,result){
+				return res.status(200).send(result);
+				con.end();
+			});
+			break;
+		case "INSERT":
+			//req.body.conditions is a list of lists
+			var fields = req.body.conditions[0];
+			var values = req.body.conditions[1];
+			var query = insertQ(fields, values);
+			queryDB(con, query, function(err,result){
+				return res.sendStatus(200);
+				con.end();
+			});
+			break;
+		case "UPDATE":
+			//req.body.conditions is a list of lists
+			var fields = req.body.conditions[0];
+			var values = req.body.conditions[1];
+			var query = updateQ(fields, values);
+			queryDB(con, query, function(err,result){
+				return res.sendStatus(200);
+				con.end();
+			});
+			break;
+		case "DELETE":
+			var conditions = req.body.conditions;
+			var query = deleteQ(conditions);
+			queryDB(con, query, function(err,result){
+				return res.sendStatus(200);
+				con.end();
+			});
+			break;
+	}
 });
 //*********************************************************VIEW*************************************************************
 app.set('view engine', 'html');
