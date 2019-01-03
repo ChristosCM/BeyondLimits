@@ -117,7 +117,7 @@ describe('test the events service', () => {
 
     it('POST /createEvent/:id edit succeeds', () => {
         return request(app)
-        .post('/createEvent/8')
+        .post('/createEvent/')
         .set('eventName', 'Summer Formal')
         .set('attendance', 500)
         .set('volunteerTotal', 6)
