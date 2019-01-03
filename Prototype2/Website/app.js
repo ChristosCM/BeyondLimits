@@ -244,7 +244,7 @@ app.get('/blogShow', (req,res)=>{
 		if(err) throw err;
 		//Using this on the client side could create JS to iterate over all posts.
 		con.end();
-		return res.send(result);
+		return res.status(200).send(result);
 	});
 });
 //This is the version for the editing blog post.
@@ -275,11 +275,9 @@ app.post('/blogPost/:id', (req,res)=>{
 		var sql = format("INSERT INTO posts (idposts,title,content,date) VALUES (%1,%2,%3,%4)", bID, title, content, today);
 		queryDB(con1,sql,function(err1,result1){
 			if(err1) throw err1;
-			console.log("Posted!")
 			con1.end();
 		});
 		//Using this on the client side could create JS to iterate over all posts.
-		console.log("Deleted!");
 		
 		return res.status(200).sendFile(__dirname + '/adminPage.html');
 	});
@@ -306,7 +304,6 @@ app.post('/blogPost', (req,res) =>{
 	queryDB(con, sql, function(err, result){
 		if(err) throw err;
 		con.end();
-		console.log("Posted!");
 	});
 	return res.status(200).sendFile(__dirname + '/adminPage.html');
 });
@@ -314,11 +311,10 @@ app.post('/blogPost', (req,res) =>{
 app.post('/blogDelete/:postID', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var pID = req.params.postID;
-	var sql = format("DELETE FROM posts WHERE postID = %1;", pID);
+	var sql = format("DELETE FROM posts WHERE idposts = %1;", pID);
 	queryDB(con, sql, function(err, result){
 		if(err) throw err;
 		con.end();
-		console.log("Removed!");
 	});
 	return res.status(200).sendFile(__dirname + '/adminPage.html');
 });
@@ -348,14 +344,12 @@ app.post('/testimonialsPost/:id', (req,res)=>{
 		if(err) throw err;
 		con.end();
 		var con1 = setupConnection("localhost", "root", "password", "blDB");
-		var sql = format("INSERT INTO testimonials (idtestimonials,name,content,picture) VALUES (%1,%2,%3,%4)", tID, name, content, picPath);
+		var sql = format("INSERT INTO testimonials (idtestimonials,name,content,photo) VALUES (%1,%2,%3,%4)", tID, name, content, picPath);
 		queryDB(con1,sql,function(err1,result1){
 			if(err1) throw err1;
-			console.log("Posted!")
 			con1.end();
 		});
 		//Using this on the client side could create JS to iterate over all posts.
-		console.log("Deleted!");
 		
 		return res.status(200).sendFile(__dirname + '/adminPage.html');;
 	});
@@ -366,11 +360,10 @@ app.post('/testimonialsPost', (req,res) =>{
 	var name = req.body.tName;
 	var content = req.body.content;
 	var picPath = req.body.pPath;
-	var sql = format("INSERT INTO testimonials (name,content,picture) VALUES (%1,%2,%3)", name, content, picPath);
+	var sql = format("INSERT INTO testimonials (name,content,photo) VALUES (%1,%2,%3)", name, content, picPath);
 	queryDB(con, sql, function(err, result){
 		if(err) throw err;
 		con.end();
-		console.log("Posted!");
 	});
 	return res.status(200).sendFile(__dirname + '/adminPage.html');
 });
@@ -382,7 +375,6 @@ app.post('/testimonialsDelete/:id', (req,res)=>{
 	queryDB(con, sql, function(err, result){
 		if(err) throw err;
 		con.end();
-		console.log("Removed!");
 	});
 	return res.status(200).sendFile(__dirname + '/adminPage.html');
 });
@@ -486,11 +478,9 @@ app.post('/createEvent/:id', (req,res)=>{
 		var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5,%6)", eID, eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
 		queryDB(con1,sql,function(err1,result1){
 			if(err1) throw err1;
-			console.log("Posted!")
 			con1.end();
 		});
 		//Using this on the client side could create JS to iterate over all posts.
-		console.log("Deleted!");
 		
 		return res.sendStatus(200);
 	});
@@ -500,15 +490,16 @@ app.post('/createEvent/:id', (req,res)=>{
 app.post('/createEvent', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var eventName = req.body.name;
+	console.log(req)
 	var attendance = req.body.attendance;
 	var volunteerTotal = req.body.vTotal;
 	var volunteerMale = req.body.vMale;
 	var volunteerFemale = req.body.vFemale;
 	var sql = format("INSERT INTO events (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
+	console.log(sql)
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		//Using this on the client side could create JS to iterate over all posts.
-		console.log("Posted!");
 		con.end()
 		return res.sendStatus(200);
 	});
@@ -521,7 +512,6 @@ app.post('/deleteEvent/:id', (req, res)=>{
 	var sql = format("DELETE FROM events WHERE idEvents = %1", eID);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
-		console.log("Deleted!");
 		con.end();
 		return res.sendStatus(200);
 	});
@@ -723,3 +713,4 @@ app.get('/', (req,res)=>{
 });
 
 app.listen(80);
+module.exports = app;
