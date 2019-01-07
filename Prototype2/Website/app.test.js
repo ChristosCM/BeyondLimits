@@ -105,31 +105,37 @@ describe('test the events service', () => {
     });
 
     it('POST /createEvent succeeds', () => {
-        return request(app)
-        .post('/createEvent')
-        .set('eventName', 'Summer Formal')
-        .set('attendance', 500)
-        .set('volunteerTotal', 5)
-        .set('volunteerMale', 3)
-        .set('volunteerFemale', 2)
-        .expect(200);
+        before(function(){
+            request(app)
+            .post('/createEvent')
+            .set('name', 'Summer Formal')
+            .set('attendance', 500)
+            .set('vtotal', 5)
+            .set('vmale', 3)
+            .set('vfemale', 2)
+            .expect(200);
+        })
     });
 
     it('POST /createEvent/:id edit succeeds', () => {
-        return request(app)
-        .post('/createEvent/')
-        .set('eventName', 'Summer Formal')
-        .set('attendance', 500)
-        .set('volunteerTotal', 6)
-        .set('volunteerMale', 3)
-        .set('volunteerFemale', 3)
-        .expect(200);
+        before(function(){
+            request(app)
+            .post('/createEvent/2')
+            .set('name', 'Summer Formal')
+            .set('attendance', 500)
+            .set('vtotal', 6)
+            .set('vmale', 3)
+            .set('vfemale', 3)
+            .expect(200);
+        })
     });
-
     it('POST /deleteEvent/:id succeeds', () => {
-        return request(app)
-        .post('/deleteEvents/8')
+        request(app)
+        .post('/deleteEvent/2')
         .expect(200);
     });
+});
 
+describe('test the database service', {} =>{
+    //Write these next.
 });

@@ -464,11 +464,11 @@ app.get('/eventsAll', (req, res)=>{
 app.post('/createEvent/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var eID = req.params.id;
-	var eventName = req.body.name;
-	var attendance = req.body.attendance;
-	var volunteerTotal = req.body.vTotal;
-	var volunteerMale = req.body.vMale;
-	var volunteerFemale = req.body.vFemale;
+	var eventName = req.headers.name;
+	var attendance = req.headers.attendance;
+	var volunteerTotal = req.headers.vTotal;
+	var volunteerMale = req.headers.vMale;
+	var volunteerFemale = req.headers.vFemale;
 	//This should work but needs further testing.
 	var sql = format("DELETE FROM events WHERE idEvents = %1;", eID);
 	queryDB(con, sql, function(err,result){
@@ -489,14 +489,12 @@ app.post('/createEvent/:id', (req,res)=>{
 //This is the version for creating events.
 app.post('/createEvent', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
-	var eventName = req.body.name;
-	console.log(req)
-	var attendance = req.body.attendance;
-	var volunteerTotal = req.body.vTotal;
-	var volunteerMale = req.body.vMale;
-	var volunteerFemale = req.body.vFemale;
+	var eventName = req.headers.name;
+	var attendance = req.headers.attendance;
+	var volunteerTotal = req.headers.vtotal;
+	var volunteerMale = req.headers.vmale;
+	var volunteerFemale = req.headers.vfemale;
 	var sql = format("INSERT INTO events (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
-	console.log(sql)
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		//Using this on the client side could create JS to iterate over all posts.
@@ -509,7 +507,7 @@ app.post('/deleteEvent/:id', (req, res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var eID = req.params.id;
 	//Delete the event by ID
-	var sql = format("DELETE FROM events WHERE idEvents = %1", eID);
+	var sql = format("DELETE FROM events WHERE idEvents = %1", parseInt(eID));
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		con.end();
