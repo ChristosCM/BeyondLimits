@@ -2,6 +2,7 @@
 'use strict';
 
 const request = require('supertest');
+const expect = require('expect');
 const app = require('./app');
 
 describe('test the blog service', () => {
@@ -16,7 +17,7 @@ describe('test the blog service', () => {
 	    .get('/blogShow')
 	    .expect('Content-type', /json/);
     });
-
+    //Check these.
     it('POST /blogPost succeeds', () => {
         return request(app)
 	    .post('/blogPost')
@@ -136,6 +137,55 @@ describe('test the events service', () => {
     });
 });
 
-describe('test the database service', {} =>{
-    //Write these next.
+describe('test the database service', () =>{
+    it('GET /colSQL succeeds', () => {
+        request(app)
+        .get('/colSQL')
+        .expect(200);
+    })
+    it('GET /colSQL returns correct result', () =>{
+        request(app)
+        .get('colSQL')
+        .expect('{"events":["idEvents","eventName","attendance","volunteerTotal","volunteerMale","volunteerFemale"],"posts":["idposts","title","content","date"],"testimonials":["idtestimonials","name","content","photo"],"volunteer":["idVolunteer","First Name","Surname","Sex","Age","OriginPlace"],"volunteerevents":["idEvents","idVolunteer"]}');
+    })
+    it('ALL /query builds and executes SELECT query', ()=>{
+        request(app)
+        .get('/query')
+        .set('qType', 'SELECT')
+        .set('qTable', 'events')
+        .set('conditions', ['idEvents=1'])
+        .set('operators', [])
+        .expect("Winter Ball");
+    })
+    it('ALL /query builds and executes INSERT query', ()=>{
+        before(function(){
+            request(app)
+            .get('/query')
+            .set('qType', 'INSERT')
+            .set('qTable', 'events')
+            .set('conditions', [['idEvents','eventName','attendance','volunteerTotal','volunteerMale','volunteerFemale'],[null,'Summer Formal',100,10,5,5]])
+            .set('operators', [])
+            .expect(200);
+        });
+    })
+    it('ALL /query builds and executes UPDATE query', ()=>{
+        before(function(){
+            request(app)
+            .get('/query')
+            .set('qType', 'UPDATE')
+            .set('qTable', 'events')
+            .set('conditions', [['attendance'],[120],"eventName = 'Summer Formal'"])
+            .set('operators', [])
+            .expect(200);
+        });
+    })
+    it('ALL /query builds and executes DELETE query', ()=>{
+        request(app)
+        .get('/query')
+        .set('qType', 'DELETE')
+        .set('qTable', 'events')
+        .set('conditions', ['eventName = "Summer Formal"'])
+        .set('operators', [])
+        .expect("Winter Ball");
+    })
 });

@@ -171,13 +171,13 @@ app.post('/volunteerEmail', (req, res)=>{
 			pass: 'testing13.'
 		}
 	});
-	var fname = req.body.fname;
-	var lname = req.body.lname;
-	var address1 = req.body.address1;
-	var address2 = req.body.address2;
-	var email = req.body.email;
-	var county = req.body.county;
-	var info = req.body.info;
+	var fname = req.headers.fname;
+	var lname = req.headers.lname;
+	var address1 = req.headers.address1;
+	var address2 = req.headers.address2;
+	var email = req.headers.email;
+	var county = req.headers.county;
+	var info = req.headers.info;
 	var message = 'VOLUNTEER<br><br>Form details below.<br><br><b>First Name:</b> '+ fname+'<br><b>Last Name:</b> '+ lname+'<br><b>Email:</b> '+ email +'<br><b>Address:</b> '+ address1 +'<br>' + address2 + '<br>' + county + '<br><b>Message:</b> '+ info;
 	
 	const mailOptions = {
@@ -208,10 +208,10 @@ app.post('/helpEmail', (req, res)=>{
 			pass: 'testing13.'
 		}
 	});
-	var fname = req.body.fname;
-	var lname = req.body.lname;
-	var email = req.body.email;
-	var info = req.body.info;
+	var fname = req.headers.fname;
+	var lname = req.headers.lname;
+	var email = req.headers.email;
+	var info = req.headers.info;
 	var message = 'Person Seeking Help<br><br>Form details below.<br><br><b>First Name:</b> '+ fname+'<br><b>Last Name:</b> '+ lname+'<br><b>Email:</b> '+ email + '<br><b>Message:</b> '+ info;
 	
 	const mailOptions = {
@@ -251,8 +251,8 @@ app.get('/blogShow', (req,res)=>{
 app.post('/blogPost/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var bID = req.params.id;
-	var title = req.body.title;
-	var content = req.body.content;
+	var title = req.headers.title;
+	var content = req.headers.content;
 	var today = new Date();
 	var dd = today.getDate();
 	var mm = today.getMonth()+1; //January is 0!
@@ -284,8 +284,8 @@ app.post('/blogPost/:id', (req,res)=>{
 });
 app.post('/blogPost', (req,res) =>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
-	var title = req.body.title;
-	var content = req.body.content;
+	var title = req.headers.title;
+	var content = req.headers.content;
 	var today = new Date();
 	var dd = today.getDate();
 	var mm = today.getMonth()+1; //January is 0!
@@ -336,9 +336,9 @@ app.post('/testimonialsPost/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	//Implement picture upload. I have a copy of this on my PP coursework.
 	var tID = req.params.id;
-	var name = req.body.tName;
-	var content = req.body.content;
-	var picPath = req.body.pPath;
+	var name = req.headers.tName;
+	var content = req.headers.content;
+	var picPath = req.headers.pPath;
 	var sql = format("DELETE FROM testimonials WHERE idtestimonials = %1;", tID);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
@@ -357,9 +357,9 @@ app.post('/testimonialsPost/:id', (req,res)=>{
 app.post('/testimonialsPost', (req,res) =>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	//Implement picture upload. I have a copy of this on my PP coursework.
-	var name = req.body.tName;
-	var content = req.body.content;
-	var picPath = req.body.pPath;
+	var name = req.headers.tName;
+	var content = req.headers.content;
+	var picPath = req.headers.pPath;
 	var sql = format("INSERT INTO testimonials (name,content,photo) VALUES (%1,%2,%3)", name, content, picPath);
 	queryDB(con, sql, function(err, result){
 		if(err) throw err;
@@ -548,7 +548,10 @@ app.get('/colSQL', (req, res)=>{
 				}
 				addToCols(columns);
 				if(i == tables.length){
-					return res.status(200).send([tables,viewCols()]);
+					var finalCols = viewCols();
+					var result = {};
+					tables.forEach((table, i) => result[table] = finalCols[i]);
+					return res.status(200).send(result);
 				}
 				i+=1;
 			});
@@ -566,35 +569,29 @@ app.get('/colSQL', (req, res)=>{
 //Instructions:
 //* For the SELECT query, the form should submit to a separate JS script which formats
 //the data correctly. The type of query(in this case "SELECT") should be placed into 
-//body.qtype in the request, the table should be placed into the body.qTable in the
+//headers.qtype in the request, the table should be placed into the headers.qTable in the
 //request. The conditions and operators need to be separated. If only one condition
-//then the body.operator list will be empty, and conditions are stored in body.conditions.
+//then the headers.operator list will be empty, and conditions are stored in headers.conditions.
 //If more than one condition then store the operators in the list in order.
 //* The DELETE query is very similar in setup to the SELECT query and should be supplied
 //with the data in the same way.
 //* For the INSERT query, the form should submit to a separate JS script which formats the
-//data correctly. Type("INSERT") should be placed into body.qType in the request, and
-//the table should be placed into body.qTable in the request. The fields and what to set their
-//values to in the record should be stored in a list of lists in body.conditions in the 
-//request. "body.conditions[0]" will contain the fields and "body.conditions[1]" the corresponding
+//data correctly. Type("INSERT") should be placed into headers.qType in the request, and
+//the table should be placed into headers.qTable in the request. The fields and what to set their
+//values to in the record should be stored in a list of lists in headers.conditions in the 
+//request. "headers.conditions[0]" will contain the fields and "headers.conditions[1]" the corresponding
 //values.
 //The UPDATE query is very similar in setup to the INSERT query and should be supplied with
 //the data in the same way.
 app.all('/query', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 
-	//This is a testing example. How the query data would be formatted.
-	req.body.qType = "DELETE";
-	req.body.qTable = "events";
-	req.body.conditions = ["idEvents=7"];
-	req.body.operators = [];
-
 	//***QUERYBUILDERS***
 	//Conditions may be a JSON object which is passed to the function from the switch.
 	function selectQ(conditions){
 		//Table to perform the query on
-		var table = req.body.qTable;
-		var operators = req.body.operators;
+		var table = req.headers.qTable;
+		var operators = req.headers.operators;
 		var s = squel.select();
 		s.from(table);
 		//s.field(...)
@@ -615,7 +612,7 @@ app.all('/query', (req,res)=>{
 		return s.toString();
 	}
 	function insertQ(fields, values){
-		var table = req.body.qTable;
+		var table = req.headers.qTable;
 		var s = squel.insert();
 		s.into(table);
 		for(var i = 0; i<values.length; i++){
@@ -623,9 +620,10 @@ app.all('/query', (req,res)=>{
 		}
 		return s.toString();
 	}
+
 	function deleteQ(conditions){
-		var table = req.body.qTable;
-		var operators = req.body.operators;
+		var table = req.headers.qTable;
+		var operators = req.headers.operators;
 		var s = squel.delete();
 		s.from(table);
 		//This for loop will give away the desired structure for conditions.
@@ -644,25 +642,26 @@ app.all('/query', (req,res)=>{
 		s.where(whereStream);
 		return s.toString();
 	}
-	function updateQ(fields, values){
-		var table = req.body.qTable;
+	function updateQ(fields, values, whereStream){
+		var table = req.headers.qTable;
 		var s = squel.update();
 		s.table(table);
 		for(var i = 0; i<values.length; i++){
 			s.set(fields[i], values[i]);
 		}
+		s.where(whereStream);
 		return s.toString();
 	}
 
 
 	//Type of query is passed
-	var type = req.body.qType;
+	var type = req.headers.qType;
 	//Switch based on type
 	switch(type){
 		case "SELECT":
 			//Get all the conditions together on the client side. The format required
 			//is given above in the selectQ function.
-			var conditions = req.body.conditions;
+			var conditions = req.headers.conditions;
 			var query = selectQ(conditions);
 			queryDB(con, query, function(err,result){
 				return res.status(200).send(result);
@@ -670,9 +669,9 @@ app.all('/query', (req,res)=>{
 			});
 			break;
 		case "INSERT":
-			//req.body.conditions is a list of lists
-			var fields = req.body.conditions[0];
-			var values = req.body.conditions[1];
+			//req.headers.conditions is a list of lists
+			var fields = req.headers.conditions[0];
+			var values = req.headers.conditions[1];
 			var query = insertQ(fields, values);
 			queryDB(con, query, function(err,result){
 				return res.sendStatus(200);
@@ -680,17 +679,18 @@ app.all('/query', (req,res)=>{
 			});
 			break;
 		case "UPDATE":
-			//req.body.conditions is a list of lists
-			var fields = req.body.conditions[0];
-			var values = req.body.conditions[1];
-			var query = updateQ(fields, values);
+			//req.headers.conditions is a list of lists
+			var fields = req.headers.conditions[0];
+			var values = req.headers.conditions[1];
+			var withStream = req.headers.conditions[2];
+			var query = updateQ(fields, values, withStream);
 			queryDB(con, query, function(err,result){
 				return res.sendStatus(200);
 				con.end();
 			});
 			break;
 		case "DELETE":
-			var conditions = req.body.conditions;
+			var conditions = req.headers.conditions;
 			var query = deleteQ(conditions);
 			queryDB(con, query, function(err,result){
 				return res.sendStatus(200);
