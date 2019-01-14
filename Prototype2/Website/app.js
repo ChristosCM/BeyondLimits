@@ -1,6 +1,5 @@
 //Need to go back over these methods to ensure that they can only be called by DOM elements or people
 //with adequate level of clearance to do so.
-const mime = require('mime-types');
 const nodemailer = require('nodemailer');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -382,7 +381,7 @@ app.post('/testimonialsDelete/:id', (req,res)=>{
 app.post('/fileUpload', (req,res) => {
 	if(req.files){
 		var file = req.files.filename;
-		if(String(mime.lookup(file)).includes("image")){
+		if(String(file.mimetypes).includes("image")){
 			var fileName = file.name;
 			file.mv("./img/" + fileName, function(err){
 				if(err){
