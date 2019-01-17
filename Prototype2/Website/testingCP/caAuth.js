@@ -1,0 +1,3 @@
+function resetPass(){
+	//call /changePass
+}
