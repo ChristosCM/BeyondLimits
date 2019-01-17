@@ -378,7 +378,7 @@ app.post('/testimonialsDelete/:id', (req,res)=>{
 	return res.status(200).sendFile(__dirname + '/adminPage.html');
 });
 
-app.post('/fileUpload', (req,res) => {
+/*app.post('/fileUpload', (req,res) => {
 	if(req.files){
 		var file = req.files.filename;
 		if(String(file.mimetypes).includes("image")){
@@ -414,7 +414,7 @@ app.post('/fileUpload', (req,res) => {
 		}
 		
 	}
-});
+});*/
 
 //*********************************************************EVENTS*************************************************************
 //Creating events:
@@ -459,6 +459,33 @@ app.get('/eventsAll', (req, res)=>{
 	});
 });
 
+function fileUpload(con,file,id,editStatus){
+	if(String(file.mimetypes).includes("image")){
+		var fileName = file.name;
+		file.mv("./images/events" + fileName, function(err){
+			if(err){
+				console.log(err);
+				return res.sendStatus(404);
+			} else if(editStatus==1){
+				var sql = format("SELECT pPath FROM events WHERE idEvents = %1", id)
+				queryDB(con,sql,function(err1,result){
+					if(err1) throw err1;
+					fs.unlink("./images/events/"+result.pPath,function(err2){
+						if(err2) throw err2;
+					});
+					var sql1 = format("UPDATE events SET pPath = %1 WHERE idEvents = %2", "./images/events/"+fileName, id)
+					queryDB(con,sql1,function(err3,result1){
+						if(err3) throw err3;
+						return
+					});
+				});
+			}
+		});
+	} else {
+		return res.redirect(403,'/adminPage.htm');
+	}
+}
+
 //This is the version for the editing events.
 app.post('/createEvent/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
@@ -468,13 +495,16 @@ app.post('/createEvent/:id', (req,res)=>{
 	var volunteerTotal = req.headers.vTotal;
 	var volunteerMale = req.headers.vMale;
 	var volunteerFemale = req.headers.vFemale;
+	var pPath = req.files.filename;
+	fileUpload(con,pPath,eID,1);
+	var description = req.headers.description;
 	//This should work but needs further testing.
 	var sql = format("DELETE FROM events WHERE idEvents = %1;", eID);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		con.end();
 		var con1 = setupConnection("localhost", "root", "password", "blDB");
-		var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5,%6)", eID, eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
+		var sql = format("INSERT INTO eventsArchive (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description);
 		queryDB(con1,sql,function(err1,result1){
 			if(err1) throw err1;
 			con1.end();
@@ -493,7 +523,10 @@ app.post('/createEvent', (req,res)=>{
 	var volunteerTotal = req.headers.vtotal;
 	var volunteerMale = req.headers.vmale;
 	var volunteerFemale = req.headers.vfemale;
-	var sql = format("INSERT INTO events (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
+	var pPath = req.files.filename;
+	fileUpload(con,pPath,eID,0);
+	var description = req.headers.description;
+	var sql = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description) VALUES (%1,%2,%3,%4,%5,%6,%7)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		//Using this on the client side could create JS to iterate over all posts.
@@ -514,7 +547,9 @@ app.post('/deleteEvent/:id', (req, res)=>{
 		var volunteerTotal = result.volunteerTotal;
 		var volunteerMale = result.volunteerMale;
 		var volunteerFemale = result.volunteerFemale;
-		var sql1 = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
+		var pPath = result.pPath;
+		var description = result.description;
+		var sql1 = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description) VALUES (%1,%2,%3,%4,%5,%6,%7)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath,description);
 		queryDB(con, sql1, function(err1, result1){
 			if(err1) throw err1;
 			var sql2 = format("DELETE FROM events WHERE idEvents = %1", parseInt(eID));
