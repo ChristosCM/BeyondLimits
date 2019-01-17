@@ -506,11 +506,24 @@ app.post('/deleteEvent/:id', (req, res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var eID = req.params.id;
 	//Delete the event by ID
-	var sql = format("DELETE FROM events WHERE idEvents = %1", parseInt(eID));
+	var sql = format("SELECT * FROM events WHERE idEvents = %1", parseInt(eID));
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
-		con.end();
-		return res.sendStatus(200);
+		var eventName = result.eventName;
+		var attendance = result.attendance;
+		var volunteerTotal = result.volunteerTotal;
+		var volunteerMale = result.volunteerMale;
+		var volunteerFemale = result.volunteerFemale;
+		var sql1 = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale) VALUES (%1,%2,%3,%4,%5)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale);
+		queryDB(con, sql1, function(err1, result1){
+			if(err1) throw err1;
+			var sql2 = format("DELETE FROM events WHERE idEvents = %1", parseInt(eID));
+			queryDB(con, sql2, function(err2,result2){
+				if(err2) throw err2;
+				con.end();
+				return res.sendStatus(200);
+			});
+		});
 	});
 });
 
