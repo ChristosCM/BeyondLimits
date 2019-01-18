@@ -45,6 +45,18 @@ function format(string) {
   });
 };
 
+var sha512 = function(password){
+    var hash = crypto.createHmac('sha512', "dhjs277w7dt3gds6"); /** Hashing algorithm sha512 */
+    hash.update(password);
+    var value = hash.digest('hex');
+    return value;
+};
+
+function saltHashPassword(userpassword) {
+    // var salt = genRandomString(16); * Gives us salt of length 16 
+    var passwordData = sha512(userpassword);
+    return passwordData;
+}
 
 //*********************************************************STATISTICS*************************************************************
 function randRGB(i){
@@ -749,7 +761,36 @@ app.all('/query', (req,res)=>{
 
 //*********************************************************ACCOUNTS*************************************************************
 app.post('/changePass', (req,res)=>{
-	//Add some code here; called from caAuth.js
+	var con = setupConnection("localhost", "root", "password", "blDB");
+	var op = req.headers.op;
+	var np = req.headers.np;
+	//if the hash of the old password is not equal to the hash stored then return a 403. Need to be able to select account also.
+	var sql = "SELECT password FROM accounts WHERE idAccount = 1;"
+	queryDB(con,sql,function(err,data){
+		if(err) throw err;
+		if(password != saltHashPassword(op)){
+			return res.sendStatus(403);
+		} else {
+			var sql1 = format("UPDATE accounts SET password = %1 WHERE idAccount=1;", saltHashPassword(np));
+			queryDB(con,sql,function(err1,data1){
+				if(err1) throw err1;
+				return res.sendStatus(200);
+			});
+		}
+	});
+});
+
+app.get('/randomNonce', (req,res)=>{
+	var userSalt = 'dhjs277w7dt3gds6'
+	function uniGenerator() {
+		var S4 = function() {
+	       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+	    };
+	    return (S4()+S4()+S4()+S4());
+	}
+	var nonce = uniGenerator();
+	var nonceSalt = nonce+userSalt;
+	res.status(200).send(nonceSalt);
 });
 
 //*********************************************************VIEW*************************************************************
