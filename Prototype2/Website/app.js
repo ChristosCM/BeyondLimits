@@ -2,10 +2,12 @@
 //with adequate level of clearance to do so.
 const nodemailer = require('nodemailer');
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const app = express();
-var squel = require("squel");
+const squel = require("squel");
+
 
 //*********************************************************SETUP*************************************************************
 //Sets up the connection to the database with the provided parameters.
@@ -173,6 +175,7 @@ app.get('/plotGraph/:one/:two', (req, res) =>{
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(session({secret:"shhhhhhhhhhhh", resave:false, saveUninitialized:true, cookie: { secure: false }, user:{login:false, username: -1}}));
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 app.post('/volunteerEmail', (req, res)=>{
 	const transporter = nodemailer.createTransport({
@@ -761,23 +764,27 @@ app.all('/query', (req,res)=>{
 
 //*********************************************************ACCOUNTS*************************************************************
 app.post('/changePass', (req,res)=>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	var op = req.headers.op;
-	var np = req.headers.np;
-	//if the hash of the old password is not equal to the hash stored then return a 403. Need to be able to select account also.
-	var sql = "SELECT password FROM accounts WHERE idAccount = 1;"
-	queryDB(con,sql,function(err,data){
-		if(err) throw err;
-		if(password != saltHashPassword(op)){
-			return res.sendStatus(403);
-		} else {
-			var sql1 = format("UPDATE accounts SET password = %1 WHERE idAccount=1;", saltHashPassword(np));
-			queryDB(con,sql,function(err1,data1){
-				if(err1) throw err1;
-				return res.sendStatus(200);
-			});
-		}
-	});
+	if(typeof req.session.user !== "undefined"){
+		var con = setupConnection("localhost", "root", "password", "blDB");
+		var op = req.headers.op;
+		var np = req.headers.np;
+		//if the hash of the old password is not equal to the hash stored then return a 403. Need to be able to select account also.
+		var sql = "SELECT password FROM accounts WHERE idAccount = 1;"
+		queryDB(con,sql,function(err,data){
+			if(err) throw err;
+			if(password != saltHashPassword(op)){
+				return res.sendStatus(403);
+			} else {
+				var sql1 = format("UPDATE accounts SET password = %1 WHERE idAccount=1;", saltHashPassword(np));
+				queryDB(con,sql,function(err1,data1){
+					if(err1) throw err1;
+					return res.sendStatus(200);
+				});
+			}
+		});
+	} else {
+		return res.sendStatus(403);
+	}
 });
 
 app.get('/randomNonce', (req,res)=>{
@@ -794,6 +801,7 @@ app.get('/randomNonce', (req,res)=>{
 });
 
 //*********************************************************VIEW*************************************************************
+//Need to find a way to changepass page.
 app.set('view engine', 'html');
 var options = {
 	extensions:['css', 'js', 'png', 'json', 'html']
