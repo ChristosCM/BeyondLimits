@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const app = express();
 const squel = require("squel");
+const fs = require('fs');
 
 
 //*********************************************************SETUP*************************************************************
@@ -55,7 +56,7 @@ var sha512 = function(password){
 };
 
 function saltHashPassword(userpassword) {
-    // var salt = genRandomString(16); * Gives us salt of length 16 
+    // var salt = genRandomString(16); * Gives us salt of length 16
     var passwordData = sha512(userpassword);
     return passwordData;
 }
@@ -135,7 +136,7 @@ function freqPlot(x,y,callback){
 		} else if("VolunteersSplit"){
 			//Potentially add in a split feature for male/female later.
 		}
-		
+
 	} else if(x == "Volunteers") {
 		if(y == "MF"){
 			var sql = "SELECT Sex, COUNT(Sex) as numberSex FROM volunteer GROUP BY Sex";
@@ -193,7 +194,7 @@ app.post('/volunteerEmail', (req, res)=>{
 	var county = req.headers.county;
 	var info = req.headers.info;
 	var message = 'VOLUNTEER<br><br>Form details below.<br><br><b>First Name:</b> '+ fname+'<br><b>Last Name:</b> '+ lname+'<br><b>Email:</b> '+ email +'<br><b>Address:</b> '+ address1 +'<br>' + address2 + '<br>' + county + '<br><b>Message:</b> '+ info;
-	
+
 	const mailOptions = {
 		from: 'testingemailCM@gmail.com',
 		to: 'mortimer907@gmail.com',
@@ -227,7 +228,7 @@ app.post('/helpEmail', (req, res)=>{
 	var email = req.headers.email;
 	var info = req.headers.info;
 	var message = 'Person Seeking Help<br><br>Form details below.<br><br><b>First Name:</b> '+ fname+'<br><b>Last Name:</b> '+ lname+'<br><b>Email:</b> '+ email + '<br><b>Message:</b> '+ info;
-	
+
 	const mailOptions = {
 		from: 'testingemailCM@gmail.com',
 		to: 'mortimer907@gmail.com',
@@ -274,11 +275,11 @@ app.post('/blogPost/:id', (req,res)=>{
 
 	if(dd<10) {
 	    dd = '0'+dd
-	} 
+	}
 
 	if(mm<10) {
 	    mm = '0'+mm
-	} 
+	}
 
 	today = mm + '/' + dd + '/' + yyyy;
 	var sql = format("DELETE FROM posts WHERE idPosts = %1;", bID);
@@ -292,7 +293,7 @@ app.post('/blogPost/:id', (req,res)=>{
 			con1.end();
 		});
 		//Using this on the client side could create JS to iterate over all posts.
-		
+
 		return res.status(200).sendFile(__dirname + '/adminPage.html');
 	});
 });
@@ -307,11 +308,11 @@ app.post('/blogPost', (req,res) =>{
 
 	if(dd<10) {
 	    dd = '0'+dd
-	} 
+	}
 
 	if(mm<10) {
 	    mm = '0'+mm
-	} 
+	}
 
 	today = mm + '/' + dd + '/' + yyyy;
 	var sql = format("INSERT INTO posts (title, content, date) VALUES (%1,%2,%3)", title,content,today);
@@ -364,7 +365,7 @@ app.post('/testimonialsPost/:id', (req,res)=>{
 			con1.end();
 		});
 		//Using this on the client side could create JS to iterate over all posts.
-		
+
 		return res.status(200).sendFile(__dirname + '/adminPage.html');;
 	});
 });
@@ -403,7 +404,7 @@ app.post('/testimonialsDelete/:id', (req,res)=>{
 					console.log(err);
 					return res.sendStatus(404);
 				} else {
-					
+
 					fs.readFile('pmdbUsers.json', function(err, data){
 						var json = JSON.parse(data);
 						for(u in json){
@@ -427,7 +428,7 @@ app.post('/testimonialsDelete/:id', (req,res)=>{
 		} else {
 			return res.redirect(403,'/adminPage.htm');
 		}
-		
+
 	}
 });*/
 
@@ -444,7 +445,7 @@ app.post('/testimonialsDelete/:id', (req,res)=>{
 //* Transition to page where just details of the event in question is shown.
 //* Store the id in question for the event and DELETE the current details of the event from the table.
 //* Values in the input boxes on the screen. These input boxes are in a form which POSTS
-//to the same method as above in "Creating events". 
+//to the same method as above in "Creating events".
 //* Take the details from the page using req params.
 //* INSERT these into the database.
 //* Should automatically update with AJAX on the events page.
@@ -525,7 +526,7 @@ app.post('/createEvent/:id', (req,res)=>{
 			con1.end();
 		});
 		//Using this on the client side could create JS to iterate over all posts.
-		
+
 		return res.sendStatus(200);
 	});
 });
@@ -630,7 +631,7 @@ app.get('/colSQL', (req, res)=>{
 
 //Instructions:
 //* For the SELECT query, the form should submit to a separate JS script which formats
-//the data correctly. The type of query(in this case "SELECT") should be placed into 
+//the data correctly. The type of query(in this case "SELECT") should be placed into
 //headers.qtype in the request, the table should be placed into the headers.qTable in the
 //request. The conditions and operators need to be separated. If only one condition
 //then the headers.operator list will be empty, and conditions are stored in headers.conditions.
@@ -640,7 +641,7 @@ app.get('/colSQL', (req, res)=>{
 //* For the INSERT query, the form should submit to a separate JS script which formats the
 //data correctly. Type("INSERT") should be placed into headers.qType in the request, and
 //the table should be placed into headers.qTable in the request. The fields and what to set their
-//values to in the record should be stored in a list of lists in headers.conditions in the 
+//values to in the record should be stored in a list of lists in headers.conditions in the
 //request. "headers.conditions[0]" will contain the fields and "headers.conditions[1]" the corresponding
 //values.
 //The UPDATE query is very similar in setup to the INSERT query and should be supplied with
@@ -800,6 +801,98 @@ app.get('/randomNonce', (req,res)=>{
 	res.status(200).send(nonceSalt);
 });
 
+//*********************************************************HOMEPAGE*************************************************************
+//CAROUSEL:View,add,delete content
+//View() - return list of content in the carousel, in order NEED: text+colour(css inline?) corresponding to each
+app.get('/home/carousel', (req,res)=>{
+	var files = fs.readdirSync('./images/home');
+	res.json(files); //change to use res.files or multer
+});
+
+//Add(content,index) - insert content in particular position NEED: text+colour(css inline?) corresponding to each
+//NEEDS authorisation
+app.post('/admin/addHomeCarousel', (req,res)=>{
+	var files = fs.readdirSync('./images/home');
+	var index = req.headers.index;
+	// Rename all files of index i and above to maintain order, works down from []length
+	for (i = files.length(); i <= index ; i--){
+		curFile = files[i];
+		fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
+	};
+	//NEED to use multer to deal with the file transfer
+	fs.writeFile(index + '.' + path.extname(req.headers.newFile),req.headers.newFile); //first image gets saved as 0.jpg
+	res.sendStatus(200);
+});
+
+//Delete(index) - delete content at index
+//NEEDS authorisation
+app.post('/admin/deleteHomeCarousel', (req,res)=>{
+	var files = fs.readdirSync('./images/home');
+	var index = req.headers.index;
+	fs.unlink(files[i]);
+	// Need to rename all files of index i and above to maintain order.
+	for (i = index; i <= files.length(); i++){
+		curFile = files[i];
+		fs.renameSync(curFile,i-1 + '.' + path.extname(curFile));
+	};
+	res.sendStatus(200);
+});
+
+//*********************************************************ABOUT US*************************************************************
+//Get text, could be html which would incorporate images, though editing could be an issue unless WYSIWYG editor is used in admin page.
+app.get('/aboutUsText', (req,res)=>{
+	var content = fs.readFile('./textContent/aboutUsText.txt', 'utf8', function(err, data) {
+  								if (err) throw err;
+								});
+	res.json(content);
+});
+//Admin
+//Post request to update text
+//NEEDS authorisation
+app.post('/aboutUsText', (req,res)=>{
+	var content = fs.writeFile('./textContent/aboutUsText.txt', req.body.mainText, function(err, data) {
+  								if (err) throw err;
+								});
+	res.sendStatus(200);
+});
+//*********************************************************HOW WE CAN HELP*************************************************************
+//Get What we can do for you tab text
+app.get('/howWeCanHelpText', (req,res)=>{
+	var content = fs.readFile('./textContent/howWeCanHelpText.txt', 'utf8', function(err, data) {
+  								if (err) throw err;
+								});
+	res.json(content);
+});
+//help form and email already done in email section
+//more information section needs clarification
+//Admin
+//Post request to update text
+//NEEDS authorisation
+app.post('/howWeCanHelpText', (req,res)=>{
+	var content = fs.writeFile('./textContent/howWeCanHelpText.txt', req.body.mainText, function(err, data) {
+  								if (err) throw err;
+								});
+	res.sendStatus(200);
+});
+//*********************************************************VOLUNTEER*************************************************************
+//Get how do I apply tab text
+app.get('/howDoIApplyText', (req,res)=>{
+	var content = fs.readFile('./textContent/howDoIApplyText.txt', 'utf8', function(err, data) {
+  								if (err) throw err;
+								});
+	res.json(content);
+});
+//volunteer form and email already done in email section
+//more information section needs clarification
+//Admin
+//Post request to update text
+//NEEDS authorisation
+app.post('/howDoIApplyText', (req,res)=>{
+	var content = fs.writeFile('./textContent/howDoIApplyText.txt', req.body.mainText, function(err, data) {
+  								if (err) throw err;
+								});
+	res.sendStatus(200);
+});
 //*********************************************************VIEW*************************************************************
 //Need to find a way to changepass page.
 app.set('view engine', 'html');
