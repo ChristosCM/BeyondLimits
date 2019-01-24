@@ -202,28 +202,40 @@ We provide relief of financial hardship by providing such persons with goods, wh
     <div id="blog" class="tab-pane fade container">
       <h3>Blog</h3>
       <hr class="half-rule"/>
-      <div class = "dropdown">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Existing Blog Posts<span class="caret"></span></button>
-        <ul class="dropdown-menu scrollable-menu" role="menu">
-            <li><a href="#">Blog No 1</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
-            <li><a href="#">Blog 2</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button>
-            </li>
-            <li><a href="#">Something Else Here</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
-            <li><a href="#">This Is Another Blog Post</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
-        </ul>
-    </div>
-      <p>Create new blog post</p>
+      <button class = "btn btn-primary" data-toggle = "collapse" data-target = "#blogs">Show/Hide Blog Posts</button>
+        <div id ="blogs" class = "collapse container">
+          <table class="table table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Title</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id = "btable">
+                <tr>
+                  <td>Blog 1</td>
+                  <td>21/12/2018</td>
+                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>Blog 2</td>
+                  <td>12/01/2019</td>
+                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
+                </tr>
+            </table>
+      </div>
+      <p>Or create new Blog Post!</p>
       <form id = "blogForm" action = "http://localhost:80/blogPost" method = "post">
         <div class = "form-group">
           <label class = "control-label" for = "name">Title</label>
           <div class="col-3">          
-              <input type="text" class="form-control" id="name" placeholder="Title" name="name">
+              <input type="text" class="form-control" id="beditort" placeholder="Title" name="name">
             </div>
 
         <br>
         <label class = "control-label" for="blog"><b>Text</b></label>
-        <textarea class='autoExpand' rows='3' data-min-rows='3' placeholder='Auto-Expanding Textarea'></textarea>
-        <textarea form = "blogForm" class="form-control" rows="5" id="blog" name = "content" placeholder="Write blog post here"></textarea>        
+        <textarea form = "blogForm" class="form-control" rows="5" id="beditor" name = "content" placeholder="Write blog post here"></textarea>        
         <button type="submit" name = "submit" class="btn btn-primary" value="Submit">Post</button>
 
 
@@ -245,25 +257,18 @@ We provide relief of financial hardship by providing such persons with goods, wh
               </thead>
               <tbody>
                 <tr>
-                  <td>Blog 1</td>
+                  <td>Testimonial 1</td>
                   <td>21/12/2018</td>
-                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
+                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
                 </tr>
                 <tr>
-                  <td>Blog 2</td>
+                  <td>Testimonial 2</td>
                   <td>12/01/2019</td>
-                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
+                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
                 </tr>
             </table>
-          <ul>
-              <li><a href="#">Blog No 1</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
-              <li><a href="#">Blog 2</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button>
-              </li>
-              <li><a href="#">Something Else Here</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
-              <li><a href="#">This Is Another Blog Post</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
-          </ul>
       </div>
-      <p>Create a new testimonial post!</p>
+      <p>Or ceate a new Testimonial Post!</p>
       <form id = "testimonialForm" action = "http://localhost:80/testimonialPost" method = "post">
         <div class = "form-group">
           <label class = "control-label">Title</label>
@@ -298,6 +303,22 @@ We provide relief of financial hardship by providing such persons with goods, wh
     <div id="database" class="tab-pane fade container">
       <h3>Database functions</h3>
       <p>Here all database queries and functions will be accessible</p>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Table Name
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li><a href="#">Volunteer</a></li>
+          <li><a href="#">Volunteer Events</a></li>
+
+          <li class="divider"></li>
+          <li><a href="#">Events</a></li>
+          <li><a href="#">Events Archive</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Blogs</a></li>
+          <li><a href="#">Testimonials</a></li>
+
+        </ul>
+      </div> 
     </div>
   </div>
 <script>
@@ -311,6 +332,48 @@ We provide relief of financial hardship by providing such persons with goods, wh
       }
       });
   }
+  $.ajax({
+	url:'http://localhost:80/blogShow',
+	type: 'GET',
+	datatype: 'json',
+	success: (posts)=>{
+		for (i=0; i<posts.length; i++){
+			("#btable").append('<tr><td>'+posts[i].title+'</td><td>'+posts[i].date+'</td><td><button onclick = "blogDelete('+posts[i].idposts+')" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick ="blogPost('+posts[i].idposts+')" class="btn btn-info">Edit</button></td></tr>');
+		}
+	}
+});
+$.ajax({
+	url:'http://localhost:80/testimonialsShow',
+	type: 'GET',
+	datatype: 'json',
+	success: (testimonials)=>{
+		for (i=0; i<testimonials.length; i++){
+			("#btable").append('<tr><td>'+testimonials[i].name+'</td><td>'+testimonials[i].date+'</td><td><button onclick = "testimonialsDelete('+testimonials[i].idtestimonials+')" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick ="blogPost('+testimonials[i].idtestimonials+')" class="btn btn-info">Edit</button></td></tr>');
+		}
+	}
+});
+function blogEdit(id){
+  $.ajax({
+    url:'http://localhost:80/blogShow',
+    type : 'GET',
+    datatype : 'json',
+    success: (posts) => {
+      var post = posts.id = [id];
+      ('#beditort').value = post.title;
+      ('#beditor').value = post.content;
+    }
+  });
+}
+function testimonialsDelete(id){
+  $.ajax({
+      url:'http://localhost:80/testimonialsDelete/'+id ,
+	    type: 'POST',
+	    datatype: 'json',
+      success: function(result) {
+
+      }
+      });
+}
   function blogPost(blogID){
     $.ajax({
       url:'http://localhost:80/blogPost/'+blogID, 

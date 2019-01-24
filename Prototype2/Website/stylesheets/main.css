@@ -123,7 +123,7 @@ ul.timeline > li:before {
     height: 10px;
     display: inline-block;
 }
-.divider{
+.divider1{
     width:10px;
     height:auto;
     display:inline-block;
@@ -133,20 +133,7 @@ ul.timeline > li:before {
     max-height: 200px;
     overflow-x: hidden;
 }
-.textarea{  
-  display: block;
-  box-sizing: padding-box;
-  overflow: hidden;
-  
-  height: 100px;
-  padding: 10px;
-  width: 800px;
-  font-size: 14px;
-  margin: 50px auto;
-  border-radius: 6px;
-  box-shadow: 2px 2px 8px rgba(black, .3);
-  border: 0;
-}
+
 .events{
     height:250px;
     /*width:300px;*/

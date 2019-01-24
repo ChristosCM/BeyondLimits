@@ -48,7 +48,7 @@
 		<div class = "row mt-5">
 			<div class="col" id = "blueblock">
 				<h3 id = "whiteh4" class = "blueH">Posts</h3>
-				<ul class="timeline">
+				<ul class="timeline" id = "blist">
 					<li>
 						<a target="_blank" href="#">Post Title 1 </a>
 						<a href="#" class="float-right">21 March, 2014</a>
@@ -59,7 +59,13 @@
 			<div class = "col">
 				<h3 class = "blueH">Testimonials</h3>
 				<div class = "ml-1 testimonials">
-					<div class="media" style = "float:bottom;"><div class="media-left media-middle"><a href="#"><img class="media-object mr-3" src="images/blog/ppexample.png" alt="Picture User" height = 100, width = 100></a></div><div class="media-body"><h4 class="media-heading"><a href = "#">John Smith</a></h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper, et elementum lorem ornare. Maecenas placerat facilisis mollis. Duis sagittis ligula in sodales vehicula....</div></div>
+					<div class="media" style = "float:bottom;"><div class="media-left media-middle"><a href="#"><img class="media-object mr-3" src="images/blog/ppexample.png" alt="Picture User" height = 100, width = 100></a></div>
+					<ul id = "testlist">
+						<li>
+							<div class="media-body"><h4 class="media-heading"><a href = "#">John Smith</a></h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper, et elementum lorem ornare. Maecenas placerat facilisis mollis. Duis sagittis ligula in sodales vehicula....</div>
+						</li>
+					</ul>
+				</div>
 				</div>
 			</div>
 		</div>
@@ -133,6 +139,28 @@
             </div>
           </div>
         </div>
-      </div>
+			</div>
+<script>
+$.ajax({
+	url:'http://localhost:80/blogShow',
+	type: 'GET',
+	datatype: 'json',
+	success: (posts)=>{
+		for (i=0; i<posts.length; i++){
+			("#blist").append('<li><a target="_blank" href="#">'+posts[i].title+ '</a><a href="#" class="float-right">'+posts[i].date+'</a><p>'+posts[i].content+'</p></li>');
+		}
+	}
+});
+$.ajax({
+	url:'http://localhost:80/testimonialsShow',
+	type: 'GET',
+	datatype: 'json',
+	success: (posts)=>{
+		for (i=0; i<posts.length; i++){
+			
+		}
+	}
+});
+</script>
 </body>
 </html>
