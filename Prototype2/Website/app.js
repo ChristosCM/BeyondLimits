@@ -163,6 +163,12 @@ function freqPlot(x,y,callback){
 				con.end();
 			});
 		}
+	} else if (x == "Months") {
+		if (y == "People Helped") {
+			
+		} else if (y == "Volunteers"){
+			
+		}
 	}
 }
 app.get('/plotGraph/:one/:two', (req, res) =>{
@@ -512,6 +518,7 @@ app.post('/createEvent/:id', (req,res)=>{
 	var volunteerTotal = req.headers.vTotal;
 	var volunteerMale = req.headers.vMale;
 	var volunteerFemale = req.headers.vFemale;
+	var date = req.headers.date;
 	var pPath = req.files.filename;
 	fileUpload(con,pPath,eID,1);
 	var description = req.headers.description;
@@ -521,7 +528,7 @@ app.post('/createEvent/:id', (req,res)=>{
 		if(err) throw err;
 		con.end();
 		var con1 = setupConnection("localhost", "root", "password", "blDB");
-		var sql = format("INSERT INTO eventsArchive (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description);
+		var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description,date);
 		queryDB(con1,sql,function(err1,result1){
 			if(err1) throw err1;
 			con1.end();
@@ -540,10 +547,11 @@ app.post('/createEvent', (req,res)=>{
 	var volunteerTotal = req.headers.vtotal;
 	var volunteerMale = req.headers.vmale;
 	var volunteerFemale = req.headers.vfemale;
+	var date = req.headers.date;
 	var pPath = req.files.filename;
 	fileUpload(con,pPath,eID,0);
 	var description = req.headers.description;
-	var sql = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description) VALUES (%1,%2,%3,%4,%5,%6,%7)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description);
+	var sql = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description,date);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		//Using this on the client side could create JS to iterate over all posts.
@@ -566,7 +574,8 @@ app.post('/deleteEvent/:id', (req, res)=>{
 		var volunteerFemale = result.volunteerFemale;
 		var pPath = result.pPath;
 		var description = result.description;
-		var sql1 = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description) VALUES (%1,%2,%3,%4,%5,%6,%7)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath,description);
+		var date = result.date
+		var sql1 = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath,description);
 		queryDB(con, sql1, function(err1, result1){
 			if(err1) throw err1;
 			var sql2 = format("DELETE FROM events WHERE idEvents = %1", parseInt(eID));
