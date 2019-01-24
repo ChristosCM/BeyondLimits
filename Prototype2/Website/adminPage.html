@@ -9,7 +9,7 @@
   <link rel = "stylesheet" type = "text/css" href = "stylesheets/main.css"/>
 </head>
 <body>
-
+  <script src = "functions.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -70,10 +70,13 @@
         });
       </script>
       <button type="button" class="btn btn-primary">Submit</button>
-      <form>
+      <form action = "http://localhost:80/fileUpload" method = "post">
         <div class="form-group">
-          <label for="exampleFormControlFile1">Image to be added to carousel</label>
-          <input type="file" class="form-control-file" id="exampleFormControlFile1">
+          <label class = "control-label" for="carousel">Image to be added to carousel</label>
+          <input type="file" class="form-control-file" id="file-select">
+          <div class = "hdivider"></div>
+          <div>
+          <button class = "btn btn-primary" id="upload">Upload</button></div>
         </div>
         <button type="button" class="btn btn-primary">Submit</button>
       </form>
@@ -106,14 +109,18 @@ We provide relief of financial hardship by providing such persons with goods, wh
       <button class="btn btn-primary" data-toggle="collapse" data-target="#eventsCreate">Create event</button>
       <div id="eventsCreate" class="collapse container">
         Form to create a new event
-        <form class="form-inline" action="/action_page.php">
+        <form action="http://localhost:80/eventPost" method = "post">
           <div class="form-group">
             <label for="eventTitle">Event Title</label>
-            <input type="eventTitle" class="form-control" id="eventTitle">
+            <div class = "col-3">
+            <input type="eventTitle" class="form-control" placeholder = "Event Title" id="eventTitle">
+            </div>
           </div>
           <div class="form-group">
-            <label for="eventDate">eventDate</label>
-            <input type="eventDate" class="form-control" id="eventDate">
+            <label class = "control-label" for="eventDate">Event Date(s)</label>
+            <div class = col-2>
+            <input type="eventDate" class="form-control" placeholder = "Event Date(s)" id="eventDate">
+            </div>
           </div>
         </form>
         <button type="button" class="btn btn-primary">Submit</button>
@@ -170,7 +177,7 @@ We provide relief of financial hardship by providing such persons with goods, wh
       <h3>How you can help</h3>
       <p>How do I apply</p>
       <div class="form-group">
-        <label for="volunteermain">Text:</label>
+        <label for="volunteermain">Text</label>
         <textarea class="form-control" rows="5" id="volunteermain">
 1. Fill out your details
     Complete the form online.
@@ -186,7 +193,7 @@ We provide relief of financial hardship by providing such persons with goods, wh
     <div id="volunteermore" class="tab-pane fade container">
       <h3>Volunteer Testimonials</h3>
       <div class="form-group">
-        <label for="volunteermore">Text:</label>
+        <label for="volunteermore">Text</label>
         <textarea class="form-control" rows="5" id="volunteermore">MORE Volunteering opportunities</textarea>
         </div>
       <button type="button" class="btn btn-primary">Submit</button>
@@ -194,14 +201,80 @@ We provide relief of financial hardship by providing such persons with goods, wh
 
     <div id="blog" class="tab-pane fade container">
       <h3>Blog</h3>
+      <hr class="half-rule"/>
+      <div class = "dropdown">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Existing Blog Posts<span class="caret"></span></button>
+        <ul class="dropdown-menu scrollable-menu" role="menu">
+            <li><a href="#">Blog No 1</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
+            <li><a href="#">Blog 2</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button>
+            </li>
+            <li><a href="#">Something Else Here</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
+            <li><a href="#">This Is Another Blog Post</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
+        </ul>
+    </div>
       <p>Create new blog post</p>
-      <form id = "blogForm" action = "/blogPost" method = "post">
-        <b>Title:</b> <input type = "text" name = "title" label = "Title" />
+      <form id = "blogForm" action = "http://localhost:80/blogPost" method = "post">
+        <div class = "form-group">
+          <label class = "control-label" for = "name">Title</label>
+          <div class="col-3">          
+              <input type="text" class="form-control" id="name" placeholder="Title" name="name">
+            </div>
+
         <br>
-        <label for="blog"><b>Text:</b></label>
-        <textarea form = "blogForm" class="form-control" rows="5" id="blog" name = "content" label="Write blog post here"></textarea>
+        <label class = "control-label" for="blog"><b>Text</b></label>
+        <textarea class='autoExpand' rows='3' data-min-rows='3' placeholder='Auto-Expanding Textarea'></textarea>
+        <textarea form = "blogForm" class="form-control" rows="5" id="blog" name = "content" placeholder="Write blog post here"></textarea>        
+        <button type="submit" name = "submit" class="btn btn-primary" value="Submit">Post</button>
+
+
         <br>
-        <input type="submit" value = "Submit" class="btn btn-primary" />
+        </div>
+      </form>
+      <hr class="half-rule"/>
+      <h3>Testimonials</h3>
+      <hr class="half-rule"/>
+      <button class = "btn btn-primary" data-toggle = "collapse" data-target = "#testimonials">Show/Hide Testimonials</button>
+      <div id ="testimonials" class = "collapse container">
+          <table class="table table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Title</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Blog 1</td>
+                  <td>21/12/2018</td>
+                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>Blog 2</td>
+                  <td>12/01/2019</td>
+                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
+                </tr>
+            </table>
+          <ul>
+              <li><a href="#">Blog No 1</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
+              <li><a href="#">Blog 2</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button>
+              </li>
+              <li><a href="#">Something Else Here</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
+              <li><a href="#">This Is Another Blog Post</a><div class = "divider"></div><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></li>
+          </ul>
+      </div>
+      <p>Create a new testimonial post!</p>
+      <form id = "testimonialForm" action = "http://localhost:80/testimonialPost" method = "post">
+        <div class = "form-group">
+          <label class = "control-label">Title</label>
+          <div class="col-3">          
+              <input type="text" class="form-control" id="name" placeholder="Title" name="name">
+            </div>
+            <label class = "control-label" for="blog"><b>Text</b></label>
+        <textarea form = "blogForm" class="form-control" rows="5" id="blog" name = "content" placeholder="Write testimonial post here"></textarea>
+        </div>
+        <button type="submit" name = "submit" class="btn btn-primary" value="Submit">Post</button>
+
       </form>
     </div>
 
@@ -221,13 +294,44 @@ We provide relief of financial hardship by providing such persons with goods, wh
         </p>
       </div>
     </div>
-    </div>
 
     <div id="database" class="tab-pane fade container">
       <h3>Database functions</h3>
       <p>Here all database queries and functions will be accessible</p>
     </div>
   </div>
+<script>
+  function blogDelete(blogID){
+    $.ajax({
+      url:'http://localhost:80/blogDelete/'+blogID, 
+	    type: 'POST',
+	    datatype: 'json',
+      success: function(result) {
 
+      }
+      });
+  }
+  function blogPost(blogID){
+    $.ajax({
+      url:'http://localhost:80/blogPost/'+blogID, 
+	    type: 'POST',
+	    datatype: 'json',
+
+    });
+  }
+  $("upload").click(function(){
+    $.ajax({
+      url:'http://localhost:80/fileUpload',
+      type: 'POST',
+      //include datatype here
+    })
+  })
+$(document).ready(function(){
+  $('#shide').click(function() {
+    $('#testimonials').toggle();
+});
+});
+
+</script>
 </body>
 </html>

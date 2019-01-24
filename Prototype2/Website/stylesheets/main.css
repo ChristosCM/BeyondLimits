@@ -34,7 +34,9 @@ h3 {
     font-size: 20px;
     padding: 11px;
 }
-
+nav{
+    background-color: #f4f4f4;
+}
 dd {
     text-indent: 2em;
     margin: 0px 0px 3px 0px;
@@ -116,6 +118,35 @@ ul.timeline > li:before {
     height: 20px;
     z-index: 400;
 }
+.hdivider{
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+}
+.divider{
+    width:10px;
+    height:auto;
+    display:inline-block;
+}
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+.textarea{  
+  display: block;
+  box-sizing: padding-box;
+  overflow: hidden;
+  
+  height: 100px;
+  padding: 10px;
+  width: 800px;
+  font-size: 14px;
+  margin: 50px auto;
+  border-radius: 6px;
+  box-shadow: 2px 2px 8px rgba(black, .3);
+  border: 0;
+}
 .events{
     height:100px;
     width:300px;
@@ -135,5 +166,8 @@ ul.timeline > li:before {
 
 h5 {
     font-weight: bold;
+}
+form label {
+    font-weight:bold;
 }
 
