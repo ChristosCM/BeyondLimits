@@ -7,7 +7,10 @@
 	<title>Blog & Testimonials</title>
 </head>
 <body>
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
@@ -141,26 +144,30 @@
         </div>
 			</div>
 <script>
-$.ajax({
-	url:'http://localhost:80/blogShow',
-	type: 'GET',
-	datatype: 'json',
-	success: (posts)=>{
-		for (i=0; i<posts.length; i++){
-			("#blist").append('<li><a target="_blank" href="#">'+posts[i].title+ '</a><a href="#" class="float-right">'+posts[i].date+'</a><p>'+posts[i].content+'</p></li>');
-		}
-	}
-});
-$.ajax({
-	url:'http://localhost:80/testimonialsShow',
-	type: 'GET',
-	datatype: 'json',
-	success: (posts)=>{
-		for (i=0; i<posts.length; i++){
-			
-		}
-	}
-});
+	$(document).ready(function(){
+		$.ajax({
+			url:'http://localhost:80/blogShow',
+			type: 'GET',
+			datatype: 'json',
+			success: (posts)=>{
+				console.log(posts)
+				for (i=0; i<posts.length; i++){
+					$("#blist").append('<li><a target="_blank" href="#">'+posts[i].title+ '</a><a href="#" class="float-right">'+posts[i].date+'</a><p>'+posts[i].content+'</p></li>');
+				}
+			}
+		});
+		$.ajax({
+			url:'http://localhost:80/testimonialsShow',
+			type: 'GET',
+			datatype: 'json',
+			success: (posts)=>{
+				for (i=0; i<posts.length; i++){
+					
+				}
+			}
+		});
+	});
+
 </script>
 </body>
 </html>
