@@ -148,15 +148,15 @@ ul.timeline > li:before {
   border: 0;
 }
 .events{
-    height:100px;
-    width:300px;
+    height:250px;
+    /*width:300px;*/
     color:white;
     background-image:url('../images/events/divineevent.png');
-    background-repeat: no-repeat;
+    /*background-repeat: no-repeat; */
     background-size: cover;
-    padding:0px 0px 5px 5px;
-    border: 1px solid #000;
-    margin-bottom: 20px;
+    /*padding:0px 0px 5px 5px; */
+    border: 5px solid #FFFFFF;
+    /*margin-bottom: 20px;*/
 }
 .collapsing {
     -webkit-transition: none;
