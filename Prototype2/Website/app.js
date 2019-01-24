@@ -176,7 +176,8 @@ app.get('/plotGraph/:one/:two', (req, res) =>{
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(session({secret:"shhhhhhhhhhhh", resave:false, saveUninitialized:true, cookie: { secure: false }, user:{login:false, username: -1}}));
+//lookup alternative memory stores for production: MemoryStore() causes memory leak
+app.use(session({secret:"shhhhhhhhhhhh", resave:false, saveUninitialized:false, cookie: { secure: false }, user:{login:false, username: -1}}));
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 app.post('/volunteerEmail', (req, res)=>{
 	const transporter = nodemailer.createTransport({
