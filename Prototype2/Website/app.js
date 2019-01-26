@@ -165,9 +165,56 @@ function freqPlot(x,y,callback){
 		}
 	} else if (x == "Months") {
 		if (y == "People Helped") {
-			
+			var sql = "SELECT date, attendance FROM events;"
+			queryDB(con, sql, function(err, res){
+				if(err) throw err;
+				var c = randRGB(res.length);
+				var colours = c[0]
+				var borderColours = c[1];
+				var labels = [];
+				var data = [];
+				var ylabel = "#People Helped"
+				var xlabel = "Months"
+				for (var object in res){
+					labels.push(res[object]['date'].split('/')[1]);
+					data.push(res[object]['attendance']);
+				}
+				var graphComponents = {
+					labels: labels,
+					data: data,
+					ylabel:ylabel,
+					xlabel:xlabel,
+					colours:colours,
+					borderColours:borderColours
+				};
+				return callback(graphComponents);
+				con.end();
+			});
 		} else if (y == "Volunteers"){
-			
+			var sql = "SELECT date, volunteerTotal FROM events;"
+			queryDB(con, sql, function(err, res){
+				if(err) throw err;
+				var c = randRGB(res.length);
+				var colours = c[0]
+				var borderColours = c[1];
+				var labels = [];
+				var data = [];
+				var ylabel = "#Volunteers"
+				var xlabel = "Months"
+				for (var object in res){
+					labels.push(res[object]['date'].split('/')[1]);
+					data.push(res[object]['volunteerTotal']);
+				}
+				var graphComponents = {
+					labels: labels,
+					data: data,
+					ylabel:ylabel,
+					xlabel:xlabel,
+					colours:colours,
+					borderColours:borderColours
+				};
+				return callback(graphComponents);
+				con.end();
 		}
 	}
 }
