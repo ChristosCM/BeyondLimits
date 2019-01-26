@@ -8,7 +8,9 @@ const mysql = require('mysql');
 const app = express();
 const squel = require("squel");
 const fs = require('fs');
-
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
 //*********************************************************SETUP*************************************************************
 //Sets up the connection to the database with the provided parameters.
@@ -176,7 +178,7 @@ function freqPlot(x,y,callback){
 				var ylabel = "#People Helped"
 				var xlabel = "Months"
 				for (var object in res){
-					labels.push(res[object]['date'].split('/')[1]);
+					labels.push(monthNames[parseInt(res[object]['date'].split('/')[1])-1]);
 					data.push(res[object]['attendance']);
 				}
 				var graphComponents = {
@@ -202,7 +204,7 @@ function freqPlot(x,y,callback){
 				var ylabel = "#Volunteers"
 				var xlabel = "Months"
 				for (var object in res){
-					labels.push(res[object]['date'].split('/')[1]);
+					labels.push(monthNames[parseInt(res[object]['date'].split('/')[1])-1]);
 					data.push(res[object]['volunteerTotal']);
 				}
 				var graphComponents = {
@@ -215,6 +217,7 @@ function freqPlot(x,y,callback){
 				};
 				return callback(graphComponents);
 				con.end();
+			});
 		}
 	}
 }
