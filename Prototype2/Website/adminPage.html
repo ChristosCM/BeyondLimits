@@ -17,8 +17,8 @@
 
 </head>
 <body>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<!--   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+ -->  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script src = "activeWorkaround.js"></script>
   <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
@@ -294,14 +294,14 @@
           <script src = "graphIt.js"></script>
           <form id="plot">
             <label for="xaxis">X-Axis Variable</label>
-            <select form="plot" class="form-control" id="xaxis">
+            <select form="plot" class="form-control" id="xaxis" onclick="plotSet();">
               <option id="monthsDrop"onclick="plotSet()"value="Months">Months</option>
               <option  id="eventsDrop"onclick="plotSet()"value="Events">Events</option>
               <option  id="volunteerDrop"onclick="plotSet()"value="Volunteer">Volunteers</option>
 
             </select>
             <label for="yaxis">Y-Axis Variable</label>
-            <select form="plot" class="form-control" id="yaxis">
+            <select form="plot" class="form-control" id="yaxis" onclick="plot();">
                 <option id="p1"onclick="plot()"value="Volunteers">Volunteers</option>
                 <option  id="p2"onclick="plot()"value="Attendance">Attendance</option>
                 <option  id="p3"onclick="plot()"value="Months">Months</option>
@@ -321,22 +321,22 @@
       <form action="/query" method="get" id="query">
       <div class="form-group">
         <label for="tables">Select Table</label>
-        <select form="query"class="form-control" id="tables" name = "tables" >
-          <option value="accounts"onclick="showCol()">Accounts</options>
-          <option value ="volunteer" onclick="showCol()"> Volunteer</option>
-          <option value="volunteerevents"onclick="showCol()">Volunteer Events</option>
-          <option value="events"onclick="showCol()">Events</option>
-          <option value="eventsarchive"onclick="showCol()">Events Archive</option>
-          <option value="posts"onclick="showCol()"> Blog Posts</option>
-          <option value="testimonials"onclick="showCol()">Testimonial Posts</option>
+        <select form="query"class="form-control" id="tables" name = "tables" onclick="showCol();">
+          <option value="accounts"onclick="showCol();">Accounts</options>
+          <option value ="volunteer" onclick="showCol();"> Volunteer</option>
+          <option value="volunteerevents"onclick="showCol();">Volunteer Events</option>
+          <option value="events"onclick="showCol();">Events</option>
+          <option value="eventsarchive"onclick="showCol();">Events Archive</option>
+          <option value="posts"onclick="showCol();"> Blog Posts</option>
+          <option value="testimonials"onclick="showCol();">Testimonial Posts</option>
         </select>
       </div> 
       <div class="form-group">
         <select form="query"class="form-control" id="type" name = "type">
-          <option onclick="showCol()" value="SELECT">Select</option>
-          <option onclick="showCol()" value="DELETE">Delete</option>
-          <option onclick="showCol()" value="INSERT">Insert</option>
-          <option onclick="showCol()" value="UPDATE">Update</option>
+          <option onclick="showCol();" value="SELECT">Select</option>
+          <option onclick="showCol();" value="DELETE">Delete</option>
+          <option onclick="showCol();" value="INSERT">Insert</option>
+          <option onclick="showCol();" value="UPDATE">Update</option>
         </select>
       </div>
       </form>

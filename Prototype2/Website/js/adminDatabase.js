@@ -4,6 +4,7 @@ function createTable(array) {
         table+='<th>'+array[i]+'</th>';
     }
     table += '</thead></table>'
+    console.log("work");
     $("#data").html(table);
     $("#data").show();
 
@@ -94,6 +95,7 @@ function query(){
     //need to add the delete function
 }
   function showCol(){
+    console.log("works");
     var table = $("#tables").val();
     var type = $("#type").val();
     $.ajax({
