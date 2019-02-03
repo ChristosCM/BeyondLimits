@@ -8,7 +8,9 @@ const mysql = require('mysql');
 const app = express();
 const squel = require("squel");
 const fs = require('fs');
-
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
 //*********************************************************SETUP*************************************************************
 //Sets up the connection to the database with the provided parameters.
@@ -163,6 +165,60 @@ function freqPlot(x,y,callback){
 				con.end();
 			});
 		}
+	} else if (x == "Months") {
+		if (y == "People Helped") {
+			var sql = "SELECT date, attendance FROM events;"
+			queryDB(con, sql, function(err, res){
+				if(err) throw err;
+				var c = randRGB(res.length);
+				var colours = c[0]
+				var borderColours = c[1];
+				var labels = [];
+				var data = [];
+				var ylabel = "#People Helped"
+				var xlabel = "Months"
+				for (var object in res){
+					labels.push(monthNames[parseInt(res[object]['date'].split('/')[1])-1]);
+					data.push(res[object]['attendance']);
+				}
+				var graphComponents = {
+					labels: labels,
+					data: data,
+					ylabel:ylabel,
+					xlabel:xlabel,
+					colours:colours,
+					borderColours:borderColours
+				};
+				return callback(graphComponents);
+				con.end();
+			});
+		} else if (y == "Volunteers"){
+			var sql = "SELECT date, volunteerTotal FROM events;"
+			queryDB(con, sql, function(err, res){
+				if(err) throw err;
+				var c = randRGB(res.length);
+				var colours = c[0]
+				var borderColours = c[1];
+				var labels = [];
+				var data = [];
+				var ylabel = "#Volunteers"
+				var xlabel = "Months"
+				for (var object in res){
+					labels.push(monthNames[parseInt(res[object]['date'].split('/')[1])-1]);
+					data.push(res[object]['volunteerTotal']);
+				}
+				var graphComponents = {
+					labels: labels,
+					data: data,
+					ylabel:ylabel,
+					xlabel:xlabel,
+					colours:colours,
+					borderColours:borderColours
+				};
+				return callback(graphComponents);
+				con.end();
+			});
+		}
 	}
 }
 app.get('/plotGraph/:one/:two', (req, res) =>{
@@ -176,7 +232,8 @@ app.get('/plotGraph/:one/:two', (req, res) =>{
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(session({secret:"shhhhhhhhhhhh", resave:false, saveUninitialized:true, cookie: { secure: false }, user:{login:false, username: -1}}));
+//lookup alternative memory stores for production: MemoryStore() causes memory leak
+app.use(session({secret:"shhhhhhhhhhhh", resave:false, saveUninitialized:false, cookie: { secure: false }, user:{login:false, username: -1}}));
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 app.post('/volunteerEmail', (req, res)=>{
 	const transporter = nodemailer.createTransport({
@@ -511,6 +568,7 @@ app.post('/createEvent/:id', (req,res)=>{
 	var volunteerTotal = req.headers.vTotal;
 	var volunteerMale = req.headers.vMale;
 	var volunteerFemale = req.headers.vFemale;
+	var date = req.headers.date;
 	var pPath = req.files.filename;
 	fileUpload(con,pPath,eID,1);
 	var description = req.headers.description;
@@ -520,7 +578,7 @@ app.post('/createEvent/:id', (req,res)=>{
 		if(err) throw err;
 		con.end();
 		var con1 = setupConnection("localhost", "root", "password", "blDB");
-		var sql = format("INSERT INTO eventsArchive (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description);
+		var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description,date);
 		queryDB(con1,sql,function(err1,result1){
 			if(err1) throw err1;
 			con1.end();
@@ -539,10 +597,11 @@ app.post('/createEvent', (req,res)=>{
 	var volunteerTotal = req.headers.vtotal;
 	var volunteerMale = req.headers.vmale;
 	var volunteerFemale = req.headers.vfemale;
+	var date = req.headers.date;
 	var pPath = req.files.filename;
 	fileUpload(con,pPath,eID,0);
 	var description = req.headers.description;
-	var sql = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description) VALUES (%1,%2,%3,%4,%5,%6,%7)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description);
+	var sql = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description,date);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		//Using this on the client side could create JS to iterate over all posts.
@@ -565,7 +624,8 @@ app.post('/deleteEvent/:id', (req, res)=>{
 		var volunteerFemale = result.volunteerFemale;
 		var pPath = result.pPath;
 		var description = result.description;
-		var sql1 = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description) VALUES (%1,%2,%3,%4,%5,%6,%7)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath,description);
+		var date = result.date
+		var sql1 = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath,description);
 		queryDB(con, sql1, function(err1, result1){
 			if(err1) throw err1;
 			var sql2 = format("DELETE FROM events WHERE idEvents = %1", parseInt(eID));
@@ -841,10 +901,10 @@ app.post('/admin/deleteHomeCarousel', (req,res)=>{
 //*********************************************************ABOUT US*************************************************************
 //Get text, could be html which would incorporate images, though editing could be an issue unless WYSIWYG editor is used in admin page.
 app.get('/aboutUsText', (req,res)=>{
-	var content = fs.readFile('./textContent/aboutUsText.txt', 'utf8', function(err, data) {
-  								if (err) throw err;
+	fs.readFile('./textContent/aboutUsText.txt', 'utf8', function(err, data) {
+		res.json(data);
+  	if (err) throw err;
 								});
-	res.json(content);
 });
 //Admin
 //Post request to update text
@@ -858,10 +918,12 @@ app.post('/aboutUsText', (req,res)=>{
 //*********************************************************HOW WE CAN HELP*************************************************************
 //Get What we can do for you tab text
 app.get('/howWeCanHelpText', (req,res)=>{
-	var content = fs.readFile('./textContent/howWeCanHelpText.txt', 'utf8', function(err, data) {
-  								if (err) throw err;
+	fs.readFile('./textContent/howWeCanHelpText.txt', 'utf8', function(err, data) {
+		if (err) throw err;
+		res.json(data);
+
 								});
-	res.json(content);
+
 });
 //help form and email already done in email section
 //more information section needs clarification
@@ -869,18 +931,19 @@ app.get('/howWeCanHelpText', (req,res)=>{
 //Post request to update text
 //NEEDS authorisation
 app.post('/howWeCanHelpText', (req,res)=>{
-	var content = fs.writeFile('./textContent/howWeCanHelpText.txt', req.body.mainText, function(err, data) {
-  								if (err) throw err;
-								});
+	console.log(req.body.mainText);
+	fs.writeFile('./textContent/howWeCanHelpText.txt', req.body.mainText, function(err, data) {
+	if (err) throw err;
+	});
 	res.sendStatus(200);
 });
 //*********************************************************VOLUNTEER*************************************************************
 //Get how do I apply tab text
 app.get('/howDoIApplyText', (req,res)=>{
-	var content = fs.readFile('./textContent/howDoIApplyText.txt', 'utf8', function(err, data) {
-  								if (err) throw err;
-								});
+	fs.readFile('./textContent/howDoIApplyText.txt', 'utf8', function(err, data) {
+	if (err) throw err;
 	res.json(content);
+	});
 });
 //volunteer form and email already done in email section
 //more information section needs clarification
@@ -888,7 +951,7 @@ app.get('/howDoIApplyText', (req,res)=>{
 //Post request to update text
 //NEEDS authorisation
 app.post('/howDoIApplyText', (req,res)=>{
-	var content = fs.writeFile('./textContent/howDoIApplyText.txt', req.body.mainText, function(err, data) {
+	fs.writeFile('./textContent/howDoIApplyText.txt', req.body.mainText, function(err, data) {
   								if (err) throw err;
 								});
 	res.sendStatus(200);
