@@ -901,10 +901,10 @@ app.post('/admin/deleteHomeCarousel', (req,res)=>{
 //*********************************************************ABOUT US*************************************************************
 //Get text, could be html which would incorporate images, though editing could be an issue unless WYSIWYG editor is used in admin page.
 app.get('/aboutUsText', (req,res)=>{
-	var content = fs.readFile('./textContent/aboutUsText.txt', 'utf8', function(err, data) {
-  								if (err) throw err;
+	fs.readFile('./textContent/aboutUsText.txt', 'utf8', function(err, data) {
+		res.json(data);
+  	if (err) throw err;
 								});
-	res.json(content);
 });
 //Admin
 //Post request to update text
@@ -918,10 +918,12 @@ app.post('/aboutUsText', (req,res)=>{
 //*********************************************************HOW WE CAN HELP*************************************************************
 //Get What we can do for you tab text
 app.get('/howWeCanHelpText', (req,res)=>{
-	var content = fs.readFile('./textContent/howWeCanHelpText.txt', 'utf8', function(err, data) {
-  								if (err) throw err;
+	fs.readFile('./textContent/howWeCanHelpText.txt', 'utf8', function(err, data) {
+		if (err) throw err;
+		res.json(data);
+
 								});
-	res.json(content);
+
 });
 //help form and email already done in email section
 //more information section needs clarification
@@ -929,18 +931,19 @@ app.get('/howWeCanHelpText', (req,res)=>{
 //Post request to update text
 //NEEDS authorisation
 app.post('/howWeCanHelpText', (req,res)=>{
-	var content = fs.writeFile('./textContent/howWeCanHelpText.txt', req.body.mainText, function(err, data) {
-  								if (err) throw err;
-								});
+	console.log(req.body.mainText);
+	fs.writeFile('./textContent/howWeCanHelpText.txt', req.body.mainText, function(err, data) {
+	if (err) throw err;
+	});
 	res.sendStatus(200);
 });
 //*********************************************************VOLUNTEER*************************************************************
 //Get how do I apply tab text
 app.get('/howDoIApplyText', (req,res)=>{
-	var content = fs.readFile('./textContent/howDoIApplyText.txt', 'utf8', function(err, data) {
-  								if (err) throw err;
-								});
+	fs.readFile('./textContent/howDoIApplyText.txt', 'utf8', function(err, data) {
+	if (err) throw err;
 	res.json(content);
+	});
 });
 //volunteer form and email already done in email section
 //more information section needs clarification
@@ -948,7 +951,7 @@ app.get('/howDoIApplyText', (req,res)=>{
 //Post request to update text
 //NEEDS authorisation
 app.post('/howDoIApplyText', (req,res)=>{
-	var content = fs.writeFile('./textContent/howDoIApplyText.txt', req.body.mainText, function(err, data) {
+	fs.writeFile('./textContent/howDoIApplyText.txt', req.body.mainText, function(err, data) {
   								if (err) throw err;
 								});
 	res.sendStatus(200);
