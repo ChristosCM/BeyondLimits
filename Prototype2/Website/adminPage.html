@@ -7,15 +7,22 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel = "stylesheet" type = "text/css" href = "stylesheets/admin.css"/>
   <link rel = "stylesheet" type = "text/css" href = "stylesheets/main.css"/>
+  <script type="text/javascript"
+    src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+    <script src="js/adminPage.js" type="text/javascript"></script>
+    <script src="js/adminGeneral.js" type="text/javascript"></script>
+    <script src="js/adminDatabase.js" type="text/javascript"></script>
+
+
 </head>
 <body>
-
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script src = "activeWorkaround.js"></script>
   <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
-  <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css"
+  <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css">
 
   <nav class="navbar navbar-light bg-light">
     <a class="title navbar-brand mb-0 h1" style = "color:white;font-weight:bold;">BeyondLimits Administrator Controls</a>
@@ -69,13 +76,16 @@
           });
         });
       </script>
-      <button type="button" class="btn btn-primary">Submit</button>
-      <form>
+      <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
+      <form action = "/fileUpload" method = "post">
         <div class="form-group">
-          <label for="exampleFormControlFile1">Image to be added to carousel</label>
-          <input type="file" class="form-control-file" id="exampleFormControlFile1">
+          <label class = "control-label" for="carousel">Image to be added to carousel</label>
+          <input type="file" class="form-control-file" id="file-select">
+          <div class = "hdivider"></div>
+          <div>
+          <button class = "btn btn-primary" id="upload">Upload</button></div>
         </div>
-        <button type="button" class="btn btn-primary">Submit</button>
+        <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
       </form>
 
     </div>
@@ -83,22 +93,14 @@
 
     <div id="aboutus" class="tab-pane fade container">
       <h3>About Us</h3>
-      <textarea id="editoraboutus">
-        <div style="text-align: center;">Beyond Limits aims to provide a place of peace or retreat to relieve anyone in poverty or distress by reason of youth, age, ill-health, disability, financial hardship or other disadvantage by providing the facilities to allow individuals and families to spend time away from home to reconnect with themselves, their families or with others.
-
-We also promote learning through the continued development of individual capabilities, competencies, skills and understanding in subjects of educational & personal value by providing training and development of skills and knowledge to those attending the retreat as a result of youth, age, ill-health, disability, financial hardship or other disadvantage allowing them to succeed beyond their limits.
-
-We provide relief of financial hardship by providing such persons with goods, which they could not otherwise afford through lack of means. We operate with a Christian Ethos.</div>
-        </div>
+      <form action="/aboutUsText" method="post" id="aboutUpload">
+        <div class="form-group">
+      <textarea class="form-control" id="editoraboutus" rows="5" >
+        <div style="text-align: center;" ></div>
       </textarea>
-      <script type="text/javascript">
-        $(document).ready(function () {
-          $("#editoraboutus").editor({
-            uiLibrary: 'bootstrap4'
-          });
-        });
-      </script>
-      <button type="button" class="btn btn-primary">Submit</button>
+      </div>
+      <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
+      </form>
     </div>
 
     <div id="events" class="tab-pane fade container">
@@ -106,18 +108,43 @@ We provide relief of financial hardship by providing such persons with goods, wh
       <button class="btn btn-primary" data-toggle="collapse" data-target="#eventsCreate">Create event</button>
       <div id="eventsCreate" class="collapse container">
         Form to create a new event
-        <form class="form-inline" action="/action_page.php">
+        <form id="eventPost" action="" method = "post">
           <div class="form-group">
             <label for="eventTitle">Event Title</label>
-            <input type="eventTitle" class="form-control" id="eventTitle">
+            <div class = "col-3">
+            <input type="text" class="form-control" placeholder = "Event Title" id="eventTitle">
+            </div>
+          </div>
+
+            <div class="form-group">
+              <label for="description">Description</label>
+              <div class = "col-3">
+              <input type="text" class="form-control" placeholder = "Description" id="description">
+              </div>
           </div>
           <div class="form-group">
-            <label for="eventDate">eventDate</label>
-            <input type="eventDate" class="form-control" id="eventDate">
+            <label class = "control-label" for="eventDate">Event Date(s)</label>
+            <div class = col-2>
+            <input type="text" class="form-control" placeholder = "Event Date(s)" id="eventDate">
+            </div>
           </div>
-        </form>
-        <button type="button" class="btn btn-primary">Submit</button>
-      </div>
+          <div class="form-group">
+            <label class = "control-label" for="attendance">Attendance</label>
+            <div class = col-2>
+            <input type="text" class="form-control" placeholder = "Attendance" id="attendance">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class = "control-label" for="eventDate">Number of Volunteers</label>
+            <div class = col-2>
+            <input type="text" class="form-control" placeholder = "No of Volunteers" id="volunteersTotal">
+            </div>
+          </div>
+          
+        <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
+    </form>
+  </div>
+
       <button class="btn btn-primary" data-toggle="collapse" data-target="#eventsEdit">Edit event</button>
       <div id="eventsEdit" class="collapse container">
         This will allow editing and deleting of current events
@@ -126,19 +153,15 @@ We provide relief of financial hardship by providing such persons with goods, wh
             <tr>
               <th>Title</th>
               <th>Date</th>
-              <th>Data</th>
+              <th>Attendance</th>
+              <th>Volunteers</th>
+              <th>Action</th>
+
+
             </tr>
           </thead>
-          <tbody>
+          <tbody id="eventsTable">
             <tr>
-              <td>Winter Ball</td>
-              <td>21/12/2018</td>
-              <td>Other value</td>
-            </tr>
-            <tr>
-              <td>Event 2</td>
-              <td>12/01/2019</td>
-              <td>Other value</td>
             </tr>
         </table>
       </div>
@@ -146,62 +169,116 @@ We provide relief of financial hardship by providing such persons with goods, wh
 
     <div id="wehelpmain" class="tab-pane fade container">
       <h3>How we can help</h3>
+      <form action="/howWeCanHelpText" method="post">
       <div class="form-group">
-        <label for="wehelpmain">Text:</label>
-        <textarea class="form-control" rows="5" id="wehelpmain">Beyond Limits aims to provide a place of peace or retreat to relieve anyone in poverty or distress by reason of youth, age, ill-health, disability, financial hardship or other disadvantage by providing the facilities to allow individuals and families to spend time away from home to reconnect with themselves, their families or with others.
-
-We also promote learning through the continued development of individual capabilities, competencies, skills and understanding in subjects of educational & personal value by providing training and development of skills and knowledge to those attending the retreat as a result of youth, age, ill-health, disability, financial hardship or other disadvantage allowing them to succeed beyond their limits.
-
-We provide relief of financial hardship by providing such persons with goods, which they could not otherwise afford through lack of means. We operate with a Christian Ethos.</textarea>
+        <textarea class="form-control" rows="5" id="editorHowWe"></textarea>
       </div>
-      <button type="button" class="btn btn-primary">Submit</button>
+      <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
+      </form>
     </div>
     <div id="wehelpmore" class="tab-pane fade container">
       <h3>How we can help more information</h3>
       <p></p>
+      <form action="/weHelpMore" method="post">
+
       <div class="form-group">
-        <label for="wehelpmore">Text:</label>
-        <textarea class="form-control" rows="5" id="wehelpmore">More information goes here</textarea>
+        <textarea class="form-control" rows="5" id="editorMore">More information goes here</textarea>
       </div>
-      <button type="button" class="btn btn-primary">Submit</button>
+      <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
+      </form>
     </div>
 
     <div id="volunteermain" class="tab-pane fade container">
       <h3>How you can help</h3>
-      <p>How do I apply</p>
+      <form action="/volUpload" method="post">
       <div class="form-group">
-        <label for="volunteermain">Text:</label>
-        <textarea class="form-control" rows="5" id="volunteermain">
-1. Fill out your details
-    Complete the form online.
-2. We'll review your application
-    A member of our admin team will review your application and get in touch with you using the contact details you have provided.
-3. We'll ask you to help out
-    We will check your availability for the upcoming events. Please let us know what life skills you have that you can bring to Beyond Limits.
-4. Volunteering Day
-    On this day with a Team Leader, we will provide you with training to do the task you have volunteered to do. </textarea>
+        <textarea class="form-control" rows="5" id="editorVol">
+        </textarea>
         </div>
-      <button type="button" class="btn btn-primary">Submit</button>
+        <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
+      </form>
     </div>
     <div id="volunteermore" class="tab-pane fade container">
       <h3>Volunteer Testimonials</h3>
+      <form action="/volMoreUpload" method="post">
       <div class="form-group">
-        <label for="volunteermore">Text:</label>
-        <textarea class="form-control" rows="5" id="volunteermore">MORE Volunteering opportunities</textarea>
+        <textarea class="form-control" rows="5" id="editorVolMore"></textarea>
         </div>
-      <button type="button" class="btn btn-primary">Submit</button>
+        <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
+      </form>
     </div>
 
     <div id="blog" class="tab-pane fade container">
       <h3>Blog</h3>
-      <p>Create new blog post</p>
-      <form id = "blogForm" action = "/blogPost" method = "post">
-        <b>Title:</b> <input type = "text" name = "title" label = "Title" />
+      <hr class="half-rule"/>
+      <button class = "btn btn-primary" data-toggle = "collapse" data-target = "#blogs">Show/Hide Blog Posts</button>
+        <div id ="blogs" class = "collapse container">
+          <table class="table table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Title</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id = "btable">
+                <tr>
+                  
+                </tr>
+            </table>
+      </div>
+      <p>Or create new Blog Post!</p>
+      <form id = "blogForm" action = "http://localhost:80/blogPost" method = "post">
+        <div class = "form-group">
+          <label class = "control-label" for = "name">Title</label>
+          <div class="col-3">          
+              <input type="text" class="form-control" id="beditort" placeholder="Title" name="name">
+            </div>
+
         <br>
-        <label for="blog"><b>Text:</b></label>
-        <textarea form = "blogForm" class="form-control" rows="5" id="blog" name = "content" label="Write blog post here"></textarea>
+        <label class = "control-label" for="blog"><b>Text</b></label>
+        <textarea class="form-control" rows="5" id="beditor" name = "content" placeholder="Write blog post here"></textarea>        
+        <button type="submit" name = "submit" class="btn btn-primary" value="Submit">Post</button>
+
+
         <br>
-        <input type="submit" value = "Submit" class="btn btn-primary" />
+        </div>
+      </form>
+      <hr class="half-rule"/>
+      <h3>Testimonials</h3>
+      <hr class="half-rule"/>
+      <button class = "btn btn-primary" data-toggle = "collapse" data-target = "#testimonials">Show/Hide Testimonials</button>
+      <div id ="testimonials" class = "collapse container">
+          <table class="table table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Title</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id=testTable>
+                <tr>
+                  <td>Testimonial 1</td>
+                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>Testimonial 2</td>
+                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
+                </tr>
+            </table>
+      </div>
+      <p>Or ceate a new Testimonial Post!</p>
+      <form id = "testimonialForm" action = "http://localhost:80/testimonialPost" method = "post">
+        <div class = "form-group">
+          <label class = "control-label">Title</label>
+          <div class="col-3">          
+              <input type="text" class="form-control" id="testname" placeholder="Title" >
+            </div>
+            <label class = "control-label" for="blog"><b>Text</b></label>
+        <textarea class="form-control" rows="5" id="testeditor" name = "content" placeholder="Write testimonial post here"></textarea>
+        </div>
+        <button type="submit" name = "submit" class="btn btn-primary" value="Submit">Post</button>
+
       </form>
     </div>
 
@@ -211,23 +288,63 @@ We provide relief of financial hardship by providing such persons with goods, wh
       <div class = "row">
         <p>
           <div class = "col ml-3">
-            <canvas id="myChart" width="500" height="500"></canvas>
+            <canvas id="chart" width="500" height="500"></canvas>
           </div>
           <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
           <script src = "graphIt.js"></script>
-          <form>
-            <input id="clickMe" type="button" value="Click!" onclick="main('Volunteers', 'MF');" />
+          <form id="plot">
+            <label for="xaxis">X-Axis Variable</label>
+            <select form="plot" class="form-control" id="xaxis">
+              <option id="monthsDrop"onclick="plotSet()"value="Months">Months</option>
+              <option  id="eventsDrop"onclick="plotSet()"value="Events">Events</option>
+              <option  id="volunteerDrop"onclick="plotSet()"value="Volunteer">Volunteers</option>
+
+            </select>
+            <label for="yaxis">Y-Axis Variable</label>
+            <select form="plot" class="form-control" id="yaxis">
+                <option id="p1"onclick="plot()"value="Volunteers">Volunteers</option>
+                <option  id="p2"onclick="plot()"value="Attendance">Attendance</option>
+                <option  id="p3"onclick="plot()"value="Months">Months</option>
+                <option  id="p4"onclick="plot()"value="MF">Male/Female</option>
+                <option  id="p5"onclick="plot()"value="People Helped">People Helped</option>
+
+
+              </select>
           </form>
         </p>
       </div>
-    </div>
     </div>
 
     <div id="database" class="tab-pane fade container">
       <h3>Database functions</h3>
       <p>Here all database queries and functions will be accessible</p>
+      <form action="/query" method="get" id="query">
+      <div class="form-group">
+        <label for="tables">Select Table</label>
+        <select form="query"class="form-control" id="tables" name = "tables" >
+          <option value="accounts"onclick="showCol()">Accounts</options>
+          <option value ="volunteer" onclick="showCol()"> Volunteer</option>
+          <option value="volunteerevents"onclick="showCol()">Volunteer Events</option>
+          <option value="events"onclick="showCol()">Events</option>
+          <option value="eventsarchive"onclick="showCol()">Events Archive</option>
+          <option value="posts"onclick="showCol()"> Blog Posts</option>
+          <option value="testimonials"onclick="showCol()">Testimonial Posts</option>
+        </select>
+      </div> 
+      <div class="form-group">
+        <select form="query"class="form-control" id="type" name = "type">
+          <option onclick="showCol()" value="SELECT">Select</option>
+          <option onclick="showCol()" value="DELETE">Delete</option>
+          <option onclick="showCol()" value="INSERT">Insert</option>
+          <option onclick="showCol()" value="UPDATE">Update</option>
+        </select>
+      </div>
+      </form>
+      <hr class="half-rule">
+      <div id="data"></div>
+      <div id="typeForm"></div>
+      <div id="dataQu"></div>
     </div>
   </div>
-
 </body>
 </html>
