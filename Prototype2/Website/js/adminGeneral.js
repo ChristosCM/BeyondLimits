@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $("#editoraboutus").editor({
-      uiLibrary: 'bootstrap4'
+      uiLibrary: 'bootstrap4',
+      height: 400,
     });
   });
   $(document).ready(function () {
