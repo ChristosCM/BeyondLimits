@@ -865,39 +865,46 @@ app.get('/randomNonce', (req,res)=>{
 
 //*********************************************************HOMEPAGE*************************************************************
 //CAROUSEL:View,add,delete content
-//View() - return list of content in the carousel, in order NEED: text+colour(css inline?) corresponding to each
+//View() - return JSON of content in the carousel, [filename:(color,title,subtitle)]
 app.get('/home/carousel', (req,res)=>{
-	var files = fs.readdirSync('./images/home');
-	res.json(files); //change to use res.files or multer
+  fs.readFile('./images/home/info.json', function(err, data){
+    object = JSON.parse(info);
+    res.json(object);
+  	if (err) throw err;
+  });
 });
 
 //Add(content,index) - insert content in particular position NEED: text+colour(css inline?) corresponding to each
 //NEEDS authorisation
 app.post('/admin/addHomeCarousel', (req,res)=>{
-	var files = fs.readdirSync('./images/home');
-	var index = req.headers.index;
-	// Rename all files of index i and above to maintain order, works down from []length
-	for (i = files.length(); i <= index ; i--){
-		curFile = files[i];
-		fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
-	};
-	//NEED to use multer to deal with the file transfer
-	fs.writeFile(index + '.' + path.extname(req.headers.newFile),req.headers.newFile); //first image gets saved as 0.jpg
-	res.sendStatus(200);
+  var index = req.headers.index;
+	fs.readdirSync('./images/home', function(err,data){
+    var files = data.length -1;
+  	// Rename all files of index i and above to maintain order, works down from files.length
+  	for (i = files.length(); i <= index ; i--){
+  		var curFile = files[i];
+  		fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
+  	};
+  	//NEED to use multer to deal with the file transfer
+  	fs.writeFile(index + '.' + path.extname(req.headers.newFile),req.headers.newFile, function(err, data){}); //first image gets saved as 0.jpg
+  	res.sendStatus(200);
+  });
 });
 
 //Delete(index) - delete content at index
 //NEEDS authorisation
 app.post('/admin/deleteHomeCarousel', (req,res)=>{
-	var files = fs.readdirSync('./images/home');
-	var index = req.headers.index;
-	fs.unlink(files[i]);
-	// Need to rename all files of index i and above to maintain order.
-	for (i = index; i <= files.length(); i++){
-		curFile = files[i];
-		fs.renameSync(curFile,i-1 + '.' + path.extname(curFile));
-	};
-	res.sendStatus(200);
+  var index = req.headers.index;
+  fs.readdirSync('./images/home', function(err, files){
+  	fs.unlink(files[i], function(){
+      // Need to rename all files of index i and above to maintain order.
+      for (i = index; i <= files.length(); i++){
+        var curFile = files[i];
+        fs.renameSync(curFile,i-1 + '.' + path.extname(curFile));
+      };
+      res.sendStatus(200);
+    });
+  })
 });
 
 //*********************************************************ABOUT US*************************************************************
