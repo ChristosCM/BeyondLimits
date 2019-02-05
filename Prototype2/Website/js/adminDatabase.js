@@ -76,15 +76,20 @@ function query(){
         var operator;
         var values = [];
         if (text1){
-            if (typeof(text1) == String){
-                values.push(column+"='"+text1+"'");
+            if (typeof(text1) === typeof(" ")){
+                console.log("works");
+                values.push(column+"="+"'"+text1+"'");
+                console.log(values);
+
             }else{
                 values.push(column+'='+text1);
+                console.log(values);
+
             }
         }
         if (text2){
             var operator = $("#selectOperator").val();
-            if (typeof(text2) == String){
+            if (typeof(text2) === typeof(" ")){
                 values.push(column+"='"+text2+"'");
             }else{
                 values.push(column+'='+text2);
@@ -150,7 +155,12 @@ function query(){
     
     })
 }
-
+$(document).ready(function(){
+    $("#insertForm").submit(function(e){
+        e.preventDefault();
+        query()
+    })
+})
 //these functions have to do with the graphs in statistics 
 //initialising the options
 $(document).ready(function(){
