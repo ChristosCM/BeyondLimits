@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `bldb`.`events` (
   `date` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`idEvents`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -72,11 +72,11 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `bldb`.`posts` (
   `idposts` INT(11) NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(45) NOT NULL,
-  `content` VARCHAR(45) NOT NULL,
+  `content` VARCHAR(250) NOT NULL,
   `date` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idposts`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
+AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -86,11 +86,11 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `bldb`.`testimonials` (
   `idtestimonials` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
-  `content` VARCHAR(45) NOT NULL,
+  `content` VARCHAR(250) NOT NULL,
   `photo` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idtestimonials`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 57
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -98,7 +98,7 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `bldb`.`volunteer`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bldb`.`volunteer` (
-  `idVolunteer` INT(11) NOT NULL,
+  `idVolunteer` INT(11) NOT NULL AUTO_INCREMENT,
   `First Name` VARCHAR(45) NOT NULL,
   `Surname` VARCHAR(45) NOT NULL,
   `Sex` CHAR(1) NOT NULL,
@@ -106,6 +106,7 @@ CREATE TABLE IF NOT EXISTS `bldb`.`volunteer` (
   `OriginPlace` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idVolunteer`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 11
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -117,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `bldb`.`volunteerevents` (
   `idVolunteer` INT(11) NOT NULL,
   PRIMARY KEY (`idEvents`, `idVolunteer`),
   INDEX `idVolunteer_idx` (`idVolunteer` ASC) VISIBLE,
-  CONSTRAINT `idEvents`
+  CONSTRAINT `idEvent`
     FOREIGN KEY (`idEvents`)
     REFERENCES `bldb`.`events` (`idEvents`),
   CONSTRAINT `idVolunteer`
