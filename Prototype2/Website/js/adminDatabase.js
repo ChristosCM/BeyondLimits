@@ -9,12 +9,26 @@ function createTable(array) {
 
 }
 function selectRes(array) {
-    table = '<h4>Items matching your search:</h4><table class="table table-hover"><thead class="thead-light"><tr>';
-    for (i=0; i<array.length; i++){
-        table+='<th>'+array[i]+'</th>';
+    if (array.length){
+        table = '<hr class="half-rule"><h4>Items matching your search:</h4><table class="table table-hover"><thead class="thead-light"><tr>';
+        for (var key in array[0]){
+            table+='<th>'+key+'</th>';
+        }
+        table +=  '</tr></thead><tbody>';
+        for (i=0; i<array.length; i++){
+            table += '<tr>'
+            for (var key in array[i]){
+                table+='<th>'+array[i][key]+'</th>';
+        }
+        table += '</tr>'
     }
-    table += '</thead></table>'
-    $("#dataQ").html(table)
+        table += '</thead></table>'
+        $("#dataQ").html(table)
+    }else{
+        var msg = '<hr class="half-rule"><center><h4>No results are matching your search</h4></center>'
+        $("#dataQ").html(msg)
+    }
+
 
 }
 function select(array){
@@ -22,7 +36,7 @@ function select(array){
     for (i=0; i<array.length; i++){
         temp += '<option>'+array[i]+'</option>';
     }
-    temp += '</select><input type="text" id="selectText" ><select form="selectForm" id="selectOperator" class="form-control"><option value="AND">AND</option><option value="OR">OR</option></select><input type="text" id="selectText2"><button type="button" onclick="query()">Look Up</button></form>';
+    temp += '</select><input type="text" id="selectText" ><select form="selectForm" id="selectOperator" class="form-control"><option value="AND">AND</option><option selected value="OR">OR</option></select><input type="text" id="selectText2"><button type="button" class="btn btn-info" onclick="query()">Search</button></form>';
     $("#typeForm").html(temp);
 }
 function deleteFn(array){
@@ -59,17 +73,29 @@ function query(){
         var column = $("#selectOptions").val();
         var text1 = $("#selectText").val();
         var text2 = $("#selectText2").val();
-        var operator = $("#selectOperator").val();
+        var operator;
         var values = [];
-        values.push(column+'='+text1);
-        values.push(column+'='+text2);
-        console.log(operator);
+        if (text1){
+            if (typeof(text1) == String){
+                values.push(column+"='"+text1+"'");
+            }else{
+                values.push(column+'='+text1);
+            }
+        }
+        if (text2){
+            var operator = $("#selectOperator").val();
+            if (typeof(text2) == String){
+                values.push(column+"='"+text2+"'");
+            }else{
+                values.push(column+'='+text2);
+            }        
+        }
+
         $.ajax({
             type:"post",
             url: "/query",
             data: {"qtable": table,"qtype": type,"operators": operator, "conditions": values},
             success(content){
-                console.log(content);
                 selectRes(content);
             },
             error(err){
@@ -84,7 +110,6 @@ function query(){
         
 
         var fields = document.forms["insertForm"].getElementsByTagName("input").length;
-        console.log(fields);
         var values = [];
         for (i=0; i<fields; i++){
             values.push($("#insertText"+i).val());
@@ -93,8 +118,10 @@ function query(){
         $.ajax({
             url: "/query",
             type: "post",
-            headers: {"qTable": table, "qType": type, "conditions": values}
+            headers: {"qtable": table, "qtype": type, "conditions": values}
         })
+    }else if (type =="DELETE"){
+
     }
                 
     //need to add the delete function

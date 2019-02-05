@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>AdminPrototype1</title>
+  <title>Admin Page</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -26,10 +26,8 @@
 
   <nav class="navbar navbar-light bg-light">
     <a class="title navbar-brand mb-0 h1" style = "color:white;font-weight:bold;">BeyondLimits Administrator Controls</a>
+    <a class="nav-link" href="home.htm">Take Me to the Home Page</a>
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="home.htm">Take Me to the Home Page</a>
-        </li>
         <li class="nav-item">
           <a class="nav-link" href = "#">Logged in as $ADMIN$</a>
         </li>
@@ -240,8 +238,8 @@
         <br>
         <label class = "control-label" for="blog"><b>Text</b></label>
         <textarea class="form-control" rows="5" id="beditor" name = "content" placeholder="Write blog post here"></textarea>        
-        <button type="submit" name = "submit" class="btn btn-primary" value="Submit">Post</button>
-
+        <button type="submit" id="blogPostButton"name = "submit" class="btn btn-primary" value="Submit">Post</button>
+            <div id="blEdDiv"></div>
 
         <br>
         </div>
@@ -345,7 +343,7 @@
       <hr class="half-rule">
       <div id="data"></div>
       <div id="typeForm"></div>
-      <div id="dataQu"></div>
+      <div id="dataQ"></div>
     </div>
   </div>
 </body>

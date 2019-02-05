@@ -322,9 +322,11 @@ app.get('/blogShow', (req,res)=>{
 //This is the version for the editing blog post.
 app.post('/blogPost/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
+	
 	var bID = req.params.id;
-	var title = req.headers.title;
-	var content = req.headers.content;
+	var title = req.body.title;
+	var content = req.body.content;
+	console.log(bID,title,content);
 	var today = new Date();
 	var dd = today.getDate();
 	var mm = today.getMonth()+1; //January is 0!
@@ -356,8 +358,8 @@ app.post('/blogPost/:id', (req,res)=>{
 });
 app.post('/blogPost', (req,res) =>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
-	var title = req.headers.title;
-	var content = req.headers.content;
+	var title = req.body.title;
+	var content = req.body.content;
 	var today = new Date();
 	var dd = today.getDate();
 	var mm = today.getMonth()+1; //January is 0!
@@ -707,15 +709,13 @@ app.get('/colSQL', (req, res)=>{
 //The UPDATE query is very similar in setup to the INSERT query and should be supplied with
 //the data in the same way.
 app.all('/query', (req,res)=>{
-
 	var con = setupConnection("localhost", "root", "password", "blDB");
-
 	//***QUERYBUILDERS***
 	//Conditions may be a JSON object which is passed to the function from the switch.
 	function selectQ(conditions){
 		//Table to perform the query on
-		var table = req.headers.qTable;
-		var operators = req.headers.operators;
+		var table = req.body.qtable;
+		var operators = req.body.operators;
 		var s = squel.select();
 		s.from(table);
 		//s.field(...)
@@ -727,7 +727,7 @@ app.all('/query', (req,res)=>{
 			//If more than one condition then second list "operators" will not be empty.
 			//This list will specify AND or OR between conditions.
 			if(conditions.length>1 && i > 0){
-				whereStream += " " + operators[i-1] + " ";
+				whereStream += " " + operators + " ";
 			}
 			whereStream += conditions[cond];
 			i+=1;
@@ -736,7 +736,7 @@ app.all('/query', (req,res)=>{
 		return s.toString();
 	}
 	function insertQ(fields, values){
-		var table = req.headers.qtable;
+		var table = req.body.qtable;
 		var s = squel.insert();
 		s.into(table);
 		for(var i = 0; i<values.length; i++){
@@ -746,8 +746,8 @@ app.all('/query', (req,res)=>{
 	}
 
 	function deleteQ(conditions){
-		var table = req.headers.qtable;
-		var operators = req.headers.operators;
+		var table = req.body.qtable;
+		var operators = req.body.operators;
 		var s = squel.delete();
 		s.from(table);
 		//This for loop will give away the desired structure for conditions.
@@ -767,7 +767,7 @@ app.all('/query', (req,res)=>{
 		return s.toString();
 	}
 	function updateQ(fields, values, whereStream){
-		var table = req.headers.qtable;
+		var table = req.body.qtable;
 		var s = squel.update();
 		s.table(table);
 		for(var i = 0; i<values.length; i++){
@@ -779,14 +779,13 @@ app.all('/query', (req,res)=>{
 
 
 	//Type of query is passed
-	var type = req.body.qType;
-	console.log(req.body);
+	var type = req.body.qtype;
 	//Switch based on type
 	switch(type){
 		case "SELECT":
 			//Get all the conditions together on the client side. The format required
 			//is given above in the selectQ function.
-			var conditions = req.headers.conditions;
+			var conditions = req.body.conditions;
 			var query = selectQ(conditions);
 			queryDB(con, query, function(err,result){
 				return res.status(200).send(result);
@@ -794,9 +793,9 @@ app.all('/query', (req,res)=>{
 			});
 			break;
 		case "INSERT":
-			//req.headers.conditions is a list of lists
-			var fields = req.headers.conditions[0];
-			var values = req.headers.conditions[1];
+			//req.body.conditions is a list of lists
+			var fields = req.body.conditions[0];
+			var values = req.body.conditions[1];
 			var query = insertQ(fields, values);
 			queryDB(con, query, function(err,result){
 				return res.sendStatus(200);
@@ -804,10 +803,10 @@ app.all('/query', (req,res)=>{
 			});
 			break;
 		case "UPDATE":
-			//req.headers.conditions is a list of lists
-			var fields = req.headers.conditions[0];
-			var values = req.headers.conditions[1];
-			var withStream = req.headers.conditions[2];
+			//req.body.conditions is a list of lists
+			var fields = req.body.conditions[0];
+			var values = req.body.conditions[1];
+			var withStream = req.body.conditions[2];
 			var query = updateQ(fields, values, withStream);
 			queryDB(con, query, function(err,result){
 				return res.sendStatus(200);
@@ -815,7 +814,7 @@ app.all('/query', (req,res)=>{
 			});
 			break;
 		case "DELETE":
-			var conditions = req.headers.conditions;
+			var conditions = req.body.conditions;
 			var query = deleteQ(conditions);
 			queryDB(con, query, function(err,result){
 				return res.sendStatus(200);
@@ -868,7 +867,7 @@ app.get('/randomNonce', (req,res)=>{
 //View() - return JSON of content in the carousel, [filename:(color,title,subtitle)]
 app.get('/home/carousel', (req,res)=>{
   fs.readFile('./images/home/info.json', function(err, data){
-    var object = JSON.parse(data);
+    object = JSON.parse(info);
     res.json(object);
   	if (err) throw err;
   });
@@ -878,46 +877,32 @@ app.get('/home/carousel', (req,res)=>{
 //NEEDS authorisation
 app.post('/admin/addHomeCarousel', (req,res)=>{
   var index = req.headers.index;
-  var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png",".mp4"];
-  if (validFileExtensions.includes(path.extname(req.headers.newFile))){
-    fs.readdirSync('./images/home', function(err,data){
-      var files = data.length -1;
-      // Rename all files of index i and above to maintain order, works down from files.length
-      for (i = files.length(); i <= index ; i--){
-        var curFile = files[i];
-        fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
-      };
-      //NEED to use multer to deal with the file transfer
-      fs.writeFile(index + '.' + path.extname(req.headers.newFile),req.headers.newFile); //first image gets saved as 0.jpg
-      res.sendStatus(200);
-    });
-  }
-  else{
-    res.sendStatus(400); //filetype not supported
-  }
+	fs.readdirSync('./images/home', function(err,data){
+    var files = data.length -1;
+  	// Rename all files of index i and above to maintain order, works down from files.length
+  	for (i = files.length(); i <= index ; i--){
+  		var curFile = files[i];
+  		fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
+  	};
+  	//NEED to use multer to deal with the file transfer
+  	fs.writeFile(index + '.' + path.extname(req.headers.newFile),req.headers.newFile, function(err, data){}); //first image gets saved as 0.jpg
+  	res.sendStatus(200);
+  });
 });
+
 //Delete(index) - delete content at index
 //NEEDS authorisation
 app.post('/admin/deleteHomeCarousel', (req,res)=>{
   var index = req.headers.index;
   fs.readdirSync('./images/home', function(err, files){
-    //files contains NumberOfPics + info.json
-    if (index>=files.length || index<0){
-      res.sendStatus(400);//no such file
-    }
-    else{
-      fs.unlink(files[i], function(){
-        //Rename all files of index i and above to maintain order.
-        for (i = index; i <= files.length(); i++){
-          var curFile = files[i];
-          fs.renameSync(curFile,i-1 + '.' + path.extname(curFile));
-        };
-        //Update info.json
-        var info = [];
-        fs.writeFile(info.json, info);
-        res.sendStatus(200);
-      });
-    }
+  	fs.unlink(files[i], function(){
+      // Need to rename all files of index i and above to maintain order.
+      for (i = index; i <= files.length(); i++){
+        var curFile = files[i];
+        fs.renameSync(curFile,i-1 + '.' + path.extname(curFile));
+      };
+      res.sendStatus(200);
+    });
   })
 });
 
