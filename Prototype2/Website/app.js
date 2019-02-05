@@ -896,7 +896,6 @@ app.post('/admin/addHomeCarousel', (req,res)=>{
     res.sendStatus(400); //filetype not supported
   }
 });
-
 //Delete(index) - delete content at index
 //NEEDS authorisation
 app.post('/admin/deleteHomeCarousel', (req,res)=>{
