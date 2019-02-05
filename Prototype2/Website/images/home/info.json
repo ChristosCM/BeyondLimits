@@ -1,22 +1,24 @@
+[{
+  "file":"0.jpeg",
+  "color":"#ffffff",
+  "title":"Beyond limits",
+  "subtitle":"Zero can help"
+},
 {
-  "0.jpeg":{
-    "color":"#ffffff",
-    "title":"Beyond limits",
-    "subtitle":"Zero can help"
-  },
-  "1.jpg":{
-    "color":"#ffffff",
-    "title":"Beyond limits",
-    "subtitle":"One can help"
-  },
-  "2.jpg":{
-    "color":"#ffffff",
-    "title":"Beyond limits",
-    "subtitle":"Two can help"
-  },
-  "3.mp4":{
-    "color":"#ffffff",
-    "title":"Beyond limits",
-    "subtitle":"Three can help"
-  }
-}
+  "file":"1.jpg",
+  "color":"#ffffff",
+  "title":"Beyond limits",
+  "subtitle":"One can help"
+},
+{
+  "file":"2.jpg",
+  "color":"#ffffff",
+  "title":"Beyond limits",
+  "subtitle":"Two can help"
+},
+{
+  "file":"3.mp4",
+  "color":"#ffffff",
+  "title":"Beyond limits",
+  "subtitle":"Three can help"
+}]
