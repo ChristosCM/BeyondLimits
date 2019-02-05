@@ -223,6 +223,7 @@ function freqPlot(x,y,callback){
 }
 app.get('/plotGraph/:one/:two', (req, res) =>{
 	var graphComponents = freqPlot(req.params.one, req.params.two, function(gC){
+		console.log(gC);
 		res.status(200).send(gC);
 	});
 });
@@ -707,15 +708,14 @@ app.get('/colSQL', (req, res)=>{
 //The UPDATE query is very similar in setup to the INSERT query and should be supplied with
 //the data in the same way.
 app.all('/query', (req,res)=>{
-	
 	var con = setupConnection("localhost", "root", "password", "blDB");
-
 	//***QUERYBUILDERS***
 	//Conditions may be a JSON object which is passed to the function from the switch.
 	function selectQ(conditions){
 		//Table to perform the query on
-		var table = req.headers.qTable;
-		var operators = req.headers.operators;
+		var table = req.body.qtable;
+		var operators = req.body.operators;
+		console.log(operators);
 		var s = squel.select();
 		s.from(table);
 		//s.field(...)
@@ -727,7 +727,7 @@ app.all('/query', (req,res)=>{
 			//If more than one condition then second list "operators" will not be empty.
 			//This list will specify AND or OR between conditions.
 			if(conditions.length>1 && i > 0){
-				whereStream += " " + operators[i-1] + " ";
+				whereStream += " " + operators + " ";
 			}
 			whereStream += conditions[cond];
 			i+=1;
@@ -736,7 +736,7 @@ app.all('/query', (req,res)=>{
 		return s.toString();
 	}
 	function insertQ(fields, values){
-		var table = req.headers.qtable;
+		var table = req.body.qtable;
 		var s = squel.insert();
 		s.into(table);
 		for(var i = 0; i<values.length; i++){
@@ -746,8 +746,8 @@ app.all('/query', (req,res)=>{
 	}
 
 	function deleteQ(conditions){
-		var table = req.headers.qtable;
-		var operators = req.headers.operators;
+		var table = req.body.qtable;
+		var operators = req.body.operators;
 		var s = squel.delete();
 		s.from(table);
 		//This for loop will give away the desired structure for conditions.
@@ -767,7 +767,7 @@ app.all('/query', (req,res)=>{
 		return s.toString();
 	}
 	function updateQ(fields, values, whereStream){
-		var table = req.headers.qtable;
+		var table = req.body.qtable;
 		var s = squel.update();
 		s.table(table);
 		for(var i = 0; i<values.length; i++){
@@ -779,24 +779,24 @@ app.all('/query', (req,res)=>{
 
 
 	//Type of query is passed
-	var type = req.body.qType;
-	console.log(req.body);
+	var type = req.body.qtype;
 	//Switch based on type
 	switch(type){
 		case "SELECT":
 			//Get all the conditions together on the client side. The format required
 			//is given above in the selectQ function.
-			var conditions = req.headers.conditions;
+			var conditions = req.body.conditions;
 			var query = selectQ(conditions);
 			queryDB(con, query, function(err,result){
+				console.log(result);
 				return res.status(200).send(result);
 				con.end();
 			});
 			break;
 		case "INSERT":
-			//req.headers.conditions is a list of lists
-			var fields = req.headers.conditions[0];
-			var values = req.headers.conditions[1];
+			//req.body.conditions is a list of lists
+			var fields = req.body.conditions[0];
+			var values = req.body.conditions[1];
 			var query = insertQ(fields, values);
 			queryDB(con, query, function(err,result){
 				return res.sendStatus(200);
@@ -804,10 +804,10 @@ app.all('/query', (req,res)=>{
 			});
 			break;
 		case "UPDATE":
-			//req.headers.conditions is a list of lists
-			var fields = req.headers.conditions[0];
-			var values = req.headers.conditions[1];
-			var withStream = req.headers.conditions[2];
+			//req.body.conditions is a list of lists
+			var fields = req.body.conditions[0];
+			var values = req.body.conditions[1];
+			var withStream = req.body.conditions[2];
 			var query = updateQ(fields, values, withStream);
 			queryDB(con, query, function(err,result){
 				return res.sendStatus(200);
@@ -815,7 +815,7 @@ app.all('/query', (req,res)=>{
 			});
 			break;
 		case "DELETE":
-			var conditions = req.headers.conditions;
+			var conditions = req.body.conditions;
 			var query = deleteQ(conditions);
 			queryDB(con, query, function(err,result){
 				return res.sendStatus(200);

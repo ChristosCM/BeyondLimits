@@ -22,7 +22,7 @@ function select(array){
     for (i=0; i<array.length; i++){
         temp += '<option>'+array[i]+'</option>';
     }
-    temp += '</select><input type="text" id="selectText" ><select form="selectForm" id="selectOperators" class="form-control"><option value="AND">AND</option><option value="OR">OR</option></select><input type="text" id="selectText2"><button type="button" onclick="query()">Look Up</button></form>';
+    temp += '</select><input type="text" id="selectText" ><select form="selectForm" id="selectOperator" class="form-control"><option value="AND">AND</option><option value="OR">OR</option></select><input type="text" id="selectText2"><button type="button" onclick="query()">Look Up</button></form>';
     $("#typeForm").html(temp);
 }
 function deleteFn(array){
@@ -56,21 +56,24 @@ function query(){
         //make every column if none is selected
     }
     if (type=="SELECT"){
-        var column = $("#selectOptions");
-        var text1 = $("#selectText");
-        var text2 = $("#selectText2");
-        var operator = $("selectOperator");
+        var column = $("#selectOptions").val();
+        var text1 = $("#selectText").val();
+        var text2 = $("#selectText2").val();
+        var operator = $("#selectOperator").val();
+        var values = [];
+        values.push(column+'='+text1);
+        values.push(column+'='+text2);
+        console.log(operator);
         $.ajax({
             type:"post",
             url: "/query",
-            headers: {"qTable": table,"qType": type,"operators": operator},
-            processData: false,
-            contentType: false,
+            data: {"qtable": table,"qtype": type,"operators": operator, "conditions": values},
             success(content){
                 console.log(content);
                 selectRes(content);
             },
             error(err){
+                console.log(err);
                 alert("There was an error processing your request");
             }
 
@@ -174,11 +177,13 @@ function plot(){
         url: "/plotGraph/"+x+"/"+y,
         type: "get",
         success(gc){
+        $('#chart').remove(); // this is my <canvas> element
+        $('#canvasContain').append('<canvas id="chart"><canvas>');
         var cvs = document.getElementById("chart")
 	    var ctx = cvs.getContext('2d');
 	    ctx.clearRect(0,0,cvs.width,cvs.height);
-	    cvs.width = 300;
-	    cvs.height = 300;
+	    cvs.width = 600;
+	    cvs.height = 600;
         //var ctx = document.getElementById("chart").getContext("2d");
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -193,6 +198,7 @@ function plot(){
         }]
     },
     options: {
+        responsive: false,
         scales: {
             yAxes: [{
                 ticks: {
