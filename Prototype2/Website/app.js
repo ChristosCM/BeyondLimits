@@ -707,6 +707,7 @@ app.get('/colSQL', (req, res)=>{
 //The UPDATE query is very similar in setup to the INSERT query and should be supplied with
 //the data in the same way.
 app.all('/query', (req,res)=>{
+	
 	var con = setupConnection("localhost", "root", "password", "blDB");
 
 	//***QUERYBUILDERS***
@@ -735,7 +736,7 @@ app.all('/query', (req,res)=>{
 		return s.toString();
 	}
 	function insertQ(fields, values){
-		var table = req.headers.qTable;
+		var table = req.headers.qtable;
 		var s = squel.insert();
 		s.into(table);
 		for(var i = 0; i<values.length; i++){
@@ -745,7 +746,7 @@ app.all('/query', (req,res)=>{
 	}
 
 	function deleteQ(conditions){
-		var table = req.headers.qTable;
+		var table = req.headers.qtable;
 		var operators = req.headers.operators;
 		var s = squel.delete();
 		s.from(table);
@@ -766,7 +767,7 @@ app.all('/query', (req,res)=>{
 		return s.toString();
 	}
 	function updateQ(fields, values, whereStream){
-		var table = req.headers.qTable;
+		var table = req.headers.qtable;
 		var s = squel.update();
 		s.table(table);
 		for(var i = 0; i<values.length; i++){
@@ -778,7 +779,8 @@ app.all('/query', (req,res)=>{
 
 
 	//Type of query is passed
-	var type = req.headers.qType;
+	var type = req.body.qType;
+	console.log(req.body);
 	//Switch based on type
 	switch(type){
 		case "SELECT":

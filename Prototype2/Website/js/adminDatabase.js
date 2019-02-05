@@ -4,7 +4,6 @@ function createTable(array) {
         table+='<th>'+array[i]+'</th>';
     }
     table += '</thead></table>'
-    console.log("work");
     $("#data").html(table);
     $("#data").show();
 
@@ -19,11 +18,11 @@ function selectRes(array) {
 
 }
 function select(array){
-    temp = '<select class="form-control" id="selectOptions">';
+    temp = '<form id="selectForm"><select class="form-control" id="selectOptions">';
     for (i=0; i<array.length; i++){
         temp += '<option>'+array[i]+'</option>';
     }
-    temp += '</select><input type="text" id="selectText"><button type="button" onclick="query()">Look Up</button>';
+    temp += '</select><input type="text" id="selectText" ><select form="selectForm" id="selectOperators" class="form-control"><option value="AND">AND</option><option value="OR">OR</option></select><input type="text" id="selectText2"><button type="button" onclick="query()">Look Up</button></form>';
     $("#typeForm").html(temp);
 }
 function deleteFn(array){
@@ -35,45 +34,41 @@ function deleteFn(array){
     $("#typeForm").html(temp);
 }
 function insert(array){
-    table = '<h4>Insert Values</h4><form id="insertForm" onsubmit="query(); return false" ><div class="form-group"><table class="table table-hover"><thead class="thead-light"><tr>';
+    table = '<h4>Insert Values</h4><form id="insertForm" name="insertForm"><div class="form-group"><table class="table table-hover"><thead class="thead-light"><tr>';
     for (i=0; i<array.length; i++){
         table+='<th>'+array[i]+'</th>';
     }
     table += '</tr></thead>'
     table += '<tbody><tr>';
     for (i=0; i<array.length; i++){
-        table+='<td><input form="insertForm" type=text></td>';
+        table+='<td><input id="insertText'+i+'"form="insertForm" type=text></td>';
     }
-    table += '</table><button type="submit" name = "submit" class="btn btn-success" onclick+"query" value="Submit">Submit</button></div></form>'
+    table += '</table><button onclick="query()" class="btn btn-success" >Submit</button></div></form>'
     $("#typeForm").html(table);
     $("#data").hide();
-}
-function update(array){
-    //not sure if this is really needed
-    return false
 }
 
 function query(){
     var table = $("#tables").val();
     var type = $("#type").val();
-    
+
     if (!column){
         //make every column if none is selected
     }
     if (type=="SELECT"){
         var column = $("#selectOptions");
-        var text = $("#selectText");
+        var text1 = $("#selectText");
+        var text2 = $("#selectText2");
+        var operator = $("selectOperator");
         $.ajax({
-            type:"get",
+            type:"post",
             url: "/query",
-            headers: {
-                "qTable": table,
-                "operators": [column,text],
-
-            },
-            success(data){
-                console.log(data);
-                selectRes(data);
+            headers: {"qTable": table,"qType": type,"operators": operator},
+            processData: false,
+            contentType: false,
+            success(content){
+                console.log(content);
+                selectRes(content);
             },
             error(err){
                 alert("There was an error processing your request");
@@ -83,19 +78,26 @@ function query(){
         })
     //problem with INSERT and getting the inputs of the generated lists: brute force solution: assign input ids while generating them and then iterate through them
     }else if(type=="INSERT"){
-        var allInputs = $( "#insertForm input:text" );
+        
+
+        var fields = document.forms["insertForm"].getElementsByTagName("input").length;
+        console.log(fields);
         var values = [];
-        console.log(allInputs["0"].val());
-        for (i=0; allInputs.length; i++)
-            values.push();
-        // $("insertFrom").each(function(){
-        //    console.log($(this).find('input')); //<-- Should return all input elements in that specific form.
-        // });
+        for (i=0; i<fields; i++){
+            values.push($("#insertText"+i).val());
+        }
+        //maybe need to add the fields to the values
+        $.ajax({
+            url: "/query",
+            type: "post",
+            headers: {"qTable": table, "qType": type, "conditions": values}
+        })
     }
+                
     //need to add the delete function
 }
+//function to get table columns from the database and call the appropriate functon based on the type of query that they want to run
   function showCol(){
-    console.log("works");
     var table = $("#tables").val();
     var type = $("#type").val();
     $.ajax({
@@ -110,9 +112,7 @@ function query(){
                 deleteFn(data[table]);
             }else if (type == "INSERT"){
                 insert(data[table]);
-            } else if (type == "UPDATE"){
-                update(data[type]);
-            }
+            } 
         },
         error(error){
             alert("There was an error: "+ error);
@@ -166,7 +166,7 @@ function plotSet(){
     }
     plot();
 }
-//function to get data and labels and plot the graphs
+//function to get data and labels and plot the graphs on the Statistics tab in the Admin Page
 function plot(){
     var x = $("#xaxis").val();
     var y = $("#yaxis").val();
@@ -174,7 +174,12 @@ function plot(){
         url: "/plotGraph/"+x+"/"+y,
         type: "get",
         success(gc){
-        var ctx = document.getElementById("chart").getContext("2d");
+        var cvs = document.getElementById("chart")
+	    var ctx = cvs.getContext('2d');
+	    ctx.clearRect(0,0,cvs.width,cvs.height);
+	    cvs.width = 300;
+	    cvs.height = 300;
+        //var ctx = document.getElementById("chart").getContext("2d");
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
