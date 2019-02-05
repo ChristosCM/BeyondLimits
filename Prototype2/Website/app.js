@@ -322,7 +322,7 @@ app.get('/blogShow', (req,res)=>{
 //This is the version for the editing blog post.
 app.post('/blogPost/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
-	
+
 	var bID = req.params.id;
 	var title = req.body.title;
 	var content = req.body.content;
@@ -877,17 +877,23 @@ app.get('/home/carousel', (req,res)=>{
 //NEEDS authorisation
 app.post('/admin/addHomeCarousel', (req,res)=>{
   var index = req.headers.index;
-	fs.readdirSync('./images/home', function(err,data){
-    var files = data.length -1;
-  	// Rename all files of index i and above to maintain order, works down from files.length
-  	for (i = files.length(); i <= index ; i--){
-  		var curFile = files[i];
-  		fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
-  	};
-  	//NEED to use multer to deal with the file transfer
-  	fs.writeFile(index + '.' + path.extname(req.headers.newFile),req.headers.newFile, function(err, data){}); //first image gets saved as 0.jpg
-  	res.sendStatus(200);
-  });
+  var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png",".mp4"];
+  if (validFileExtensions.includes(path.extname(req.headers.newFile))){
+    fs.readdirSync('./images/home', function(err,data){
+      var files = data.length -1;
+      // Rename all files of index i and above to maintain order, works down from files.length
+      for (i = files.length(); i <= index ; i--){
+        var curFile = files[i];
+        fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
+      };
+      //NEED to use multer to deal with the file transfer
+      fs.writeFile(index + '.' + path.extname(req.headers.newFile),req.headers.newFile); //first image gets saved as 0.jpg
+      res.sendStatus(200);
+    });
+  }
+  else{
+    res.sendStatus(400); //filetype not supported
+  }
 });
 
 //Delete(index) - delete content at index
@@ -895,14 +901,23 @@ app.post('/admin/addHomeCarousel', (req,res)=>{
 app.post('/admin/deleteHomeCarousel', (req,res)=>{
   var index = req.headers.index;
   fs.readdirSync('./images/home', function(err, files){
-  	fs.unlink(files[i], function(){
-      // Need to rename all files of index i and above to maintain order.
-      for (i = index; i <= files.length(); i++){
-        var curFile = files[i];
-        fs.renameSync(curFile,i-1 + '.' + path.extname(curFile));
-      };
-      res.sendStatus(200);
-    });
+    //files contains NumberOfPics + info.json
+    if (index>=files.length || index<0){
+      res.sendStatus(400);//no such file
+    }
+    else{
+      fs.unlink(files[i], function(){
+        //Rename all files of index i and above to maintain order.
+        for (i = index; i <= files.length(); i++){
+          var curFile = files[i];
+          fs.renameSync(curFile,i-1 + '.' + path.extname(curFile));
+        };
+        //Update info.json
+        var info = [];
+        fs.writeFile(info.json, info);
+        res.sendStatus(200);
+      });
+    }
   })
 });
 
