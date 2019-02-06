@@ -29,7 +29,19 @@ $(document).ready(function () {
       uiLibrary: 'bootstrap4'
     });
   });
-
+function getAboutUs(){
+    $.ajax({
+        url: "/aboutUsText",
+        type: "get",
+        success(data){
+            console.log("works");
+            $("#showAboutUs").html(data);
+        },
+        error(err){
+            alert("There was problem getting the content from the page: " + error);
+        }
+    })
+}
   //aboutUSupload
   $(document).ready(function(){
       $("#aboutUpload").submit(function(e){

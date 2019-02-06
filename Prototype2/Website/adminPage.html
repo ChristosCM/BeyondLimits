@@ -92,15 +92,17 @@
     </div>
 
 
-    <div id="aboutus" class="tab-pane fade container">
+    <div id="aboutus" class="tab-pane container fade">
       <h3>About Us</h3>
       <form action="/aboutUsText" method="post" id="aboutUpload">
         <div class="form-group">
-      <textarea class="form-control" id="editoraboutus" rows="5" >
-      </textarea>
+      <textarea class="form-control" id="editoraboutus" ></textarea>
       </div>
       <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
       </form>
+      <hr class="half-rule">
+      <button type="button" onclick="getAboutUs()" class="btn btn-info">Show the Content Displayed on the Page</button>
+      <div id="showAboutUs"></div>
     </div>
 
     <div id="events" class="tab-pane fade container">
@@ -141,8 +143,9 @@
             </div>
           </div>
           
-        <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
+        <button type="submit" id = "eventSubmit" class="btn btn-success " value="Submit">Submit Event</button>
     </form>
+    <div id="divEventEdit"></div>
   </div>
 
       <button class="btn btn-primary" data-toggle="collapse" data-target="#eventsEdit">Edit event</button>
@@ -275,7 +278,7 @@
               <input type="text" class="form-control" id="testname" placeholder="Title" >
             </div>
             <label class = "control-label" for="blog"><b>Text</b></label>
-        <textarea class="form-control" rows="5" id="testeditor" name = "content" placeholder="Write testimonial post here"></textarea>
+        <textarea class="form-control" id="testeditor" name = "content" placeholder="Write testimonial post here"></textarea>
         </div>
         <button type="submit" name = "submit" class="btn btn-primary" value="Submit">Post</button>
 
@@ -336,7 +339,7 @@
           <option value="SELECT">Select</option>
           <option value="DELETE">Delete</option>
           <option value="INSERT">Insert</option>
-          <option value="UPDATE">Update</option>
+          <!-- <option value="UPDATE">Update</option> -->
         </select>
       </div>
       </form>

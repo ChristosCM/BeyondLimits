@@ -40,44 +40,42 @@ function select(array){
     $("#typeForm").html(temp);
 }
 function deleteFn(array){
-    temp = '<select class="form-control" id="deleteOptions">';
+    temp = '<form id="deleteForm"><select class="form-control" id="deleteOptions">';
     for (i=0; i<array.length; i++){
         temp += '<option>'+array[i]+'</option>';
     }
-    temp += '</select>';
+    temp += '</select><input type="text" id="deleteText" ><select form="deleteForm" id="deleteOperator" class="form-control"><option value="AND">AND</option><option selected value="OR">OR</option></select><input type="text" id="deleteText2"><button type="button" class="btn btn-danger" onclick="query()">Delete</button></form>';
+    $("#typeForm").html(temp);
     $("#typeForm").html(temp);
 }
 function insert(array){
-    table = '<h4>Insert Values</h4><form id="insertForm" name="insertForm"><div class="form-group"><table class="table table-hover"><thead class="thead-light"><tr>';
+    table = '<h4>Insert Values</h4><form id="insertForm" ><table class="table table-hover"><thead class="thead-light"><tr>';
     for (i=0; i<array.length; i++){
         table+='<th>'+array[i]+'</th>';
     }
     table += '</tr></thead>'
     table += '<tbody><tr>';
     for (i=0; i<array.length; i++){
-        table+='<td><input id="insertText'+i+'"form="insertForm" type=text></td>';
+        table+='<td><input id="insertText'+i+'"type="text"></td>';
     }
-    table += '</table><button onclick="query()" class="btn btn-success" >Submit</button></div></form>'
+    table += '</table><button type="button" class="btn btn-info" onclick="query()">Insert</button></form>'
     $("#typeForm").html(table);
     $("#data").hide();
 }
 
 function query(){
-    var table = $("#tables").val();
+    var table = "`"+$("#tables").val()+"`";
     var type = $("#type").val();
 
-    if (!column){
-        //make every column if none is selected
-    }
+ 
     if (type=="SELECT"){
-        var column = $("#selectOptions").val();
+        var column = "`"+$("#selectOptions").val()+"`";
         var text1 = $("#selectText").val();
         var text2 = $("#selectText2").val();
         var operator;
         var values = [];
         if (text1){
             if (typeof(text1) === typeof(" ")){
-                console.log("works");
                 values.push(column+"="+"'"+text1+"'");
                 console.log(values);
 
@@ -112,21 +110,77 @@ function query(){
         })
     //problem with INSERT and getting the inputs of the generated lists: brute force solution: assign input ids while generating them and then iterate through them
     }else if(type=="INSERT"){
-        
+        var array;
+        var tableNorm = $("#tables").val();
 
-        var fields = document.forms["insertForm"].getElementsByTagName("input").length;
-        var values = [];
-        for (i=0; i<fields; i++){
-            values.push($("#insertText"+i).val());
-        }
-        //maybe need to add the fields to the values
         $.ajax({
-            url: "/query",
-            type: "post",
-            headers: {"qtable": table, "qtype": type, "conditions": values}
-        })
+            url: "/colSQL",
+            type: "get",
+            datatype: "json",
+            success(data){
+                array = data[tableNorm];
+                var fields = document.forms["insertForm"].getElementsByTagName("input").length;
+            var values = [];
+            for (i=0; i<fields; i++){
+                values.push($("#insertText"+i).val());
+            }
+            //maybe need to add the fields to the values
+            $.ajax({
+                url: "/query",
+                type: "post",
+                data: {"qtable": table, "qtype": type, "conditions": [array,values]},
+                success(content){
+                    alert("The items have been inserted");
+                },
+                error(error){
+                    alert("There was an error: " + error);
+                }
+            })
+
+            }
+        });
+
+        
+        //if delete is selected as the type
     }else if (type =="DELETE"){
 
+        var column = "`"+$("#deleteOptions").val()+"`";
+        var text1 = $("#deleteText").val();
+        var text2 = $("#deleteText2").val();
+        var operator;
+        var values = [];
+        if (text1){
+            if (typeof(text1) === typeof(" ")){
+                values.push(column+"="+"'"+text1+"'");
+
+            }else{
+                values.push(column+'='+text1);
+
+            }
+        }
+        if (text2){
+            var operator = $("#deleteOperator").val();
+            if (typeof(text2) === typeof(" ")){
+                values.push(column+"='"+text2+"'");
+            }else{
+                values.push(column+'='+text2);
+            }        
+        }
+
+        $.ajax({
+            type:"post",
+            url: "/query",
+            data: {"qtable": table,"qtype": type,"operators": operator, "conditions": values},
+            success(content){
+                alert("The items have been deleted");
+            },
+            error(err){
+                console.log(err);
+                alert("There was an error processing your request");
+            }
+
+
+        })
     }
                 
     //need to add the delete function
@@ -155,12 +209,13 @@ function query(){
     
     })
 }
-$(document).ready(function(){
-    $("#insertForm").submit(function(e){
-        e.preventDefault();
-        query()
-    })
-})
+// $(document).ready(function(){
+//     $("#insertForm").submit(function(e){
+//         e.preventDefault();
+//         alert("calling");
+//         query()
+//     })
+// })
 //these functions have to do with the graphs in statistics 
 //initialising the options
 $(document).ready(function(){

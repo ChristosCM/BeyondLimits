@@ -32,6 +32,7 @@ $.ajax({
 	}
 });
 });
+//ajax to post the blog from the admin tab: Blog
 $(document).ready(function(){
   $("#blogForm").submit(function(e){
       e.preventDefault();
@@ -39,7 +40,7 @@ $(document).ready(function(){
       var content = $("#beditor").val();
       //maybe add if for empty, but they might want it empty
       $.ajax({
-          url: "/howMore",
+          url: "/blogPost",
           type: "post",
           data: {"title": title, "content": content},
           datatype: "json",
@@ -76,6 +77,30 @@ $(document).ready(function(){
   });
 });
 });
+function eventEdit(id){
+  $.ajax({
+    url:'/eventsAll',
+    type: 'get',
+    datatype: 'json',
+    success(events){
+      for (i=0; i<events.length; i++){
+        if (events[i].idEvents ==id){
+          var event = events[i];
+        }
+      }
+      $('#eventTitle').val(event.eventName);
+      $('#description').val(event.description);
+      $('#eventDate').val(event.date);
+      $('#attendance').val(event.attendance);
+      $('#volunteersTotal').val(event.volunteerTotal);
+      $('#eventsCreate').slideToggle('slow');
+      $("#eventSubmit").hide();
+      $('#divEventEdit').html('<button class="btn btn-info" onclick("eventEditPost('+id+')")>Edit Event</button>');
+
+    }
+  })
+}
+
  function blogEdit(id){
   $.ajax({
     url:'/blogShow',
@@ -90,7 +115,7 @@ $(document).ready(function(){
       $('#beditort').val(post.title);
       $('#beditor').val(post.content);
       $('#blogPostButton').hide();
-      $('#blEdDiv').html('<button class="btn btn-info" onclick("blogEditPost('+id+'); return false")>Edit Post</button>');
+      $('#blEdDiv').html('<button class="btn btn-info" onclick("blogEditPost('+id+')")>Edit Post</button>');
     }
   });
 }
@@ -103,16 +128,12 @@ function blogEditPost(id){
     data: {"title": title, "content": content},
     datatype: 'json',
     sucess(){
-      return false;
+      alert("The Blog Post has been edited");
           //right now the page gets resent so no use for these functions yet
     },
     error(err){
         console.log(error);
-      
-
     }
-    
-  
   });
   return false;
 }
