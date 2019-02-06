@@ -341,7 +341,7 @@ app.post('/blogPost/:id', (req,res)=>{
 	    mm = '0'+mm
 	}
 
-	today = mm + '/' + dd + '/' + yyyy;
+	today = dd + '/' + mm + '/' + yyyy;
 	var sql = format("DELETE FROM posts WHERE idPosts = %1;", bID);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
@@ -374,7 +374,7 @@ app.post('/blogPost', (req,res) =>{
 	    mm = '0'+mm
 	}
 
-	today = mm + '/' + dd + '/' + yyyy;
+	today = dd + '/' + mm + '/' + yyyy;
 	var sql = format("INSERT INTO posts (title, content, date) VALUES (%1,%2,%3)", title,content,today);
 	queryDB(con, sql, function(err, result){
 		if(err) throw err;
