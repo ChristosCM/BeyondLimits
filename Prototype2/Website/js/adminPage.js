@@ -55,6 +55,28 @@ $(document).ready(function(){
   });
 });
 $(document).ready(function(){
+  $("#testimonialForm").submit(function(e){
+      e.preventDefault();
+      var name =  $("#testname").val();
+      var content = $("#testeditor").val();
+      $.ajax({
+          url: "/testimonialsPost",
+          type: "post",
+          data: {"name": name, "content": content},
+          datatype: "json",
+          success(){
+            if(!alert('The Testimonial has been posted')){window.location.reload();}
+          },
+          error(){
+              alert("There was an error posting the testimonial")
+          }
+
+      });
+  });
+});
+
+
+$(document).ready(function(){
   $("#eventPost").submit(function(e){
     e.preventDefault();
   var title = $("#eventTitle").val();
@@ -93,7 +115,6 @@ function eventEdit(id){
       $('#eventDate').val(event.date);
       $('#attendance').val(event.attendance);
       $('#volunteersTotal').val(event.volunteerTotal);
-      $('#eventsCreate').slideToggle('slow');
       $("#eventSubmit").hide();
       $('#divEventEdit').html('<button class="btn btn-info" onclick("eventEditPost('+id+')")>Edit Event</button>');
 
@@ -129,7 +150,8 @@ function blogEditPost(id){
     data: {"title": title, "content": content},
     datatype: 'json',
     success: ()=>{
-      alert("The Blog Post has been edited");
+      if(!alert("The Blog Post has been edited")){window.location.reload();}
+
           //right now the page gets resent so no use for these functions yet
     },
     error(err){
@@ -139,28 +161,56 @@ function blogEditPost(id){
   return false;
 }
 function testimonialsDelete(id){
+  if (confirm('Are you sure you want to delete this testimonial post from the website?')) {
+    
   $.ajax({
-      url:'/testimonialsDelete/'+id ,
-	    type: 'POST',
-	    datatype: 'json',
-      success: function(result) {
+    url:'/testimonialsDelete/'+id ,
+    type: 'POST',
+    datatype: 'json',
+    success: function() {
+      if(!alert("The Testimonial Post has been deleted")){window.location.reload();}
 
-      }
-      });
+    }
+    });
+} else {
+
+    }
 }
-function testimonialEdit(id){
+function testimonialsEdit(id){
   $.ajax({
     url:'http://localhost:80/testimonialsShow',
     type : 'GET',
     datatype : 'json',
     success: (posts) => {
+
       for (i=0; i<posts.length; i++){
-        if (posts[i].idposts ==id){
+        if (posts[i].idtestimonials ==id){
           var post = posts[i];
         }
       }
-      $('#name').value = post.name;
-      $('#testeditor').value = post.content;
+      $('#testname').val(post.name);
+      $('#testeditor').val(post.content);
+      $('#submitTestForm').prop('disabled', true);
+      $('#submitTestForm').hide();
+      $('#testEditDiv').html('<button class="btn btn-info" id = "blogEditPostButton" onclick="testEditPost('+id+')">Edit Post</button>');
+    }
+  });
+}
+function testEditPost(id){
+  var title =  $("#testname").val();
+  var content = $("#testeditor").val();
+  console.log(id,title,content);
+  $.ajax({
+    url:'/testimonialsPost/'+id, 
+    type: 'POST',
+    data: {"name": title, "content": content},
+    datatype: 'json',
+    success: ()=>{
+      if(!alert("The Testimonial Post has been edited")){window.location.reload();}
+          //right now the page gets resent so no use for these functions yet
+    },
+    error(err){
+        console.log(error);
     }
   });
 }
@@ -177,45 +227,26 @@ function blogPost(){
     },
     error(err){
         console.log(error);
-      
-
     }
-    
-
   });
+
 }
-  function testimonialsPost(testID){
-    var name =  $("#testname").val();
-    var content = $("#testeditor").val();
-    $.ajax({
-      url:'http://localhost:80/blogPost/'+testID, 
-      type: 'POST',
-      data: {"name": name, "content": content},
-      datatype: 'json',
-      sucess(){
-            //right now the page gets resent so no use for these functions yet
-      },
-      error(err){
-        if (err){
-          console.log(error);
-        }
-
-      }
-      
-
-    });
-  }
+  
   function blogDelete(blogID){
-    $.ajax({
-      url:'http://localhost:80/blogDelete/'+blogID, 
-	    type: 'POST',
-	    datatype: 'json',
-      success: function(result) {
-
-      }
-      });
-    location.reload();
+    if (confirm('Are you sure you want to save this thing into the database?')) {
+      $.ajax({
+        url:'http://localhost:80/blogDelete/'+blogID, 
+        type: 'POST',
+        datatype: 'json',
+        success: function(result) {
+          if(!alert('the Blog Post has been deleted')){window.location.reload();}
+        }
+        });
+      // Save it!
+  } else {
+      // Do nothing!
   }
+      }
   $("upload").click(function(){
     $.ajax({
       url:'http://localhost:80/fileUpload',

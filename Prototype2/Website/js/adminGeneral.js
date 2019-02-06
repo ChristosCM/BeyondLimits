@@ -40,13 +40,24 @@ $(document).ready(function () {
       uiLibrary: 'bootstrap4'
     });
   });
+  function getHowWe(){
+    $.ajax({
+        url: "/howWeCanHelpText",
+        type: "get",
+        success(data){
+            $("#editorHowWe").editor().content(data);
+        },
+        error(err){
+            alert("There was problem getting the content from the page: " + error);
+        }
+    })
+}
 function getAboutUs(){
     $.ajax({
         url: "/aboutUsText",
         type: "get",
         success(data){
-            console.log("works");
-            $("#showAboutUs").html(data);
+            $("#editoraboutus").editor().content(data);
         },
         error(err){
             alert("There was problem getting the content from the page: " + error);

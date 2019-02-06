@@ -32,20 +32,30 @@ function selectRes(array) {
 
 }
 function select(array){
-    temp = '<form id="selectForm"><select class="form-control" id="selectOptions">';
+    temp = '<form id="selectForm"><select class="form-control" id="selectOptions1">';
     for (i=0; i<array.length; i++){
         temp += '<option>'+array[i]+'</option>';
     }
-    temp += '</select><input type="text" id="selectText" ><select form="selectForm" id="selectOperator" class="form-control"><option value="AND">AND</option><option selected value="OR">OR</option></select><input type="text" id="selectText2"><button type="button" class="btn btn-info" onclick="query()">Search</button></form>';
+    temp += '</select><input type="text" id="selectText">';
+    temp += '<select class="form-control" id="selectOptions2">';
+    for (i=0; i<array.length; i++){
+        temp += '<option>'+array[i]+'</option>';
+    }
+    temp +='</select><select form="selectForm" id="selectOperator" class="form-control"><option value="AND">AND</option><option selected value="OR">OR</option></select><input type="text" id="selectText2"><button type="button" class="btn btn-info" onclick="query()">Search</button></form>';
     $("#typeForm").html(temp);
 }
 function deleteFn(array){
-    temp = '<form id="deleteForm"><select class="form-control" id="deleteOptions">';
+    temp = '<form id="deleteForm"><select class="form-control" id="deleteOptions1">';
     for (i=0; i<array.length; i++){
         temp += '<option>'+array[i]+'</option>';
     }
-    temp += '</select><input type="text" id="deleteText" ><select form="deleteForm" id="deleteOperator" class="form-control"><option value="AND">AND</option><option selected value="OR">OR</option></select><input type="text" id="deleteText2"><button type="button" class="btn btn-danger" onclick="query()">Delete</button></form>';
-    $("#typeForm").html(temp);
+    temp += '</select><input type="text" id="deleteText" >';
+    temp += '<select class="form-control" id="deleteOptions2">';
+
+    for (i=0; i<array.length; i++){
+        temp += '<option>'+array[i]+'</option>';
+    }
+    temp+= '</select><select form="deleteForm" id="deleteOperator" class="form-control"><option selected value="AND">AND</option><option value="OR">OR</option></select><input type="text" id="deleteText2"><button type="button" class="btn btn-danger" onclick="query()">Delete</button></form>';
     $("#typeForm").html(temp);
 }
 function insert(array){
@@ -69,18 +79,18 @@ function query(){
 
  
     if (type=="SELECT"){
-        var column = "`"+$("#selectOptions").val()+"`";
+        var column = ["`"+$("#selectOptions1").val()+"`","`"+$("#selectOptions2").val()+"`"];
         var text1 = $("#selectText").val();
         var text2 = $("#selectText2").val();
         var operator;
         var values = [];
         if (text1){
             if (typeof(text1) === typeof(" ")){
-                values.push(column+"="+"'"+text1+"'");
+                values.push(column[0]+"="+"'"+text1+"'");
                 console.log(values);
 
             }else{
-                values.push(column+'='+text1);
+                values.push(column[0]+'='+text1);
                 console.log(values);
 
             }
@@ -88,9 +98,9 @@ function query(){
         if (text2){
             var operator = $("#selectOperator").val();
             if (typeof(text2) === typeof(" ")){
-                values.push(column+"='"+text2+"'");
+                values.push(column[1]+"='"+text2+"'");
             }else{
-                values.push(column+'='+text2);
+                values.push(column[1]+'='+text2);
             }        
         }
 
@@ -144,43 +154,48 @@ function query(){
         //if delete is selected as the type
     }else if (type =="DELETE"){
 
-        var column = "`"+$("#deleteOptions").val()+"`";
+        var column = ["`"+$("#deleteOptions1").val()+"`","`"+$("#deleteOptions2").val()+"`"];
         var text1 = $("#deleteText").val();
         var text2 = $("#deleteText2").val();
         var operator;
         var values = [];
         if (text1){
             if (typeof(text1) === typeof(" ")){
-                values.push(column+"="+"'"+text1+"'");
+                values.push(column[0]+"="+"'"+text1+"'");
 
             }else{
-                values.push(column+'='+text1);
+                values.push(column[0]+'='+text1);
 
             }
         }
         if (text2){
             var operator = $("#deleteOperator").val();
             if (typeof(text2) === typeof(" ")){
-                values.push(column+"='"+text2+"'");
+                values.push(column[1]+"='"+text2+"'");
             }else{
-                values.push(column+'='+text2);
+                values.push(column[1]+'='+text2);
             }        
         }
+        if (confirm('Are you sure you want to delete from the database?')) {
+            $.ajax({
+                type:"post",
+                url: "/query",
+                data: {"qtable": table,"qtype": type,"operators": operator, "conditions": values},
+                success(content){
+                    alert("The items have been deleted");
+                },
+                error(err){
+                    console.log(err);
+                    alert("There was an error processing your request");
+                }
+    
+    
+            })
+        } else {
+            // Do nothing!
+        }
 
-        $.ajax({
-            type:"post",
-            url: "/query",
-            data: {"qtable": table,"qtype": type,"operators": operator, "conditions": values},
-            success(content){
-                alert("The items have been deleted");
-            },
-            error(err){
-                console.log(err);
-                alert("There was an error processing your request");
-            }
-
-
-        })
+        
     }
                 
     //need to add the delete function

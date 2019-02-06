@@ -431,9 +431,9 @@ app.post('/testimonialsPost/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	//Implement picture upload. I have a copy of this on my PP coursework.
 	var tID = req.params.id;
-	var name = req.headers.tName;
-	var content = req.headers.content;
-	var picPath = req.headers.pPath;
+	var name = req.body.name;
+	var content = req.body.content;
+	var picPath = req.body.pPath;
 	var sql = format("DELETE FROM testimonials WHERE idtestimonials = %1;", tID);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
@@ -452,9 +452,9 @@ app.post('/testimonialsPost/:id', (req,res)=>{
 app.post('/testimonialsPost', (req,res) =>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	//Implement picture upload. I have a copy of this on my PP coursework.
-	var name = req.headers.tName;
-	var content = req.headers.content;
-	var picPath = req.headers.pPath;
+	var name = req.body.name;
+	var content = req.body.content;
+	var picPath = req.body.pPath;
 	var sql = format("INSERT INTO testimonials (name,content,photo) VALUES (%1,%2,%3)", name, content, picPath);
 	queryDB(con, sql, function(err, result){
 		if(err) throw err;
@@ -586,15 +586,15 @@ function fileUpload(con,file,id,editStatus){
 app.post('/createEvent/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var eID = req.params.id;
-	var eventName = req.headers.name;
-	var attendance = req.headers.attendance;
-	var volunteerTotal = req.headers.vTotal;
-	var volunteerMale = req.headers.vMale;
-	var volunteerFemale = req.headers.vFemale;
-	var date = req.headers.date;
+	var eventName = req.body.name;
+	var attendance = req.body.attendance;
+	var volunteerTotal = req.body.vTotal;
+	var volunteerMale = req.body.vMale;
+	var volunteerFemale = req.body.vFemale;
+	var date = req.body.date;
 	var pPath = req.files.filename;
 	fileUpload(con,pPath,eID,1);
-	var description = req.headers.description;
+	var description = req.body.description;
 	//This should work but needs further testing.
 	var sql = format("DELETE FROM events WHERE idEvents = %1;", eID);
 	queryDB(con, sql, function(err,result){
@@ -615,15 +615,15 @@ app.post('/createEvent/:id', (req,res)=>{
 //This is the version for creating events.
 app.post('/createEvent', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
-	var eventName = req.headers.name;
-	var attendance = req.headers.attendance;
-	var volunteerTotal = req.headers.vtotal;
-	var volunteerMale = req.headers.vmale;
-	var volunteerFemale = req.headers.vfemale;
-	var date = req.headers.date;
+	var eventName = req.body.name;
+	var attendance = req.body.attendance;
+	var volunteerTotal = req.body.vTotal;
+	var volunteerMale = req.body.vMale;
+	var volunteerFemale = req.body.vFemale;
+	var date = req.body.date;
 	var pPath = req.files.filename;
 	fileUpload(con,pPath,eID,0);
-	var description = req.headers.description;
+	var description = req.body.description;
 	var sql = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description,date);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;

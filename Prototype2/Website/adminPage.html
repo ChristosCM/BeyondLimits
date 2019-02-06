@@ -102,7 +102,6 @@
       </form>
       <hr class="half-rule">
       <button type="button" onclick="getAboutUs()" class="btn btn-info">Show the Content Displayed on the Page</button>
-      <div id="showAboutUs"></div>
     </div>
 
     <div id="events" class="tab-pane fade container">
@@ -178,6 +177,8 @@
       </div>
       <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
       </form>
+      <hr class="half-rule">
+      <button type="button" onclick="getHowWe()" class="btn btn-info">Show the Content Displayed on the Page</button>
     </div>
     <div id="wehelpmore" class="tab-pane fade container">
       <h3>How we can help more information</h3>
@@ -262,28 +263,25 @@
               </thead>
               <tbody id=testTable>
                 <tr>
-                  <td>Testimonial 1</td>
-                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
-                </tr>
-                <tr>
-                  <td>Testimonial 2</td>
-                  <td><button onclick = "blogDelete()" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick = "blogPost()" class="btn btn-info">Edit</button></td>
+                  
                 </tr>
             </table>
       </div>
       <p>Or ceate a new Testimonial Post!</p>
-      <form id = "testimonialForm" action = "http://localhost:80/testimonialPost" method = "post">
+      <form id = "testimonialForm" action = "/testimonialPost" method = "post">
         <div class = "form-group">
-          <label class = "control-label">Title</label>
+          <label class = "control-label">Name</label>
           <div class="col-3">          
-              <input type="text" class="form-control" id="testname" placeholder="Title" >
+              <input type="text" class="form-control" id="testname" placeholder="Name" >
             </div>
             <label class = "control-label" for="blog"><b>Text</b></label>
         <textarea class="form-control" id="testeditor" name = "content" placeholder="Write testimonial post here"></textarea>
         </div>
-        <button type="submit" name = "submit" class="btn btn-primary" value="Submit">Post</button>
+        <button type="submit" id = "submitTestForm" class="btn btn-primary" value="Submit">Post</button>
 
       </form>
+      <div id="testEditDiv"></div>
+
     </div>
 
     <div id="stats" class="tab-pane fade container">
