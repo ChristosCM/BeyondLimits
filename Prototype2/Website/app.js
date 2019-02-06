@@ -8,6 +8,7 @@ const mysql = require('mysql');
 const app = express();
 const squel = require("squel");
 const fs = require('fs');
+var multer = require('multer');
 const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
@@ -873,32 +874,45 @@ app.get('/home/carousel', (req,res)=>{
   });
 });
 
-//Add(content,index) - insert content in particular position NEED: text+colour(css inline?) corresponding to each
+//Add content to carousel, multipart form comes in with
+//parameter index and the file to be uploaded.
 //NEEDS authorisation
-app.post('/admin/addHomeCarousel', (req,res)=>{
-  var index = req.headers.index;
+
+
+app.post('/admin/addHomeCarousel', function(req,res){
+  var index = req.body.index;
   var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png",".mp4"];
-  if (validFileExtensions.includes(path.extname(req.headers.newFile))){
+  if (validFileExtensions.includes(path.extname(req.file))){
     fs.readdirSync('./images/home', function(err,data){
       var files = data.length -1;
       // Rename all files of index i and above to maintain order, works down from files.length
-      for (i = files.length(); i <= index ; i--){
+      for (i = files.length(); i <= index; i--){
         var curFile = files[i];
         fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
       };
-      //NEED to use multer to deal with the file transfer
-      fs.writeFile(index + '.' + path.extname(req.headers.newFile),req.headers.newFile); //first image gets saved as 0.jpg
-      res.sendStatus(200);
+      //set file upload name and path
+      var storage = multer.diskStorage({
+        destination: 'images/home/',
+        filename: function (req, file, cb) {
+          cb(null, index + path.extname(req.body.newFile))
+        }
+      });
+      var upload = multer({ storage: storage });
+      //pass to next function which uploads the file
+      next();
     });
   }
   else{
-    res.sendStatus(400); //filetype not supported
+    res.status(400).send('This file type is not supported, try ".jpg", ".jpeg", ".bmp", ".gif", ".png",".mp4"'); //filetype not supported
   }
+}, function(req,res){
+  upload.single('newFile');
+  res.sendStatus(200);
 });
 
 //Delete(index) - delete content at index
 //NEEDS authorisation
-app.post('/admin/deleteHomeCarousel', (req,res)=>{
+app.post('/admin/deleteHomeCarousel', function(req,res){
   var index = req.headers.index;
   fs.readdirSync('./images/home', function(err, files){
     //files contains NumberOfPics + info.json
