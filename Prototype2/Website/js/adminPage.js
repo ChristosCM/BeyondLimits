@@ -114,8 +114,9 @@ function eventEdit(id){
       }
       $('#beditort').val(post.title);
       $('#beditor').val(post.content);
+      $('#blogPostButton').prop('disabled', true);
       $('#blogPostButton').hide();
-      $('#blEdDiv').html('<button class="btn btn-info" onclick("blogEditPost('+id+')")>Edit Post</button>');
+      $('#blEdDiv').html('<button class="btn btn-info" id = "blogEditPostButton" onclick="blogEditPost('+id+')">Edit Post</button>');
     }
   });
 }
@@ -127,7 +128,7 @@ function blogEditPost(id){
     type: 'POST',
     data: {"title": title, "content": content},
     datatype: 'json',
-    sucess(){
+    success: ()=>{
       alert("The Blog Post has been edited");
           //right now the page gets resent so no use for these functions yet
     },
@@ -213,6 +214,7 @@ function blogPost(){
 
       }
       });
+    location.reload();
   }
   $("upload").click(function(){
     $.ajax({
