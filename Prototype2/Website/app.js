@@ -868,7 +868,7 @@ app.get('/randomNonce', (req,res)=>{
 //View() - return JSON of content in the carousel, [filename:(color,title,subtitle)]
 app.get('/home/carousel', (req,res)=>{
   fs.readFile('./images/home/info.json', function(err, data){
-    object = JSON.parse(info);
+    object = JSON.parse(data);
     res.json(object);
   	if (err) throw err;
   });
