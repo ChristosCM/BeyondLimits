@@ -865,28 +865,26 @@ app.get('/randomNonce', (req,res)=>{
 
 //*********************************************************HOMEPAGE*************************************************************
 //CAROUSEL:View,add,delete content
-//View() - return JSON of content in the carousel, [filename:(color,title,subtitle)]
+//View() - return JSON of content in the carousel,
+//array of objects form{file,color,title,subtitle}
 app.get('/home/carousel', (req,res)=>{
   fs.readFile('./images/home/info.json', function(err, data){
     object = JSON.parse(data);
     res.json(object);
-  	if (err) throw err;
+    if (err) throw err;
   });
 });
 
 //Add content to carousel, multipart form comes in with
 //parameter index and the file to be uploaded.
 //NEEDS authorisation
-
-
 app.post('/admin/addHomeCarousel', function(req,res){
   var index = req.body.index;
-  var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png",".mp4"];
+  var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
   if (validFileExtensions.includes(path.extname(req.file))){
-    fs.readdirSync('./images/home', function(err,data){
-      var files = data.length -1;
-      // Rename all files of index i and above to maintain order, works down from files.length
-      for (i = files.length(); i <= index; i--){
+    // Firstly rename all files of index i and above to maintain order
+    fs.readdirSync('./images/home', function(err,files){
+      for (i = files.length()-1; i <= index; i--){
         var curFile = files[i];
         fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
       };
@@ -894,19 +892,60 @@ app.post('/admin/addHomeCarousel', function(req,res){
       var storage = multer.diskStorage({
         destination: 'images/home/',
         filename: function (req, file, cb) {
-          cb(null, index + path.extname(req.body.newFile))
+          cb(null, index + path.extname(file.originalname));
         }
       });
       var upload = multer({ storage: storage });
-      //pass to next function which uploads the file
       next();
     });
   }
   else{
-    res.status(400).send('This file type is not supported, try ".jpg", ".jpeg", ".bmp", ".gif", ".png",".mp4"'); //filetype not supported
+    res.status(400).send('This file type is not supported, try ".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"'); //filetype not supported
   }
 }, function(req,res){
-  upload.single('newFile');
+  //new file is added to folder with index.fileExtension filename
+  upload.single('newFile', function(){
+    //REWRITE INFO.JSON
+    var newInfo = [];
+    var newFilename = index + path.extname(file.originalname);
+    var newColor = req.body.color;
+    var newTitle = req.body.title;
+    var newSubtitle = req.body.subtitle;
+    var newFile ={
+      file: newFilename,
+      color: newColor,
+      title: newTitle,
+      subtitle: newSubtitle
+    }
+    newInfo.append(newFile);
+    fs.readFile('./images/home/info.json', function(err, data){
+      if (err) throw err;
+      info = JSON.parse(data);
+      info.splice(index);
+      for (i=0; i<=info.length; i++){
+        if (i<index){//filename will be the same
+          var file = info[i];
+          newInfo.append(file);
+        }
+        else{
+          var updatedFilename = i + info[i].file.slice(0)
+          var file ={
+            file: updatedFilename,
+            color: info[i].color,
+            title: info[i].title,
+            subtitle: info[i].subtitle
+          }
+          newInfo.append(file);
+          next();
+        }
+      }
+    },function(){
+      var newInfoJSON = JSON.stringify(newInfo);
+      fs.writeFile("/images/home/info.json", newInfoJSON, function(err) {
+        if (err) throw err;
+      });
+    });
+  });
   res.sendStatus(200);
 });
 
@@ -917,19 +956,28 @@ app.post('/admin/deleteHomeCarousel', function(req,res){
   fs.readdirSync('./images/home', function(err, files){
     //files contains NumberOfPics + info.json
     if (index>=files.length || index<0){
-      res.sendStatus(400);//no such file
+      res.status(400).send("No file at index: " + index);
     }
     else{
       fs.unlink(files[i], function(){
         //Rename all files of index i and above to maintain order.
-        for (i = index; i <= files.length(); i++){
+        for (i = index; i < files.length(); i++){
           var curFile = files[i];
           fs.renameSync(curFile,i-1 + '.' + path.extname(curFile));
         };
-        //Update info.json
+        //Update info.json THIS IS NOT FINISHED
         var info = [];
-        fs.writeFile(info.json, info);
-        res.sendStatus(200);
+        fs.readdirSync('./images/home', function(err, files){
+          for (i=0; i < files.length(); i++){
+            var curFile = files[i];
+            info.append(curFile);
+          };
+          then();
+        },function(err){
+          if (err) throw err;
+          fs.writeFile(info.json, JSON.stringify(info));
+          res.sendStatus(200);
+        });
       });
     }
   })
