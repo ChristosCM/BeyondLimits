@@ -182,9 +182,19 @@ function freqPlot(x,y,callback){
 					labels.push(monthNames[parseInt(res[object]['date'].split('/')[1])-1]);
 					data.push(res[object]['attendance']);
 				}
+				var labelsEncountered = [];
+				var dataEncountered = [];
+				for (var object in labels){
+					if (labelsEncountered.includes(labels[object])) {
+						dataEncountered[labelsEncountered.indexOf(labels[object])] += data[object];
+					} else {
+						labelsEncountered.push(labels[object]);
+						dataEncountered.push(data[object]);
+					}
+				}
 				var graphComponents = {
-					labels: labels,
-					data: data,
+					labels: labelsEncountered,
+					data: dataEncountered,
 					ylabel:ylabel,
 					xlabel:xlabel,
 					colours:colours,
@@ -208,9 +218,19 @@ function freqPlot(x,y,callback){
 					labels.push(monthNames[parseInt(res[object]['date'].split('/')[1])-1]);
 					data.push(res[object]['volunteerTotal']);
 				}
+				var labelsEncountered = [];
+				var dataEncountered = [];
+				for (var object in labels){
+					if (labelsEncountered.includes(labels[object])) {
+						dataEncountered[labelsEncountered.indexOf(labels[object])] += data[object];
+					} else {
+						labelsEncountered.push(labels[object]);
+						dataEncountered.push(data[object]);
+					}
+				}
 				var graphComponents = {
-					labels: labels,
-					data: data,
+					labels: labelsEncountered,
+					data: dataEncountered,
 					ylabel:ylabel,
 					xlabel:xlabel,
 					colours:colours,
