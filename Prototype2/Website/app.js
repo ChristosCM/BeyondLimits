@@ -1016,18 +1016,18 @@ app.post('/admin/deleteHomeCarousel', function(req,res){
 //Get text, could be html which would incorporate images, though editing could be an issue unless WYSIWYG editor is used in admin page.
 app.get('/aboutUsText', (req,res)=>{
 	fs.readFile('./textContent/aboutUsText.txt', 'utf8', function(err, data) {
+    if (err) throw err;
 		res.json(data);
-  	if (err) throw err;
-								});
+  });
 });
 //Admin
 //Post request to update text
 //NEEDS authorisation
 app.post('/aboutUsText', (req,res)=>{
 	var content = fs.writeFile('./textContent/aboutUsText.txt', req.body.mainText, function(err, data) {
-  								if (err) throw err;
-								});
-	res.sendStatus(200);
+  	if (err) throw err;
+    res.sendStatus(200);
+  });
 });
 //*********************************************************HOW WE CAN HELP*************************************************************
 //Get What we can do for you tab text
@@ -1050,27 +1050,27 @@ app.get('/howMore', (req,res)=>{
 app.post('/howWeCanHelpText', (req,res)=>{
 	fs.writeFile('./textContent/howWeCanHelpText.txt', req.body.mainText, function(err, data) {
   	if (err) throw err;
+    res.sendStatus(200);
 	});
-	res.sendStatus(200);
 });
 app.post('/howMore', (req,res)=>{
 	fs.writeFile('./textContent/howWeCanHelpMoreText.txt', req.body.mainText, function(err, data) {
   	if (err) throw err;
+    res.sendStatus(200);
 	});
-	res.sendStatus(200);
 });
 //*********************************************************VOLUNTEER*************************************************************
 //Get how do I apply tab text
 app.get('/howDoIApplyText', (req,res)=>{
 	fs.readFile('./textContent/howDoIApplyText.txt', 'utf8', function(err, data) {
-	if (err) throw err;
-	res.json(data);
+  	if (err) throw err;
+  	res.json(data);
 	});
 });
 app.get('/volMore', (req,res)=>{
 	fs.readFile('./textContent/volMore.txt', 'utf8', function(err, data) {
-	if (err) throw err;
-	res.json(data);
+  	if (err) throw err;
+  	res.json(data);
 	});
 });
 //volunteer form and email already done in email section
@@ -1080,15 +1080,15 @@ app.get('/volMore', (req,res)=>{
 //NEEDS authorisation
 app.post('/howDoIApplyText', (req,res)=>{
 	fs.writeFile('./textContent/howDoIApplyText.txt', req.body.mainText, function(err, data) {
-  								if (err) throw err;
-								});
-	res.sendStatus(200);
+		if (err) throw err;
+    res.sendStatus(200);
+	});
 });
 app.post('/volMore', (req,res)=>{
 	fs.writeFile('./textContent/volMore.txt', req.body.mainText, function(err, data) {
-  								if (err) throw err;
-								});
-	res.sendStatus(200);
+  	if (err) throw err;
+    res.sendStatus(200);
+  });
 });
 //*********************************************************VIEW*************************************************************
 //Need to find a way to changepass page.
