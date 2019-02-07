@@ -126,6 +126,20 @@ function eventEdit(id){
     }
   })
 }
+function eventDelete(id){
+  $.ajax({
+    url:'/deleteEvent/'+id,
+    type: 'post',
+    success(){
+      if(!alert("Event has been deleted")){window.location.reload();}
+
+    },
+    error(){
+      console.log(error);
+    }
+
+  })
+}
 function eventEditPost(id){
   var title = $("#eventTitle").val();
   var description = $("#description").val();
