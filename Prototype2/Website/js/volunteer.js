@@ -1,10 +1,10 @@
 $(document).ready(function() {
     $.ajax({
-        url: "/aboutUsText",
+        url: "/howDoIApplyText",
         type: "GET",
         datatype:"json",
         success(data){
-            $("#aboutText").html('<p>'+data+'</p>');
+            $("#volText").html('<p>'+data+'</p>');
         }
         
     })

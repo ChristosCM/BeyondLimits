@@ -6,10 +6,14 @@
     <link rel="stylesheet" type=text/css href="stylesheet1.css">
     <link rel = "stylesheet" type = "text/css" href = "stylesheets/main.css"  />
     <meta charset="ISO-8859-1">
+    <script type="text/javascript"
+    src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+    <script src="js/volunteer.js" type="text/javascript"></script>
 </head>
 
 <body>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <nav class="navbar navbar-expand-lg">
@@ -60,7 +64,8 @@
         <div class="tab-content">
           <div id="home" class="tab-pane active fade show">
             <h3>How Do I Apply?</h3>
-            <dl class="dl-vertical">
+            <div id="volText">
+            <!-- <dl class="dl-vertical">
               <dt>1. Fill out your details</dt>
               <dd>Complete the form online.</dd>
               <dt>2. We'll review your application</dt>
@@ -69,12 +74,11 @@
               <dd>We will check your availability for the upcoming events. Please let us know what life skills you have that you can bring to Beyond Limits.</dd>
               <dt>4. Volunteering Day</dt>
               <dd>On this day with a Team Leader, we will provide you with training to do the task you have volunteered to do.</dd>
-              
-            </dl>
+            </dl> -->
+            </div>
           </div>
           <div id="apply" class="tab-pane fade">
             <h3>Apply To Become A Volunteer!</h3>
-            <p>Some more info and the online form</p>
             <form action = "http://localhost:80/volunteerEmail" method="post">
               <!--The following is a list with all the form fileds-->
               <div class="form-group">
@@ -131,7 +135,10 @@
           </div>
           <div id="moreInfo" class="tab-pane fade">
             <h3>More Information</h3>
-            <p>Contact information and maybe some FAQ</p>
+            <p>Beyond Limits is able to function largely due to the selfless commitment of 30 people, who give their time to help run various projects during the week and the additional events that take place on some weekends. Otherwise referred to as the ‘workforce’, the activities of the volunteers are coordinated by Susan, Beyond Limits founder.
+              Our projects are designed to cater for specific needs of the community which is as diverse as feeding the homeless to putting on a pamper event for ladies needing a bit of TLC
+              
+              Would you like to consider being part of our workforce? Fill out the form! - thank you</p>
           </div>
         </div>
       </div>

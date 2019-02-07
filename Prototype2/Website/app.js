@@ -592,8 +592,10 @@ app.post('/createEvent/:id', (req,res)=>{
 	var volunteerMale = req.body.vMale;
 	var volunteerFemale = req.body.vFemale;
 	var date = req.body.date;
-	var pPath = req.files.filename;
-	fileUpload(con,pPath,eID,1);
+	// if (req.files.filename){
+	// var pPath = req.files.filename;
+	// fileUpload(con,pPath,eID,1);
+	// }
 	var description = req.body.description;
 	//This should work but needs further testing.
 	var sql = format("DELETE FROM events WHERE idEvents = %1;", eID);
@@ -601,7 +603,7 @@ app.post('/createEvent/:id', (req,res)=>{
 		if(err) throw err;
 		con.end();
 		var con1 = setupConnection("localhost", "root", "password", "blDB");
-		var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description,date);
+		var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, "text", description,date);
 		queryDB(con1,sql,function(err1,result1){
 			if(err1) throw err1;
 			con1.end();
@@ -621,10 +623,17 @@ app.post('/createEvent', (req,res)=>{
 	var volunteerMale = req.body.vMale;
 	var volunteerFemale = req.body.vFemale;
 	var date = req.body.date;
-	var pPath = req.files.filename;
-	fileUpload(con,pPath,eID,0);
+	var eID = "13";
+	//added this if in case there is no upload
+	var pPath;
+	// if(req.files.filename){
+	// 	var pPath = req.files.filename;
+	// }
+	// fileUpload(con,pPath,eID,0);
 	var description = req.body.description;
-	var sql = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath.name, description,date);
+	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, "text", description,date);
+	console.log(sql);
+	//add this: pPath.name, in sql before description
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		//Using this on the client side could create JS to iterate over all posts.
@@ -779,7 +788,7 @@ app.all('/query', (req,res)=>{
 			//If more than one condition then second list "operators" will not be empty.
 			//This list will specify AND or OR between conditions.
 			if(conditions.length>1 && i > 0){
-				whereStream += " " + operators[i-1] + " ";
+				whereStream += " " + operators + " ";
 			}
 			whereStream += conditions[cond];
 			i+=1;
@@ -1036,7 +1045,6 @@ app.get('/howWeCanHelpText', (req,res)=>{
 //Post request to update text
 //NEEDS authorisation
 app.post('/howWeCanHelpText', (req,res)=>{
-	console.log(req.body.mainText);
 	fs.writeFile('./textContent/howWeCanHelpText.txt', req.body.mainText, function(err, data) {
 	if (err) throw err;
 	});
@@ -1047,7 +1055,7 @@ app.post('/howWeCanHelpText', (req,res)=>{
 app.get('/howDoIApplyText', (req,res)=>{
 	fs.readFile('./textContent/howDoIApplyText.txt', 'utf8', function(err, data) {
 	if (err) throw err;
-	res.json(content);
+	res.json(data);
 	});
 });
 //volunteer form and email already done in email section

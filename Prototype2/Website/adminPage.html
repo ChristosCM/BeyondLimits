@@ -194,16 +194,18 @@
 
     <div id="volunteermain" class="tab-pane fade container">
       <h3>How you can help</h3>
-      <form action="/volUpload" method="post">
+      <form action="/howDoIApplyText" id="volUpload"method="post">
       <div class="form-group">
         <textarea class="form-control" rows="5" id="editorVol">
         </textarea>
         </div>
         <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
       </form>
+      <hr class="half-rule">
+      <button type="button" onclick="getHowDoI()" class="btn btn-info">Show the Content Displayed on the Page</button>
     </div>
     <div id="volunteermore" class="tab-pane fade container">
-      <h3>Volunteer Testimonials</h3>
+      <h3>More Information</h3>
       <form action="/volMoreUpload" method="post">
       <div class="form-group">
         <textarea class="form-control" rows="5" id="editorVolMore"></textarea>

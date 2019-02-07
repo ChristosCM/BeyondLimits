@@ -87,7 +87,7 @@ $(document).ready(function(){
   $.ajax({
     url:'/createEvent',
     type : 'post',
-    data: {"attendance": attendance, "name": title, "description": description, "date": date, "volunteersTotal": volunteers},
+    data: {"attendance": attendance, "name": title, "description": description, "date": date, "vTotal": volunteers},
     datatype : 'json',
     success: () => {
       alert("Event has been created");
@@ -116,10 +116,31 @@ function eventEdit(id){
       $('#attendance').val(event.attendance);
       $('#volunteersTotal').val(event.volunteerTotal);
       $("#eventSubmit").hide();
-      $('#divEventEdit').html('<button class="btn btn-info" onclick("eventEditPost('+id+')")>Edit Event</button>');
+      $('#divEventEdit').html('<button class="btn btn-info" onclick="eventEditPost('+id+')">Edit Event</button>');
 
     }
   })
+}
+function eventEditPost(id){
+  var title = $("#eventTitle").val();
+  var description = $("#description").val();
+  var date = $("#eventDate").val();
+  var attendance = $("#attendance").val();
+  var volunteers = $("#volunteersTotal").val();
+  $.ajax({
+    url:'/createEvent/'+id,
+    type : 'post',
+    data: {"attendance": attendance, "name": title, "description": description, "date": date, "vTotal": volunteers},
+    datatype : 'json',
+    success: () => {
+      if(!alert("Event has been edited")){window.location.reload();}
+
+    },
+    error(err){
+      console.log(err);
+      alert("There was an error creating the event" + err);
+    }
+  });
 }
 
  function blogEdit(id){
@@ -158,7 +179,6 @@ function blogEditPost(id){
         console.log(error);
     }
   });
-  return false;
 }
 function testimonialsDelete(id){
   if (confirm('Are you sure you want to delete this testimonial post from the website?')) {

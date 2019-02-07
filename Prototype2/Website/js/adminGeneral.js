@@ -64,6 +64,19 @@ function getAboutUs(){
         }
     })
 }
+function getHowDoI(){
+    $.ajax({
+        url: "/howDoIApplyText",
+        type: "get",
+        success(data){
+            $("#editorVol").editor().content(data);
+        },
+        error(err){
+            alert("There was problem getting the content from the page: " + error);
+        }
+    })
+}
+
   //aboutUSupload
   $(document).ready(function(){
       $("#aboutUpload").submit(function(e){
