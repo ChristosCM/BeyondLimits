@@ -265,13 +265,13 @@ app.post('/volunteerEmail', (req, res)=>{
 			pass: 'testing13.'
 		}
 	});
-	var fname = req.headers.fname;
-	var lname = req.headers.lname;
-	var address1 = req.headers.address1;
-	var address2 = req.headers.address2;
-	var email = req.headers.email;
-	var county = req.headers.county;
-	var info = req.headers.info;
+	var fname = req.body.fname;
+	var lname = req.body.lname;
+	var address1 = req.body.address1;
+	var address2 = req.body.address2;
+	var email = req.body.email;
+	var county = req.body.county;
+	var info = req.body.info;
 	var message = 'VOLUNTEER<br><br>Form details below.<br><br><b>First Name:</b> '+ fname+'<br><b>Last Name:</b> '+ lname+'<br><b>Email:</b> '+ email +'<br><b>Address:</b> '+ address1 +'<br>' + address2 + '<br>' + county + '<br><b>Message:</b> '+ info;
 
 	const mailOptions = {
@@ -302,10 +302,10 @@ app.post('/helpEmail', (req, res)=>{
 			pass: 'testing13.'
 		}
 	});
-	var fname = req.headers.fname;
-	var lname = req.headers.lname;
-	var email = req.headers.email;
-	var info = req.headers.info;
+	var fname = req.body.fname;
+	var lname = req.body.lname;
+	var email = req.body.email;
+	var info = req.body.info;
 	var message = 'Person Seeking Help<br><br>Form details below.<br><br><b>First Name:</b> '+ fname+'<br><b>Last Name:</b> '+ lname+'<br><b>Email:</b> '+ email + '<br><b>Message:</b> '+ info;
 
 	const mailOptions = {
@@ -599,16 +599,10 @@ app.post('/createEvent/:id', (req,res)=>{
 	// }
 	var description = req.body.description;
 	//This should work but needs further testing.
-	var sql = format("DELETE FROM events WHERE idEvents = %1;", eID);
+	var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, pPath = 'img/src', description = %6, date = %7 WHERE idEvents = %8;", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description, date, eID);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		con.end();
-		var con1 = setupConnection("localhost", "root", "password", "blDB");
-		var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, "text", description,date);
-		queryDB(con1,sql,function(err1,result1){
-			if(err1) throw err1;
-			con1.end();
-		});
 		//Using this on the client side could create JS to iterate over all posts.
 
 		return res.sendStatus(200);
@@ -624,7 +618,6 @@ app.post('/createEvent', (req,res)=>{
 	var volunteerMale = req.body.vMale;
 	var volunteerFemale = req.body.vFemale;
 	var date = req.body.date;
-	var eID = 13;
 	//added this if in case there is no upload
 	var pPath;
 	// if(req.files.filename){
@@ -632,7 +625,7 @@ app.post('/createEvent', (req,res)=>{
 	// }
 	// fileUpload(con,pPath,eID,0);
 	var description = req.body.description;
-	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,null,%7,%8)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description,String.valueOf(date));
+	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (null,%1,%2,%3,%4,%5,null,%6,%7)",eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description,date);
 	console.log(sql);
 	//add this: pPath.name, in sql before description
 	queryDB(con, sql, function(err,result){
