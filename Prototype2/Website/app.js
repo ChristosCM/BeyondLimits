@@ -1035,18 +1035,27 @@ app.get('/howWeCanHelpText', (req,res)=>{
 	fs.readFile('./textContent/howWeCanHelpText.txt', 'utf8', function(err, data) {
 		if (err) throw err;
 		res.json(data);
-
-								});
-
+	});
+});
+app.get('/howMore', (req,res)=>{
+	fs.readFile('./textContent/howWeCanHelpMoreText.txt', 'utf8', function(err, data) {
+		if (err) throw err;
+		res.json(data);
+	});
 });
 //help form and email already done in email section
-//more information section needs clarification
 //Admin
 //Post request to update text
 //NEEDS authorisation
 app.post('/howWeCanHelpText', (req,res)=>{
 	fs.writeFile('./textContent/howWeCanHelpText.txt', req.body.mainText, function(err, data) {
-	if (err) throw err;
+  	if (err) throw err;
+	});
+	res.sendStatus(200);
+});
+app.post('/howMore', (req,res)=>{
+	fs.writeFile('./textContent/howWeCanHelpMoreText.txt', req.body.mainText, function(err, data) {
+  	if (err) throw err;
 	});
 	res.sendStatus(200);
 });
@@ -1058,6 +1067,12 @@ app.get('/howDoIApplyText', (req,res)=>{
 	res.json(data);
 	});
 });
+app.get('/volMore', (req,res)=>{
+	fs.readFile('./textContent/volMore.txt', 'utf8', function(err, data) {
+	if (err) throw err;
+	res.json(data);
+	});
+});
 //volunteer form and email already done in email section
 //more information section needs clarification
 //Admin
@@ -1065,6 +1080,12 @@ app.get('/howDoIApplyText', (req,res)=>{
 //NEEDS authorisation
 app.post('/howDoIApplyText', (req,res)=>{
 	fs.writeFile('./textContent/howDoIApplyText.txt', req.body.mainText, function(err, data) {
+  								if (err) throw err;
+								});
+	res.sendStatus(200);
+});
+app.post('/volMore', (req,res)=>{
+	fs.writeFile('./textContent/volMore.txt', req.body.mainText, function(err, data) {
   								if (err) throw err;
 								});
 	res.sendStatus(200);
