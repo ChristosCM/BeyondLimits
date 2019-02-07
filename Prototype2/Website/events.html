@@ -5,6 +5,43 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel = "stylesheet" type = "text/css" href = "stylesheets/main.css" />
 	<title>Events</title>
+	<script>
+	function loadEvents() {
+		$.get('/home/eventsAll', function (data) {
+			var html = "";
+			var currentCollapse = "";
+			jQuery.each(data, function(index, element) {
+				i = index;
+				if (index % 3 == 0) {
+					html += '<div class="row">';
+				}
+				
+				html += '<div class = "col-md-4">';
+				html +=	'	<div class = "events" id = "'+element.idEvents+'">';
+				html +=	'		<h4>'+element.eventName+'</h4>';
+				html +=	'		<button data-toggle="collapse" data-target="'+element.idEvents+'">Expand</button>';
+				html +=	'	</div>';
+				html += '</div>';
+				
+				currentCollapse += '<div class="collapse" id="'+element.idEvents+'">
+				currentCollapse +=	'	<div class = "cardit card card-body bg-light">'+element.description+'</div>
+				currentCollapse += '</div>
+				
+				if (index % 3 == 2 || index == array.length - 1) {
+					html += '</div>';
+					html += '<div class = "row">';
+					html += '	<div class = "cardit col-md-auto">';
+					html += currentCollapse;
+					html += '	</div>';
+					html += '</div>
+				}
+				
+			})
+			$("#eventGrid").html(html);
+			});
+	}
+
+	$(loadCarousel());
 </head>
 <body>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -40,7 +77,7 @@
 			</ul>
 		</div>
 	</nav>
-	<div class = "container-fluid" style = "margin-bottom:79px; width:100%">
+	<div class = "container-fluid" style = "margin-bottom:79px; width:100%" id = "eventGrid">
 		<!--Would need to mod3 to get correct number of rows-->
 		<div class = "row">
 			<div class = "col-md-4">
