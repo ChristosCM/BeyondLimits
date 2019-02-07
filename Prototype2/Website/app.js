@@ -42,6 +42,7 @@ function queryDB(con, sql, callback){
 function format(string) {
   var args = arguments;
   var pattern = new RegExp("%([1-" + arguments.length + "])", "g");
+  console.log(pattern);
   return String(string).replace(pattern, function(match, index) {
   	if(Number.isInteger(args[index])){
   		return args[index];
@@ -631,7 +632,7 @@ app.post('/createEvent', (req,res)=>{
 	// }
 	// fileUpload(con,pPath,eID,0);
 	var description = req.body.description;
-	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, "text", description,date);
+	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,null,%7,%8)", eID,eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description,String.valueOf(date));
 	console.log(sql);
 	//add this: pPath.name, in sql before description
 	queryDB(con, sql, function(err,result){
