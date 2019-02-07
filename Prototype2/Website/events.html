@@ -23,9 +23,9 @@
 				html +=	'	</div>';
 				html += '</div>';
 				
-				currentCollapse += '<div class="collapse" id="'+element.idEvents+'">;
-				currentCollapse +=	'	<div class = "cardit card card-body bg-light">'+element.description+'</div>;
-				currentCollapse += '</div>;
+				currentCollapse += '<div class="collapse" id="'+element.idEvents+'">';
+				currentCollapse +=	'	<div class = "cardit card card-body bg-light">'+element.description+'</div>';
+				currentCollapse += '</div>';
 				
 				if (index % 3 == 2 || index == array.length - 1) {
 					html += '</div>';
@@ -41,7 +41,7 @@
 			});
 	}
 
-	$(loadCarousel());
+	$(loadEvents());
 </head>
 <body>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
