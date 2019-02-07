@@ -623,7 +623,7 @@ app.post('/createEvent', (req,res)=>{
 	var volunteerMale = req.body.vMale;
 	var volunteerFemale = req.body.vFemale;
 	var date = req.body.date;
-	var eID = "13";
+	var eID = 13;
 	//added this if in case there is no upload
 	var pPath;
 	// if(req.files.filename){
