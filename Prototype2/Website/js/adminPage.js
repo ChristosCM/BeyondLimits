@@ -84,10 +84,12 @@ $(document).ready(function(){
   var date = $("#eventDate").val();
   var attendance = $("#attendance").val();
   var volunteers = $("#volunteersTotal").val();
+  var male = $("#volunteersMale").val();
+  var female = $("#volunteersFemale").val();
   $.ajax({
     url:'/createEvent',
     type : 'post',
-    data: {"attendance": attendance, "name": title, "description": description, "date": date, "vTotal": volunteers},
+    data: {"attendance": attendance, "name": title, "description": description, "date": date, "vTotal": volunteers,"vMale": male, "vFemale": female},
     datatype : 'json',
     success: () => {
       alert("Event has been created");
@@ -110,11 +112,14 @@ function eventEdit(id){
           var event = events[i];
         }
       }
+      console.log(event);
       $('#eventTitle').val(event.eventName);
       $('#description').val(event.description);
       $('#eventDate').val(event.date);
       $('#attendance').val(event.attendance);
       $('#volunteersTotal').val(event.volunteerTotal);
+      $('#volunteersMale').val(event.volunteerMale);
+      $('#volunteersFemale').val(event.volunteerFemale);
       $("#eventSubmit").hide();
       $('#divEventEdit').html('<button class="btn btn-info" onclick="eventEditPost('+id+')">Edit Event</button>');
 
@@ -127,10 +132,13 @@ function eventEditPost(id){
   var date = $("#eventDate").val();
   var attendance = $("#attendance").val();
   var volunteers = $("#volunteersTotal").val();
+  var male = $("#volunteersMale").val();
+  var female = $("#volunteersFemale").val();
+
   $.ajax({
     url:'/createEvent/'+id,
     type : 'post',
-    data: {"attendance": attendance, "name": title, "description": description, "date": date, "vTotal": volunteers},
+    data: {"attendance": attendance, "name": title, "description": description, "date": date, "vTotal": volunteers, "vMale": male, "vFemale": female},
     datatype : 'json',
     success: () => {
       if(!alert("Event has been edited")){window.location.reload();}
