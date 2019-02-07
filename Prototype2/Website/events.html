@@ -7,7 +7,7 @@
 	<title>Events</title>
 	<script>
 	function loadEvents() {
-		$.get('/home/eventsAll', function (data) {
+		$.get('/eventsAll', function (data) {
 			var html = "";
 			var currentCollapse = "";
 			jQuery.each(data, function(index, element) {
@@ -33,7 +33,7 @@
 					html += '	<div class = "cardit col-md-auto">';
 					html += currentCollapse;
 					html += '	</div>';
-					html += '</div>;
+					html += '</div>';
 				}
 				
 			})
