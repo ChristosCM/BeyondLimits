@@ -1,24 +1,24 @@
 [{
   "file":"0.jpeg",
-  "color":"#ffffff",
+  "color":"#000000",
   "title":"Beyond limits",
-  "subtitle":"Zero can help"
+  "subtitle":"We can help"
 },
 {
   "file":"1.jpg",
   "color":"#ffffff",
   "title":"Beyond limits",
-  "subtitle":"One can help"
+  "subtitle":"We can help"
 },
 {
   "file":"2.jpg",
   "color":"#ffffff",
   "title":"Beyond limits",
-  "subtitle":"Two can help"
+  "subtitle":"We can help"
 },
 {
   "file":"3.mp4",
   "color":"#ffffff",
   "title":"Beyond limits",
-  "subtitle":"Three can help"
+  "subtitle":"We can help"
 }]
