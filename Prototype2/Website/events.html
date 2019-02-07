@@ -23,9 +23,9 @@
 				html +=	'	</div>';
 				html += '</div>';
 				
-				currentCollapse += '<div class="collapse" id="'+element.idEvents+'">
-				currentCollapse +=	'	<div class = "cardit card card-body bg-light">'+element.description+'</div>
-				currentCollapse += '</div>
+				currentCollapse += '<div class="collapse" id="'+element.idEvents+'">;
+				currentCollapse +=	'	<div class = "cardit card card-body bg-light">'+element.description+'</div>;
+				currentCollapse += '</div>;
 				
 				if (index % 3 == 2 || index == array.length - 1) {
 					html += '</div>';
@@ -33,7 +33,7 @@
 					html += '	<div class = "cardit col-md-auto">';
 					html += currentCollapse;
 					html += '	</div>';
-					html += '</div>
+					html += '</div>;
 				}
 				
 			})
