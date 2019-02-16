@@ -1,0 +1,12 @@
+#selectForm select {
+    width: 150px;
+}
+#deleteForm select {
+    width: 150px;
+}
+#editoraboutus{
+    height: 400px;
+}
+div[role=body]{
+    height: 300px;
+}

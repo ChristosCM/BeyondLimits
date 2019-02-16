@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<head>
+    <title>Volunteer</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type=text/css href="stylesheet1.css">
+    <link rel = "stylesheet" type = "text/css" href = "stylesheets/main.css"  />
+    <meta charset="ISO-8859-1">
+    <script type="text/javascript"
+    src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+    <script src="js/volunteer.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <nav class="navbar navbar-expand-lg">
+  <a class="title navbar-brand mb-0 h1" style = "color:white;font-weight:bold;">BeyondLimits</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="home.htm">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="aboutus.htm">About Us</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="events.html">Events</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="wehelp.htm">How we can help</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Volunteer <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="blog.html">Blog</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+    <h1>Become A Volunteer</h1>
+
+<div class="container">
+        <h2 style = "color:#87CEEB; text-align:center">Find information about how to become a volunteer...</h2>
+        <p></p>
+
+        <ul class="nav nav-tabs">
+          <li class="nav-item"><a class = "nav-link active" data-toggle="tab" href="#home">How Do I Apply?</a></li>
+          <li class = "nav-item"><a class = "nav-link" data-toggle="tab" href="#apply">Online Application</a></li>
+          <li class = "nav-item"><a class = "nav-link" data-toggle="tab" href="#moreInfo">More Information</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <div id="home" class="tab-pane active fade show">
+            <h3>How Do I Apply?</h3>
+            <div id="volText">
+            <!-- <dl class="dl-vertical">
+              <dt>1. Fill out your details</dt>
+              <dd>Complete the form online.</dd>
+              <dt>2. We'll review your application</dt>
+              <dd>A member of our admin team will review your application and get in touch with you using the contact details you have provided.</dd>
+              <dt>3. We'll ask you to help out</dt>
+              <dd>We will check your availability for the upcoming events. Please let us know what life skills you have that you can bring to Beyond Limits.</dd>
+              <dt>4. Volunteering Day</dt>
+              <dd>On this day with a Team Leader, we will provide you with training to do the task you have volunteered to do.</dd>
+            </dl> -->
+            </div>
+          </div>
+          <div id="apply" class="tab-pane fade">
+            <h3>Apply To Become A Volunteer!</h3>
+            <form action = "/volunteerEmail" method="post" id="volEmail">
+              <!--The following is a list with all the form fileds-->
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="fname">First Name</label>
+                <div class="col-3">
+                  <input type="text" class="form-control" id="fname" placeholder="First Name" name="fname">
+                </div>
+              </div>
+              <!--Form field for last name-->
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="lname">Last Name</label>
+                <div class="col-3">
+                  <input type="text" class="form-control" id="lname" placeholder="Last Name" name="lname">
+                </div>
+              </div>
+              <!--Form field for email-->
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="email">Email</label>
+                <div class="col-4">
+                <input type="email" class="form-control" id="email" placeholder="Email" name="email">
+                </div>
+              </div>
+              <div class = "form-group">
+                <label class="control-label col-sm-2" for="address1">Address Line 1</label>
+                <div class = "col-3">
+                  <input type="text" class="form-control" id="address1" placeholder="Street Address Line 1" name="address1">
+                </div>
+              </div>
+              <div class = "form-group">
+                <label class="control-label col-sm-3" for="address2">Address Line 2<small><em> -Optional</em></small></label>
+                <div class = "col-3">
+                  <input type="text" class="form-control" id="address2" placeholder="Street Address Line 2" name="address2">
+                </div>
+              </div>
+              <div class = "form-group">
+                <label class="control-label col-sm-2" for="county">County</label>
+                <div class = "col-2">
+                  <input type="text" class="form-control" id="county" placeholder="County" name="county">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="info">Your Message</label>
+                <div class="col-10">
+                  <textarea class="form-control" rows="5" name="info" id="info"></textarea>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" name = "submit" class="btn btn-success" value="Submit">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="moreInfo" class="tab-pane fade">
+            <h3>More Information</h3>
+            <p>Beyond Limits is able to function largely due to the selfless commitment of 30 people, who give their time to help run various projects during the week and the additional events that take place on some weekends. Otherwise referred to as the ‘workforce’, the activities of the volunteers are coordinated by Susan, Beyond Limits founder.
+              Our projects are designed to cater for specific needs of the community which is as diverse as feeding the homeless to putting on a pamper event for ladies needing a bit of TLC
+
+              Would you like to consider being part of our workforce? Fill out the form! - thank you</p>
+          </div>
+        </div>
+      </div>
+
+      <div class = "footer" class = "jumbotron text-center">
+        <div class = "container-fluid text-center text-md-left">
+
+          <div class = "row">
+
+            <div class = "col-md-6 mt-md-0 mt-3">
+
+              <h5 class = "text-uppercase">Contact Us</h5>
+              <p>You can get in touch using one of the following ways</p>
+
+            </div>
+
+            <hr class = "clearfix w-100 d-md-none pb-3">
+            <div class="col-md-3 mb-md-0 mb-3">
+
+              <!-- Links -->
+              <h5 class="text-uppercase">Email and Telephone</h5>
+
+              <ul class="list-unstyled">
+                <li>Email</li>
+                <li>
+                  <a href="mailto:e-mail: beyondlimitscharity@googlemail.com.">                  beyondlimitscharity@googlemail.com.</a>
+                  <p></p>
+                </li>
+                <li>Telephone</li>
+                <li>
+                  <a href="#!">07861714779</a>
+                  <p></p>
+                </li>
+                <li>Facebook</li>
+                <li>
+                  <a href="https://www.facebook.com/groups/1203921086342433/">Facebook Group</a>
+                  <p></p>
+                </li>
+              </ul>
+
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-3 mb-md-0 mb-3">
+
+              <!-- Links -->
+              <h5 class="text-uppercase">Quick Links</h5>
+
+              <ul class="list-unstyled">
+                <li>
+                  <a href="home.htm">Home</a>
+                </li>
+                <li>
+                  <a href="aboutus.htm">About Us</a>
+                </li>
+                <li>
+                  <a href="events.html">Events</a>
+                </li>
+                <li>
+                  <a href="wehelp.htm">How we can help</a>
+                </li>
+                <li>
+                  <a href="volunteer.htm">Volunteer</a>
+                </li>
+                <li>
+                  <a href="blog.html">Blog</a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+</body>
