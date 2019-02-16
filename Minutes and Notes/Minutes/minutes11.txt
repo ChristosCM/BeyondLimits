@@ -1,0 +1,29 @@
+Updates to the site and Future plan
+
+Chris:
+text already on editors
+whenever they make changes, ask them if they are sure about it
+alert for the email page
+add file upload to events
+file upload for testimonials
+reload after select and delete
+show them the items before they delete them? maybe use a span class
+email about location of donation button + colours
+manage update for the events
+
+
+Frank:
+Section 1 testcases
+password
+
+Matt:
+section 3 testcases
+footer
+finish events
+
+Jake: 
+section 2 test report (draft)
+
+Website needs to be finalised by next week so that testing can begins and so that it can be hosted online (most probably on AWS)
+Need to email Beyond Limits for a few things (see above) + whatever else we are missing
+Send them a link to a stable version of the site before the final product in hopes that we can get some feedback and perfect a few things
