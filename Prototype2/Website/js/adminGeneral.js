@@ -11,8 +11,7 @@ $(function(){
 });
 $(document).ready(function () {
     $("#editoraboutus").editor({
-      uiLibrary: 'bootstrap4',
-      height: 400,
+      uiLibrary: 'bootstrap4'
     });
   });
   $(document).ready(function () {
@@ -40,7 +39,7 @@ $(document).ready(function () {
       uiLibrary: 'bootstrap4'
     });
   });
-  function getHowWe(){
+  $(document).ready(function(){
     $.ajax({
         url: "/howWeCanHelpText",
         type: "get",
@@ -48,11 +47,31 @@ $(document).ready(function () {
             $("#editorHowWe").editor().content(data);
         },
         error(err){
-            alert("There was problem getting the content from the page: " + error);
+            alert("There was problem getting the content from the page: " + err);
         }
     })
-}
-function getAboutUs(){
+    $.ajax({
+        url: "/howMore",
+        type: "get",
+        success(data){
+            $("#editorMore").editor().content(data);
+        },
+        error(err){
+            alert("There was problem getting the content from the page: " + err);
+        }
+    })
+    $.ajax({
+        url: "/volMore",
+        type: "get",
+        success(data){
+            $("#editorVolMore").editor().content(data);
+        },
+        error(err){
+            alert("There was problem getting the content from the page: " + err);
+        }
+    })
+})
+$(document).ready(function(){
     $.ajax({
         url: "/aboutUsText",
         type: "get",
@@ -60,11 +79,11 @@ function getAboutUs(){
             $("#editoraboutus").editor().content(data);
         },
         error(err){
-            alert("There was problem getting the content from the page: " + error);
+            alert("There was problem getting the content from the page: " + err);
         }
     })
-}
-function getHowDoI(){
+})
+$(document).ready(function(){
     $.ajax({
         url: "/howDoIApplyText",
         type: "get",
@@ -72,10 +91,10 @@ function getHowDoI(){
             $("#editorVol").editor().content(data);
         },
         error(err){
-            alert("There was problem getting the content from the page: " + error);
+            alert("There was problem getting the content from the page: " + err);
         }
     })
-}
+})
 
   //aboutUSupload
   $(document).ready(function(){
@@ -83,18 +102,20 @@ function getHowDoI(){
           e.preventDefault();
           var text = $("#editoraboutus").val();
           //maybe add if for empty, but they might want it empty
+          if (confirm('Are you sure you want to change the About Us text?')){
           $.ajax({
               url: "/aboutUsText",
               type: "post",
               data: {"mainText": text},
               success(){
-                  alert("About Us section has been altered");
+                if(!alert("About Us section has been altered")){window.location.reload();}
               },
               error(){
                   alert("There was an error updating the section")
               }
 
           });
+        }
       });
   });
   //how we can help upload
@@ -103,18 +124,20 @@ function getHowDoI(){
         e.preventDefault();
         var text = $("#editorHowWe").val();
         //maybe add if for empty, but they might want it empty
+        if (confirm('Are you sure you want to change the How We Can Help text?')){
         $.ajax({
             url: "/howWeCanHelpText",
             type: "post",
             data: {"mainText": text},
             success(){
-                alert("How We Can Help section has been altered");
+                if(!alert("How We Can Help section has been altered")){window.location.reload();}
             },
             error(){
                 alert("There was an error updating the section")
             }
 
         });
+    }
     });
 });
 $(document).ready(function(){
@@ -122,18 +145,20 @@ $(document).ready(function(){
         e.preventDefault();
         var text = $("#editorMore").val();
         //maybe add if for empty, but they might want it empty
+        if (confirm('Are you sure you want to change the More information text on the How We Can Help section?')){
         $.ajax({
             url: "/howMore",
             type: "post",
             data: {"mainText": text},
             success(){
-                alert("More Information (on How We Can Help) section has been altered");
+                if(!alert("More Information (on How We Can Help) section has been altered")){window.location.reload();}
             },
             error(){
                 alert("There was an error updating the section")
             }
 
         });
+    }
     });
 });
 //volunteer upload
@@ -142,18 +167,20 @@ $(document).ready(function(){
         e.preventDefault();
         var text = $("#editorVol").val();
         //maybe add if for empty, but they might want it empty
+        if (confirm("Are you sure you want to change the Volunteer text?")){
         $.ajax({
             url: "/howDoIApplyText",
             type: "post",
             data: {"mainText": text},
             success(){
-                alert("How Do I Apply section has been altered");
+                if(!alert("How Do I Apply section has been altered")){window.location.reload();}
             },
             error(){
                 alert("There was an error updating the section")
             }
 
         });
+    }
     });
 });
 $(document).ready(function(){
@@ -161,17 +188,21 @@ $(document).ready(function(){
         e.preventDefault();
         var text = $("#editorVolMore").val();
         //maybe add if for empty, but they might want it empty
+        if (confirm("Are you sure you want to change the More Information on the Volunteer page?")){
         $.ajax({
             url: "/volMore",
             type: "post",
             data: {"mainText": text},
             success(){
-                alert("More Information (on How Do I Help) section has been altered");
+                if(!alert("More Information (on How Do I Help) section has been altered")){window.location.reload();}
+                if(!alert()){window.location.reload();}
+                
             },
             error(){
                 alert("There was an error updating the section")
             }
 
         });
+    }
     });
 });

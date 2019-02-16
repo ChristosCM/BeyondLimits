@@ -135,17 +135,19 @@ function query(){
                 values.push($("#insertText"+i).val());
             }
             //maybe need to add the fields to the values
+            if (confirm("Are you sure you want to Insert information in: "+tableNorm+" ?")){
             $.ajax({
                 url: "/query",
                 type: "post",
                 data: {"qtable": table, "qtype": type, "conditions": [array,values]},
                 success(content){
-                    alert("The items have been inserted");
+                    if(!alert("The items are now i the database")){window.location.reload();}
                 },
                 error(error){
                     alert("There was an error: " + error);
                 }
             })
+        }
 
             }
         });
@@ -182,7 +184,8 @@ function query(){
                 url: "/query",
                 data: {"qtable": table,"qtype": type,"operators": operator, "conditions": values},
                 success(content){
-                    alert("The items have been deleted");
+                    if(!alert("The items have been deleted")){window.location.reload();}
+            
                 },
                 error(err){
                     console.log(err);

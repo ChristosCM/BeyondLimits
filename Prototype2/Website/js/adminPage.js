@@ -86,6 +86,8 @@ $(document).ready(function(){
   var volunteers = $("#volunteersTotal").val();
   var male = $("#volunteersMale").val();
   var female = $("#volunteersFemale").val();
+  var file = $("#eventFile").val();
+    console.log(file);
   $.ajax({
     url:'/createEvent',
     type : 'post',
