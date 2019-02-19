@@ -3,6 +3,7 @@
 const nodemailer = require('nodemailer');
 const express = require('express');
 const session = require('express-session');
+
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const app = express();
@@ -12,6 +13,11 @@ var multer = require('multer');
 const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
+
+
+
+
+
 
 //*********************************************************SETUP*************************************************************
 //Sets up the connection to the database with the provided parameters.
@@ -64,6 +70,41 @@ function saltHashPassword(userpassword) {
     var passwordData = sha512(userpassword);
     return passwordData;
 }
+//Session setup
+var idleTimeoutSeconds = 1800;
+app.use(session({
+  secret: 'secretcodeofsomesort',
+  resave: true,
+  cookie: {
+    maxAge: idleTimeoutSeconds * 1000
+  },
+  rolling: true
+});
+//*********************************************************AUTHORISATION*************************************************************
+//To be called by any function requiring authentication
+var auth = function(req, res, next) {
+  if (req.session.admin)
+    return next();
+  else
+    return res.sendStatus(401);
+};
+app.post('/login', function (req, res) {
+  var passHash = saltHashPassword(req.body.password);
+  var username = req.body.username;
+  var sql = "SELECT * FROM accounts WHERE username='" + username + "';";
+  queryDB(con, sql, function(err, res){
+    if(err) throw err;
+    if(res.password == passHash) {
+      req.session.user = username;
+      req.session.admin = true;
+      res.send("Login successful, user: " + username);
+    }
+    else{
+      res.sendStatus(403);
+    }
+    con.end();
+  });
+});
 
 //*********************************************************STATISTICS*************************************************************
 function randRGB(i){
