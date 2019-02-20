@@ -626,7 +626,7 @@ function fileUpload(con,file,id,editStatus){
 //This is the code for uploading pictures for the events
 var eventStorage = multer.diskStorage({
 	destination: function(req, file, callback) {
-			callback(null, "/images/events");
+			callback(null, "./images/events");
 	},
 	filename: function(req, file, callback) {
 					callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
@@ -666,10 +666,7 @@ app.post('/createEvent/:id', (req,res)=>{
 app.post('/createEvent', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	eventUpload(req,res, function(err){
-		console.log(req.file);
 		var pPath = req.file.path;
-		console.log(pPath);
-	})
 	var eventName = req.body.name;
 	var attendance = req.body.attendance;
 	var volunteerTotal = req.body.vTotal;
@@ -687,6 +684,7 @@ app.post('/createEvent', (req,res)=>{
 		//Using this on the client side could create JS to iterate over all posts.
 		con.end()
 		return res.sendStatus(200);
+	})
 	});
 });
 

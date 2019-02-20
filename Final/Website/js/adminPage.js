@@ -6,7 +6,7 @@ $.ajax({
 	datatype: 'json',
 	success: (events)=>{
 		for (i=0; i<events.length; i++){
-			$("#eventsTable").append('<tr><td>'+events[i].eventName+'</td><td>'+events[i].date+'</td><td>'+events[i].attendance+'</td><td>'+events[i].volunteerTotal+'</td><td><button onclick = "eventDelete('+events[i].idEvent+')" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick ="eventEdit('+events[i].idEvents+')" class="btn btn-info">Edit</button></td></tr>');
+			$("#eventsTable").append('<tr><td>'+events[i].eventName+'</td><td>'+events[i].date+'</td><td>'+events[i].attendance+'</td><td>'+events[i].volunteerTotal+'</td><td><button onclick = "eventDelete('+events[i].idEvents+')" class="btn btn-danger">Delete</button><div class = "divider1"></div><button  onclick ="eventEdit('+events[i].idEvents+')" class="btn btn-info">Edit</button></td></tr>');
 		}
 	}
 });
@@ -92,6 +92,7 @@ $(document).ready(function() {
  return false;
  });    
 });
+//old ajax form submit, new one is above so that it works with the image uploader
 // $(document).ready(function(){
 //   $("#eventPost").submit(function(e){
 //     e.preventDefault();
@@ -147,6 +148,7 @@ function eventEdit(id){
   })
 }
 function eventDelete(id){
+  console.log(id);
   $.ajax({
     url:'/deleteEvent/'+id,
     type: 'post',
@@ -154,8 +156,8 @@ function eventDelete(id){
       if(!alert("Event has been deleted")){window.location.reload();}
 
     },
-    error(){
-      console.log(error);
+    error(xhr){
+      console.log(xhr.status);
     }
 
   })
