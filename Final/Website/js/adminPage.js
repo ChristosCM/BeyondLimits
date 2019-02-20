@@ -75,34 +75,52 @@ $(document).ready(function(){
   });
 });
 
+$(document).ready(function() {
 
-$(document).ready(function(){
-  $("#eventPost").submit(function(e){
-    e.preventDefault();
-  var title = $("#eventTitle").val();
-  var description = $("#description").val();
-  var date = $("#eventDate").val();
-  var attendance = $("#attendance").val();
-  var volunteers = $("#volunteersTotal").val();
-  var male = $("#volunteersMale").val();
-  var female = $("#volunteersFemale").val();
-  var file = $("#eventFile").val();
-    console.log(file);
-  $.ajax({
-    url:'/createEvent',
-    type : 'post',
-    data: {"attendance": attendance, "name": title, "description": description, "date": date, "vTotal": volunteers,"vMale": male, "vFemale": female},
-    datatype : 'json',
-    success: () => {
-      alert("Event has been created");
-    },
-    error(err){
-      console.log(err);
-      alert("There was an error creating the event" + err);
-    }
-  });
+  $('#eventPost').submit(function() {
+     $(this).ajaxSubmit({
+
+         error: function(xhr) {
+     status('Error: ' + xhr.status);
+         },
+
+         success: function() {
+             alert("The event has been created successfully");
+         }
+ });
+     //Very important line, it disable the page refresh.
+ return false;
+ });    
 });
-});
+// $(document).ready(function(){
+//   $("#eventPost").submit(function(e){
+//     e.preventDefault();
+//   var title = $("#eventTitle").val();
+//   var description = $("#description").val();
+//   var date = $("#eventDate").val();
+//   var attendance = $("#attendance").val();
+//   var volunteers = $("#volunteersTotal").val();
+//   var male = $("#volunteersMale").val();
+//   var female = $("#volunteersFemale").val();
+//   var file = ($("#eventImage"));
+
+//   $.ajax({
+//     url:'/createEvent',
+//     type : 'post',
+//     data: {"attendance": attendance, "name": title, "description": description, "date": date, "vTotal": volunteers,"vMale": male, "vFemale": female, "file":file},
+//     cache: false,
+//     contentType: false,
+//     processData: false,
+//     success: () => {
+//       alert("Event has been created");
+//     },
+//     error(err){
+//       console.log(err);
+//       alert("There was an error creating the event" + err);
+//     }
+//   });
+// });
+// });
 function eventEdit(id){
   $.ajax({
     url:'/eventsAll',

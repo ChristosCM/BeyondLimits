@@ -79,7 +79,7 @@ app.use(session({
     maxAge: idleTimeoutSeconds * 1000
   },
   rolling: true
-});
+}));
 //*********************************************************AUTHORISATION*************************************************************
 //To be called by any function requiring authentication
 var auth = function(req, res, next) {
@@ -623,6 +623,18 @@ function fileUpload(con,file,id,editStatus){
 		return res.redirect(403,'/adminPage.htm');
 	}
 }
+//This is the code for uploading pictures for the events
+var eventStorage = multer.diskStorage({
+	destination: function(req, file, callback) {
+			callback(null, "/images/events");
+	},
+	filename: function(req, file, callback) {
+					callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+	}
+});
+var eventUpload = multer({
+	storage: eventStorage
+}).single("eventImage"); 
 
 //This is the version for the editing events.
 app.post('/createEvent/:id', (req,res)=>{
@@ -653,6 +665,11 @@ app.post('/createEvent/:id', (req,res)=>{
 //This is the version for creating events.
 app.post('/createEvent', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
+	eventUpload(req,res, function(err){
+		console.log(req.file);
+		var pPath = req.file.path;
+		console.log(pPath);
+	})
 	var eventName = req.body.name;
 	var attendance = req.body.attendance;
 	var volunteerTotal = req.body.vTotal;
@@ -661,10 +678,6 @@ app.post('/createEvent', (req,res)=>{
 	var date = req.body.date;
 	//added this if in case there is no upload
 	var pPath;
-	// if(req.files.filename){
-	// 	var pPath = req.files.filename;
-	// }
-	// fileUpload(con,pPath,eID,0);
 	var description = req.body.description;
 	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (null,%1,%2,%3,%4,%5,null,%6,%7)",eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description,date);
 	console.log(sql);
