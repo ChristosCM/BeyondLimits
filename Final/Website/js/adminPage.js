@@ -57,23 +57,37 @@ $(document).ready(function(){
 $(document).ready(function(){
   $("#testimonialForm").submit(function(e){
       e.preventDefault();
-      var name =  $("#testname").val();
-      var content = $("#testeditor").val();
-      $.ajax({
-          url: "/testimonialsPost",
-          type: "post",
-          data: {"name": name, "content": content},
-          datatype: "json",
-          success(){
-            if(!alert('The Testimonial has been posted')){window.location.reload();}
+        $("#testimonialForm").ajaxSubmit({
+          error: function(err){
+            alert("There was an Error"+ err);
           },
-          error(){
-              alert("There was an error posting the testimonial")
+          success: function(){
+            if(!alert("The testimonial has been edited successfully")){window.location.reload();}
+      
           }
-
+        })
       });
-  });
-});
+    });
+// $(document).ready(function(){
+//   $("#testimonialForm").submit(function(e){
+//       e.preventDefault();
+//       var name =  $("#testname").val();
+//       var content = $("#testeditor").val();
+//       $.ajax({
+//           url: "/testimonialsPost",
+//           type: "post",
+//           data: {"name": name, "content": content},
+//           datatype: "json",
+//           success(){
+//             if(!alert('The Testimonial has been posted')){window.location.reload();}
+//           },
+//           error(){
+//               alert("There was an error posting the testimonial")
+//           }
+
+//       });
+//   });
+// });
 
 $(document).ready(function() {
 
@@ -81,17 +95,31 @@ $(document).ready(function() {
      $(this).ajaxSubmit({
 
          error: function(xhr) {
-     status('Error: ' + xhr.status);
+     alert('Error: ' + xhr.status);
          },
 
          success: function() {
-             alert("The event has been created successfully");
+          if(!alert("The event has been created successfully")){window.location.reload();}
          }
  });
      //Very important line, it disable the page refresh.
  return false;
  });    
 });
+function eventEditPost(id){
+  var options = {url: '/createEvent/'+id}
+  $("#eventPost").ajaxForm(options);
+  $("#eventPost").ajaxSubmit({
+    error: function(err){
+      alert("There was an Error"+ err);
+    },
+    success: function(){
+      if(!alert("The event has been edited successfully")){window.location.reload();}
+
+    }
+  })
+  return false;
+}
 //old ajax form submit, new one is above so that it works with the image uploader
 // $(document).ready(function(){
 //   $("#eventPost").submit(function(e){
@@ -122,6 +150,8 @@ $(document).ready(function() {
 //   });
 // });
 // });
+
+
 function eventEdit(id){
   $.ajax({
     url:'/eventsAll',
@@ -162,30 +192,30 @@ function eventDelete(id){
 
   })
 }
-function eventEditPost(id){
-  var title = $("#eventTitle").val();
-  var description = $("#description").val();
-  var date = $("#eventDate").val();
-  var attendance = $("#attendance").val();
-  var volunteers = $("#volunteersTotal").val();
-  var male = $("#volunteersMale").val();
-  var female = $("#volunteersFemale").val();
+// function eventEditPost(id){
+//   var title = $("#eventTitle").val();
+//   var description = $("#description").val();
+//   var date = $("#eventDate").val();
+//   var attendance = $("#attendance").val();
+//   var volunteers = $("#volunteersTotal").val();
+//   var male = $("#volunteersMale").val();
+//   var female = $("#volunteersFemale").val();
 
-  $.ajax({
-    url:'/createEvent/'+id,
-    type : 'post',
-    data: {"attendance": attendance, "name": title, "description": description, "date": date, "vTotal": volunteers, "vMale": male, "vFemale": female},
-    datatype : 'json',
-    success: () => {
-      if(!alert("Event has been edited")){window.location.reload();}
+//   $.ajax({
+//     url:'/createEvent/'+id,
+//     type : 'post',
+//     data: {"attendance": attendance, "name": title, "description": description, "date": date, "vTotal": volunteers, "vMale": male, "vFemale": female},
+//     datatype : 'json',
+//     success: () => {
+//       if(!alert("Event has been edited")){window.location.reload();}
 
-    },
-    error(err){
-      console.log(err);
-      alert("There was an error creating the event" + err);
-    }
-  });
-}
+//     },
+//     error(err){
+//       console.log(err);
+//       alert("There was an error creating the event" + err);
+//     }
+//   });
+// }
 
  function blogEdit(id){
   $.ajax({
@@ -261,23 +291,37 @@ function testimonialsEdit(id){
   });
 }
 function testEditPost(id){
-  var title =  $("#testname").val();
-  var content = $("#testeditor").val();
-  console.log(id,title,content);
-  $.ajax({
-    url:'/testimonialsPost/'+id, 
-    type: 'POST',
-    data: {"name": title, "content": content},
-    datatype: 'json',
-    success: ()=>{
-      if(!alert("The Testimonial Post has been edited")){window.location.reload();}
-          //right now the page gets resent so no use for these functions yet
-    },
-    error(err){
-        console.log(error);
-    }
-  });
-}
+  var options = { url: '/testimonialsPost/'+id}
+  $("#testimonialForm").ajaxForm(options);
+        $("#testimonialForm").ajaxSubmit({
+          error: function(err){
+            alert("There was an Error"+ err);
+          },
+          success: function(){
+            if(!alert("The testimonial has been edited successfully")){window.location.reload();}
+      
+          }
+        })
+        return false;
+      }
+    
+// function testEditPost(id){
+//   var title =  $("#testname").val();
+//   var content = $("#testeditor").val();
+//   $.ajax({
+//     url:'/testimonialsPost/'+id, 
+//     type: 'POST',
+//     data: {"name": title, "content": content},
+//     datatype: 'json',
+//     success: ()=>{
+//       if(!alert("The Testimonial Post has been edited")){window.location.reload();}
+//           //right now the page gets resent so no use for these functions yet
+//     },
+//     error(err){
+//         console.log(error);
+//     }
+//   });
+// }
 function blogPost(){
   var title =  $("#beditort").val();
   var content = $("#beditor").val();

@@ -285,11 +285,11 @@
             </table>
       </div>
       <p>Or ceate a new Testimonial Post!</p>
-      <form id = "testimonialForm" action = "/testimonialPost" method = "post">
+      <form id = "testimonialForm" action = "/testimonialPost" enctype="multipart/form-data" method = "post">
         <div class = "form-group">
           <label class = "control-label">Name</label>
           <div class="col-3">          
-              <input type="text" class="form-control" id="testname" placeholder="Name" >
+              <input type="text" class="form-control" id="testname" name = "name" placeholder="Name" >
             </div>
             <label class = "control-label" for="blog"><b>Text</b></label>
         <textarea class="form-control" id="testeditor" name = "content" placeholder="Write testimonial post here"></textarea>

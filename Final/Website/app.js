@@ -467,15 +467,27 @@ app.get('/testimonialsShow', (req,res)=>{
 		return res.status(200).send(result);
 	});
 });
-
+var testStorage = multer.diskStorage({
+	destination: function(req, file, callback) {
+			callback(null, "./images/blog");
+	},
+	filename: function(req, file, callback) {
+					callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+	}
+});
+var testUpload = multer({
+	storage: testStorage
+}).single("testImage");
 //This is the version for editing the testimonials.
 app.post('/testimonialsPost/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	//Implement picture upload. I have a copy of this on my PP coursework.
+	eventUpload(req,res, function(err){
+		//also need to unlink the previous testimonila photo from the folder
+	var picPath = req.file.path;
 	var tID = req.params.id;
 	var name = req.body.name;
 	var content = req.body.content;
-	var picPath = req.body.pPath;
 	var sql = format("DELETE FROM testimonials WHERE idtestimonials = %1;", tID);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
@@ -488,21 +500,24 @@ app.post('/testimonialsPost/:id', (req,res)=>{
 		});
 		//Using this on the client side could create JS to iterate over all posts.
 
-		return res.status(200).sendFile(__dirname + '/adminPage.html');;
+		return res.status(200).sendFile(__dirname + '/adminPage.html')
 	});
+});
 });
 app.post('/testimonialsPost', (req,res) =>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	//Implement picture upload. I have a copy of this on my PP coursework.
+	eventUpload(req,res, function(err){
+		var picPath = req.file.path;
 	var name = req.body.name;
 	var content = req.body.content;
-	var picPath = req.body.pPath;
 	var sql = format("INSERT INTO testimonials (name,content,photo) VALUES (%1,%2,%3)", name, content, picPath);
 	queryDB(con, sql, function(err, result){
 		if(err) throw err;
 		con.end();
 	});
 	return res.status(200).sendFile(__dirname + '/adminPage.html');
+});
 });
 //This would be triggered by clicking on the post in a list on the admin page. Scrollable region???
 app.post('/testimonialsDelete/:id', (req,res)=>{
@@ -639,17 +654,16 @@ var eventUpload = multer({
 //This is the version for the editing events.
 app.post('/createEvent/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
+	eventUpload(req,res, function(err){
+		var pPath = req.file.path;
+		//here also need to delete previous file, pull the event from the database and fs.unlink that file.
 	var eID = req.params.id;
 	var eventName = req.body.name;
 	var attendance = req.body.attendance;
 	var volunteerTotal = req.body.vTotal;
 	var volunteerMale = req.body.vMale;
 	var volunteerFemale = req.body.vFemale;
-	var date = req.body.date;
-	// if (req.files.filename){
-	// var pPath = req.files.filename;
-	// fileUpload(con,pPath,eID,1);
-	// }
+	var date = req.body.date;s
 	var description = req.body.description;
 	//This should work but needs further testing.
 	var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, pPath = 'img/src', description = %6, date = %7 WHERE idEvents = %8;", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description, date, eID);
@@ -660,6 +674,7 @@ app.post('/createEvent/:id', (req,res)=>{
 
 		return res.sendStatus(200);
 	});
+});
 });
 
 //This is the version for creating events.
