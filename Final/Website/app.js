@@ -71,23 +71,30 @@ function saltHashPassword(userpassword) {
     return passwordData;
 }
 //Session setup
-var idleTimeoutSeconds = 1800;
+var idleTimeoutSeconds = 1800; //30 min inactivity timeout
 app.use(session({
   secret: 'secretcodeofsomesort',
   resave: true,
+  saveUninitialized: false,
   cookie: {
+    secure: true,
     maxAge: idleTimeoutSeconds * 1000
   },
   rolling: true
 }));
-//*********************************************************AUTHORISATION*************************************************************
+//*********************************************************AUTHORISATION/AUTHENTICATION*************************************************************
 //To be called by any function requiring authentication
-var auth = function(req, res, next) {
+function auth(req, res, next) {
   if (req.session.admin)
     return next();
   else
-    return res.sendStatus(401);
+    return res.redirect('/login');
 };
+
+app.get('/login', function (req,res){
+	return res.sendFile(__dirname+'/login.htm');
+});
+
 app.post('/login', function (req, res) {
   var passHash = saltHashPassword(req.body.password);
   var username = req.body.username;
@@ -105,7 +112,19 @@ app.post('/login', function (req, res) {
     con.end();
   });
 });
-
+app.get('/logout', function (req, res) {
+  req.session.destroy();
+  res.send("Logout successful");
+});
+//Function to get current session username for the "Logged in as $ADMIN$" text
+app.get('/user', function(req,res){
+	res.send(req.session.username);
+});
+app.get('/AdminPage', function (req,res){
+  auth(req,res,function(){
+    return res.sendFile(__dirname+'/adminPage.html');
+  });
+});
 //*********************************************************STATISTICS*************************************************************
 function randRGB(i){
 	var colours = []
@@ -650,7 +669,7 @@ var eventStorage = multer.diskStorage({
 });
 var eventUpload = multer({
 	storage: eventStorage
-}).single("eventImage"); 
+}).single("eventImage");
 
 //This is the version for the editing events.
 app.post('/createEvent/:id', (req,res)=>{
