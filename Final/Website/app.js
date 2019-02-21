@@ -96,6 +96,7 @@ app.get('/login', function (req,res){
 });
 
 app.post('/login', function (req, res) {
+  console.log(req.body);
   var passHash = saltHashPassword(req.body.password);
   var username = req.body.username;
   var sql = "SELECT * FROM accounts WHERE username='" + username + "';";
@@ -120,7 +121,7 @@ app.get('/logout', function (req, res) {
 app.get('/user', function(req,res){
 	res.send(req.session.username);
 });
-app.get('/AdminPage', function (req,res){
+app.get('/adminPage', function (req,res){
   auth(req,res,function(){
     return res.sendFile(__dirname+'/adminPage.html');
   });
