@@ -666,7 +666,7 @@ app.post('/createEvent/:id', (req,res)=>{
 	var date = req.body.date;s
 	var description = req.body.description;
 	//This should work but needs further testing.
-	var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, pPath = 'img/src', description = %6, date = %7 WHERE idEvents = %8;", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description, date, eID);
+	var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, pPath = %6', description = %7, date = %8 WHERE idEvents = %9;", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale,pPath, description, date, eID);
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		con.end();
@@ -682,6 +682,7 @@ app.post('/createEvent', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	eventUpload(req,res, function(err){
 		var pPath = req.file.path;
+		console.log(pPath);
 	var eventName = req.body.name;
 	var attendance = req.body.attendance;
 	var volunteerTotal = req.body.vTotal;
@@ -691,7 +692,7 @@ app.post('/createEvent', (req,res)=>{
 	//added this if in case there is no upload
 	var pPath;
 	var description = req.body.description;
-	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (null,%1,%2,%3,%4,%5,null,%6,%7)",eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description,date);
+	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (null,%1,%2,%3,%4,%5,%6,%7,%8)",eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale,pPath, description,date);
 	console.log(sql);
 	//add this: pPath.name, in sql before description
 	queryDB(con, sql, function(err,result){
