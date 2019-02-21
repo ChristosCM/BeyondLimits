@@ -131,7 +131,8 @@ function freqPlot(x,y,callback){
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	if(x == "Events"){
 		if(y == "Volunteers"){
-			var sql = "SELECT events.eventName, COUNT(volunteerevents.idEvents) as numberPeople FROM events INNER JOIN volunteerevents ON events.idEvents = volunteerevents.idEvents";
+			//var sql = "SELECT events.eventName, COUNT(volunteerevents.idEvents) as numberPeople FROM events INNER JOIN volunteerevents ON events.idEvents = volunteerevents.idEvents";
+			var sql = "SELECT eventName, volunteerTotal as numberPeople FROM bldb.events;";
 			queryDB(con, sql, function(err, res){
 				if(err) throw err;
 				var c = randRGB(res.length);
