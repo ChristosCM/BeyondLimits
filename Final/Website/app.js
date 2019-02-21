@@ -46,11 +46,14 @@ function queryDB(con, sql, callback){
 function format(string) {
   var args = arguments;
   var pattern = new RegExp("%([1-" + arguments.length + "])", "g");
-  console.log(pattern);
   return String(string).replace(pattern, function(match, index) {
   	if(Number.isInteger(args[index])){
   		return args[index];
   	} else {
+  		var format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>?]/;
+		if (format.test(args[index])){
+			return '"' + args[index].replace("\\", "/").replace("\\", "/") + '"';
+		}
   		return '"'+args[index]+'"';
   	}
   });
