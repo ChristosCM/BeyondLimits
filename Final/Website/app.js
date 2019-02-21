@@ -2,21 +2,19 @@
 //with adequate level of clearance to do so.
 const nodemailer = require('nodemailer');
 const express = require('express');
-const session = require('express-session');
-
-const bodyParser = require('body-parser');
-const mysql = require('mysql');
 const app = express();
+const session = require('express-session');
+const bodyParser = require('body-parser');
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+const mysql = require('mysql');
 const squel = require("squel");
 const fs = require('fs');
-var multer = require('multer');
+const multer = require('multer');
 const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
-
-
-
-
+const crypto = require('crypto');
 
 
 //*********************************************************SETUP*************************************************************
@@ -97,15 +95,17 @@ app.get('/login', function (req,res){
 
 app.post('/login', function (req, res) {
   console.log(req.body);
+
   var passHash = saltHashPassword(req.body.password);
   var username = req.body.username;
+  var con = setupConnection("localhost", "root", "password", "blDB");
   var sql = "SELECT * FROM accounts WHERE username='" + username + "';";
   queryDB(con, sql, function(err, res){
     if(err) throw err;
     if(res.password == passHash) {
       req.session.user = username;
       req.session.admin = true;
-      res.send("Login successful, user: " + username);
+      res.redirect('/adminPage.html');
     }
     else{
       res.sendStatus(403);

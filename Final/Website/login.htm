@@ -24,23 +24,19 @@
     <a class="nav-link" href="home.htm">Take Me to the Home Page</a>
   </nav>
 
-  <form action = "/login" method="post" id="loginForm">
+  <form action = "/login" method="post">
     <!--Form field for username-->
     <div class="form-group">
       <label class="control-label col-sm-2" for="username">Username</label>
       <div class="col-3">
-        <input type="text" class="form-control" id="username" placeholder="Username" name="username">
+        <input type="text" class="form-control" placeholder="Username" name="username">
       </div>
-    </div>
     <!--Form field for password-->
-    <div class="form-group">
       <label class="control-label col-sm-2" for="password">Password</label>
       <div class="col-3">
-        <input type="text" class="form-control" id="password" placeholder="Password" name="password">
+        <input type="password" class="form-control" placeholder="Password" name="password">
       </div>
-    </div>
     <!--Submit button-->
-    <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <button type="submit" name = "submit" class="btn btn-success" value="Submit">Submit</button>
       </div>
