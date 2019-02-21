@@ -2,22 +2,34 @@ head{
     background-color: white;
 }
 .container, #container{
-    padding: 20px;
-    padding-bottom:60px;
+	position:relative;
 }
-.footer {
+.page-footer {
     position:absolute;
     color: whitesmoke;
+	bottom: 0;
     background-color: #607b91;
     width: 100%;
-    padding-block-start: 20px;
+	height: 250px;
+	padding: 10px;
+	padding-bottom: 0px;
+    /* padding-block-start: 20px; */
 }
 
-.footer a{
+/*.footer a{
     padding: 11px;
     color: whitesmoke;
 }
+
+.page-footer {
+  background-color: #222;
+  color: #ccc;
+  padding: 60px 0 30px;
+}*/
+
 html, body{
+	margin:0;
+	padding:0;
     height:100%;
     background-color: white;
 }
