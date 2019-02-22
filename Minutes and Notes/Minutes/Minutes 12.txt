@@ -1,0 +1,21 @@
+Minutes 12 
+
+Tasks for next minute: 
+
+Chris: Fix the alert for events
+More specific on test descriptions (select)
+create a few more
+Make note of FR that were not implemented 
+Start on User Manual
+Advanced Deliverables
+carousel upload
+
+Jake: Fix pPath
+add more testcases
+change Password
+work on login
+function to return the entire database
+
+Frank: Section 1 testcases, fix password, high priority
+
+Matt: Section 3, medium priority, update carousel, improve front end
