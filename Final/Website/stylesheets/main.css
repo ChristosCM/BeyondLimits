@@ -1,6 +1,18 @@
 head{
     background-color: white;
 }
+
+body{
+	position: relative;
+	min-height: 100%;
+}
+
+body::after{
+	content:'';
+	display: block;
+	height: 250px;
+}
+
 .container, #container{
 	position:relative;
 }
@@ -27,7 +39,7 @@ head{
   padding: 60px 0 30px;
 }*/
 
-html, body{
+html{
 	margin:0;
 	padding:0;
     height:100%;

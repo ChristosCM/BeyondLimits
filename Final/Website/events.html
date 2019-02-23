@@ -22,7 +22,7 @@
 				html += '<div class = "col-md-4">';
 				html +=	'	<div class = "events" id = "event'+index+' style="background-image:url('+element.pPath+';)"">';
 				html +=	'		<h4>'+element.eventName+'</h4>';
-				html +=	'		<button data-toggle="collapse" data-target="#'+element.idEvents+'">Expand</button>';
+				html +=	'		<button id="collapseButton" data-toggle="collapse" data-target="#'+element.idEvents+'">Expand</button>';
 				html +=	'	</div>';
 				html += '</div>';
 				
@@ -45,6 +45,15 @@
 	}
 
 	$(loadEvents());
+	
+	$("#collapseButton").onclick(function() {
+		if ($(this).html() == "Expand"){
+			$(this).html("Collapse");
+		}
+		else {
+			$(this).html("Expand");
+		}
+	});
 	</script>
 </head>
 <body>
