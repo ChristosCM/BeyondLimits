@@ -28,12 +28,12 @@ body::after{
     /* padding-block-start: 20px; */
 }
 
-/*.footer a{
+.page-footer a{
     padding: 11px;
     color: whitesmoke;
 }
 
-.page-footer {
+/*.page-footer {
   background-color: #222;
   color: #ccc;
   padding: 60px 0 30px;
