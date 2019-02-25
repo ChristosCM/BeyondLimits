@@ -71,6 +71,28 @@ function saltHashPassword(userpassword) {
     var passwordData = sha512(userpassword);
     return passwordData;
 }
+
+function getAllData(con, callback){
+	//get all data from all tables. Dictionary format.
+	var tables = ["events", "posts", "eventsarchive", "testimonials", "volunteer"];
+	queryDB(con, "SELECT * FROM events;", function(err1, res1){
+		queryDB(con, "SELECT * FROM posts;", function(err2, res2){
+			queryDB(con, "SELECT * FROM eventsarchive;", function(err3, res3){
+				queryDB(con, "SELECT * FROM testimonials;", function(err4, res4){
+					queryDB(con, "SELECT * FROM volunteer;", function(err5, res5){
+						var tableResults = {};
+						tableResults['events'] = res1;
+						tableResults['posts'] = res2;
+						tableResults['eventsarchive'] = res3;
+						tableResults['testimonials'] = res4;
+						tableResults['volunteer'] = res5;
+						return callback(tableResults);
+					})
+				})
+			})
+		})
+	})
+}
 //Session setup
 var idleTimeoutSeconds = 1800; //30 min inactivity timeout
 app.use(session({
@@ -977,7 +999,13 @@ app.get('/randomNonce', (req,res)=>{
 	var nonceSalt = nonce+userSalt;
 	res.status(200).send(nonceSalt);
 });
-
+//*************************************************************PRINT FUNCTION*******************************************************************************
+app.get('/tablesAll', (req, res) =>{
+	var con = setupConnection("localhost", "root", "password", "blDB");
+	getAllData(con, function(td){
+		res.status(200).send(td);
+	});
+});
 //*********************************************************HOMEPAGE*************************************************************
 //CAROUSEL:View,add,delete content
 //View() - return JSON of content in the carousel,
