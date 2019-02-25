@@ -13,47 +13,45 @@
 		$.get('/eventsAll', function (data) {
 			var html = "";
 			var currentCollapse = "";
-			jQuery.each(data, function(index, element) {
-				i = index;
-				if (index % 3 == 0) {
-					html += '<div class="row">';
-				}
-				
-				html += '<div class = "col-md-4">';
-				html +=	'	<div class = "events" id = "event'+index+' style="background-image:url('+element.pPath+';)"">';
-				html +=	'		<h4>'+element.eventName+'</h4>';
-				html +=	'		<button type="button" class="btn btn-primary" id="collapseButton" data-toggle="collapse" data-target="#'+element.idEvents+'">Expand</button>';
-				html +=	'	</div>';
-				html += '</div>';
-				
-				currentCollapse += '<div class="collapse" id="'+element.idEvents+'">';
-				currentCollapse +=	'	<div class = "cardit card card-body bg-light">'+element.description+'</div>';
-				currentCollapse += '</div>';
-				
-				if (index % 3 == 2 || index == data.length - 1) {
+			
+			if (data.length == 0) {
+				html += '<h1 style="font-size:150px;text-align:center;line-height:1.25;>More Events Coming Soon...</h1>';
+			}
+			else {
+				jQuery.each(data, function(index, element) {
+					i = index;
+					if (index % 3 == 0) {
+						html += '<div class="row">';
+					}
+					
+					html += '<div class = "col-md-4">';
+					html +=	'	<div class = "events" id = "event'+index+'" style="background-image:url(\'..'+element.pPath+'\');">';
+					html +=	'		<h4>'+element.eventName+'</h4>';
+					html +=	'		<button type="button" class="btn btn-primary" id="collapseButton" data-toggle="collapse" data-target="#'+element.idEvents+'">Expand</button>';
+					html +=	'	</div>';
 					html += '</div>';
-					html += '<div class = "row">';
-					html += '	<div class = "cardit col-md-auto">';
-					html += currentCollapse;
-					html += '	</div>';
-					html += '</div>';
-				}
-				
-			})
-			$("#eventGrid").html(html);
+					
+					currentCollapse += '<div class="collapse" id="'+element.idEvents+'">';
+					currentCollapse +=	'	<div class = "cardit card card-body bg-light">'+element.Description+'</div>';
+					currentCollapse += '</div>';
+					
+					if (index % 3 == 2 || index == data.length - 1) {
+						html += '</div>';
+						html += '<div class = "row">';
+						html += '	<div class = "cardit col-md-auto">';
+						html += currentCollapse;
+						html += '	</div>';
+						html += '</div>';
+					}
+					
+				})
+			}
+			$('#eventGrid').html(html);
 			});
 	}
-
+	
 	$(loadEvents());
 	
-	$($("#collapseButton").click(function() {
-		if ($(this).text() == "Expand"){
-			$(this).text("Collapse");
-		}
-		else {
-			$(this).text("Expand");
-		}
-	}))
 	</script>
 </head>
 <body>
@@ -90,7 +88,7 @@
 			</ul>
 		</div>
 	</nav>
-	<div class = "container-fluid" style = "margin-bottom:79px; width:100%" id = "eventGrid">
+	<div class = "container-fluid" id = "eventGrid" style = "margin-bottom:79px; width:100%;" >
 		<!--Would need to mod3 to get correct number of rows-->
 		<div class = "row">
 			<div class = "col-md-4">
@@ -222,5 +220,19 @@
           </div>
         </div>
       </div>
+	  
+	  <script>
+		$('#eventGrid').on("click", "button", function() {
+			if (this.id == "collapseButton") {
+				if ($(this).text() == "Expand"){
+					$(this).text("Collapse");
+				}
+				else {
+					$(this).text("Expand");
+				}
+			}
+			
+		});
+	  </script>
 </body>
 </html>
