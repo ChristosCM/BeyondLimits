@@ -28,12 +28,12 @@ body::after{
     /* padding-block-start: 20px; */
 }
 
-.page-footer a{
+/*.footer a{
     padding: 11px;
     color: whitesmoke;
 }
 
-/*.page-footer {
+.page-footer {
   background-color: #222;
   color: #ccc;
   padding: 60px 0 30px;
@@ -110,9 +110,6 @@ dt {
     border:1px solid black;
     margin-right:10px;
 }
-#event1{
-    background-image:url('../images/events/winterbanner.jpg');
-}
 .text-container{
     float:right;
 }
@@ -182,6 +179,13 @@ ul.timeline > li:before {
     border: 5px solid #FFFFFF;
     /*margin-bottom: 20px;*/
 }
+
+#collapseButton {
+	position: absolute;
+	bottom: 8px;
+	right: 23px;
+}
+
 .collapsing {
     -webkit-transition: none;
     transition: none;
