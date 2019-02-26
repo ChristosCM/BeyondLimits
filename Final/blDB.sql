@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `bldb`.`accounts` (
   `password` VARCHAR(128) NOT NULL,
   PRIMARY KEY (`idAccount`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -40,12 +40,12 @@ CREATE TABLE IF NOT EXISTS `bldb`.`events` (
   `volunteerTotal` INT(11) NULL DEFAULT NULL,
   `volunteerMale` INT(11) NULL DEFAULT NULL,
   `volunteerFemale` INT(11) NULL DEFAULT NULL,
-  `pPath` VARCHAR(45) NULL DEFAULT NULL,
+  `pPath` VARCHAR(250) NULL DEFAULT NULL,
   `description` VARCHAR(45) NULL DEFAULT NULL,
   `date` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`idEvents`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
+AUTO_INCREMENT = 28
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -61,8 +61,10 @@ CREATE TABLE IF NOT EXISTS `bldb`.`eventsarchive` (
   `volunteerFemale` INT(11) NULL DEFAULT NULL,
   `pPath` VARCHAR(45) NOT NULL,
   `description` VARCHAR(45) NULL DEFAULT NULL,
+  `date` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`idEvents`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -76,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `bldb`.`posts` (
   `date` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idposts`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
+AUTO_INCREMENT = 17
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -87,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `bldb`.`testimonials` (
   `idtestimonials` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `content` VARCHAR(250) NOT NULL,
-  `photo` VARCHAR(45) NOT NULL,
+  `photo` VARCHAR(250) NOT NULL,
   PRIMARY KEY (`idtestimonials`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 4
@@ -116,14 +118,7 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `bldb`.`volunteerevents` (
   `idEvents` INT(11) NOT NULL,
   `idVolunteer` INT(11) NOT NULL,
-  PRIMARY KEY (`idEvents`, `idVolunteer`),
-  INDEX `idVolunteer_idx` (`idVolunteer` ASC) VISIBLE,
-  CONSTRAINT `idEvent`
-    FOREIGN KEY (`idEvents`)
-    REFERENCES `bldb`.`events` (`idEvents`),
-  CONSTRAINT `idVolunteer`
-    FOREIGN KEY (`idVolunteer`)
-    REFERENCES `bldb`.`volunteer` (`idVolunteer`))
+  PRIMARY KEY (`idEvents`, `idVolunteer`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
