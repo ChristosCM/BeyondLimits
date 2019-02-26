@@ -1,7 +1,7 @@
 //showing the events
 $(document).ready(function(){
 $.ajax({
-	url:'http://localhost:80/eventsAll',
+	url:'/eventsAll',
 	type: 'GET',
 	datatype: 'json',
 	success: (events)=>{
@@ -10,9 +10,21 @@ $.ajax({
 		}
 	}
 });
-  
   $.ajax({
-	url:'http://localhost:80/blogShow',
+    url:'/home/carousel',
+    type: 'GET',
+    datatype:'json',
+    success: (images)=>{
+      for (i=0; i<images.length; i++){
+        $("#carTable").append('<tr><td>'+images[i].file+'</td><td><img width="100px" height="100px"src="images/home/'+images[i].file+'"</td><td><button onclick = "carDelete('+i+')" class="btn btn-danger">Delete</button><div class = "divider1"></div></tr>');
+      }
+    },
+    error: (err)=>{
+      alert("There was an error getting the images from the database");
+    }
+  })
+  $.ajax({
+	url:'/blogShow',
 	type: 'GET',
 	datatype: 'json',
 	success: (posts)=>{
@@ -22,7 +34,7 @@ $.ajax({
 	}
 });
 $.ajax({
-	url:'http://localhost:80/testimonialsShow',
+	url:'/testimonialsShow',
 	type: 'GET',
 	datatype: 'json',
 	success: (testimonials)=>{
@@ -91,17 +103,37 @@ $(document).ready(function(){
 
 $(document).ready(function() {
 
-  $('#eventPost').submit(function() {
-     $(this).ajaxSubmit({
+  $('#eventPost').submit(function(e) {
+    var submit = true;
+    if (($("#eventTitle").val()==null) || ($("#description").val()==null)||($("#eventDate").val()==null)){
+      submit = false;
+      alert("Please fill out all the fields");
+
+    }
+    if (($("#attendance").val()==null)||($("#attendance").val()>("99999999999"))){
+      submit = false;
+    }
+    if (($("#volunteersTotal").val()==null)||($("#volunteersTotal").val()>("99999999999"))){
+      submit = false;
+    }
+    if (($("#volunteersMale").val()==null)||($("#volunteersMale").val()>("99999999999"))){
+      submit = false;
+    }
+    if (($("#volunteersFemale").val()==null)||($("#volunteersFemale").val()>("99999999999"))){
+      submit = false;
+    }
+    if (submit){
+     $('#eventPost').ajaxSubmit({
 
          error: function(xhr) {
-     alert('Error: ' + xhr.status);
+        alert('Error: ' + xhr.status);
          },
 
          success: function() {
           if(!alert("The event has been created successfully")){window.location.reload();}
          }
  });
+  }
      //Very important line, it disable the page refresh.
  return false;
  });    
@@ -216,7 +248,20 @@ function eventDelete(id){
 //     }
 //   });
 // }
+function carDelete(index){
+  $.ajax({
+    url:'/admin/deleteHomeCarousel',
+    method: 'post',
+    beforeSend: function(request) {
+      request.setRequestHeader("index", index);
+    },
+    success: () => {
+      if(!alert("The Carousel Image has been deleted")){window.location.reload();}
+      
+    }
 
+  })
+}
  function blogEdit(id){
   $.ajax({
     url:'/blogShow',

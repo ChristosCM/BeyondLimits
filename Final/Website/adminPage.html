@@ -10,7 +10,7 @@
   <script type="text/javascript"
     src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
     </script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script> 
     <script src="js/adminPage.js" type="text/javascript"></script>
     <script src="js/adminGeneral.js" type="text/javascript"></script>
     <script src="js/adminDatabase.js" type="text/javascript"></script>
@@ -89,6 +89,21 @@
         </div>
         <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
       </form>
+      <div id="deleteCarousel">
+        <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>Image Name</th>
+              <th>Image</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id = "carTable">
+            <tr>
+              
+            </tr>
+        </table>
+      </div>
 
     </div>
 
@@ -119,37 +134,37 @@
 
             <div class="form-group">
               <label for="description">Description</label>
-              <div class = "col-3">
-              <input type="text" class="form-control" placeholder = "Description"  name = "description" id="description">
+              <div class = "col-5">
+              <textarea rows = "4"class="form-control" placeholder = "Description"  name = "description" id="description"></textarea>
               </div>
           </div>
           <div class="form-group">
             <label class = "control-label" for="eventDate">Event Date(s)</label>
             <div class = col-2>
-            <input type="text" class="form-control" placeholder = "Event Date(s)" name="date" id="eventDate">
+            <input type="date" class="form-control" placeholder = "Event Date(s)" name="date" id="eventDate">
             </div>
           </div>
           <div class="form-group">
             <label class = "control-label" for="attendance">Attendance</label>
             <div class = col-2>
-            <input type="text" class="form-control" placeholder = "Attendance" name = "attendance" id="attendance">
+            <input type="number" class="form-control" placeholder = "Attendance" name = "attendance" id="attendance">
             </div>
           </div>
           <div class="form-group">
             <label class = "control-label" for="volunteersTotal">Number of Volunteers</label>
             <div class = col-2>
-            <input type="text" class="form-control" placeholder = "No of Volunteers" name="vTotal" id="volunteersTotal">
+            <input type="number" class="form-control" placeholder = "No of Volunteers" name="vTotal" id="volunteersTotal">
             </div>
             <div class="form-group">
               <label class = "control-label" for="volunteersMale">Number of Male Volunteers</label>
               <div class = col-2>
-              <input type="text" class="form-control" placeholder = "No of Male Volunteers" name="vMale" id="volunteersMale">
+              <input type="number" class="form-control" placeholder = "No of Male Volunteers" name="vMale" id="volunteersMale">
               </div>
               </div>
               <div class="form-group">
                 <label class = "control-label" for="volunteersFemale">Number of Female Volunteers</label>
                 <div class = col-2>
-                <input type="text" class="form-control" placeholder = "No of Female Volunteers" name = "vFemale"id="volunteersFemale">
+                <input type="number" class="form-control" placeholder = "No of Female Volunteers" name = "vFemale"id="volunteersFemale">
                 </div>
                 </div>
                 <div class="form-group">
