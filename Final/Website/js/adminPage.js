@@ -104,6 +104,8 @@ $(document).ready(function(){
 $(document).ready(function() {
 
   $('#eventPost').submit(function(e) {
+    e.preventDefault();
+    console.log("true");
     var submit = true;
     if (($("#eventTitle").val()==null) || ($("#description").val()==null)||($("#eventDate").val()==null)){
       submit = false;
@@ -123,8 +125,8 @@ $(document).ready(function() {
       submit = false;
     }
     if (submit){
-     $('#eventPost').ajaxSubmit({
-
+     $(this).ajaxSubmit({
+        
          error: function(xhr) {
         alert('Error: ' + xhr.status);
          },
@@ -139,9 +141,8 @@ $(document).ready(function() {
  });    
 });
 function eventEditPost(id){
-  var options = {url: '/createEvent/'+id}
-  $("#eventPost").ajaxForm(options);
-  $("#eventPost").ajaxSubmit({
+  console.log(id);
+  $("#eventPost").ajaxSubmit({url: '/createEvent/'+id,
     error: function(err){
       alert("There was an Error"+ err);
     },
@@ -219,7 +220,7 @@ function eventDelete(id){
 
     },
     error(xhr){
-      console.log(xhr.status);
+      if(!alert("There was an error while deleting the event, please try again.")){window.location.reload();}
     }
 
   })
@@ -388,7 +389,7 @@ function blogPost(){
   function blogDelete(blogID){
     if (confirm('Are you sure you want to save this thing into the database?')) {
       $.ajax({
-        url:'http://localhost:80/blogDelete/'+blogID, 
+        url:'/blogDelete/'+blogID, 
         type: 'POST',
         datatype: 'json',
         success: function(result) {
@@ -402,7 +403,7 @@ function blogPost(){
       }
   $("upload").click(function(){
     $.ajax({
-      url:'http://localhost:80/fileUpload',
+      url:'/fileUpload',
       type: 'POST',
       datatype: 'json'
     })
