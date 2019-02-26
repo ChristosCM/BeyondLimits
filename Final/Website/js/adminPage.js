@@ -15,6 +15,7 @@ $.ajax({
     type: 'GET',
     datatype:'json',
     success: (images)=>{
+      $("#sliderIm").html('<label class = "control-label" for="index">Pick the position that the image is going to be added (see table below)</label><input type="range" min="0" value="0" max="'+(images.length)+'"class="slider" name="index"id="index" oninput="printChange(this.value);" ></input><p>Position: <span id="pos">0</span></p>')
       for (i=0; i<images.length; i++){
         $("#carTable").append('<tr><td>'+images[i].file+'</td><td><img width="100px" height="100px"src="images/home/'+images[i].file+'"</td><td><button onclick = "carDelete('+i+')" class="btn btn-danger">Delete</button><div class = "divider1"></div></tr>');
       }
@@ -80,6 +81,11 @@ $(document).ready(function(){
         })
       });
     });
+    function printChange(value){
+      console.log(value);
+        $("#pos").empty().text(value);
+    }
+
 // $(document).ready(function(){
 //   $("#testimonialForm").submit(function(e){
 //       e.preventDefault();
@@ -100,12 +106,27 @@ $(document).ready(function(){
 //       });
 //   });
 // });
+$(document).ready(function(){
+  $("#newCarousel").submit(function(e){
+    console.log("working...");
+    e.preventDefault();
+    $(this).ajaxSubmit({
+      error: function(xhr) {
+        alert('There was an error: ' + xhr.status);
+         },
 
+         success: function() {
+          if(!alert("The image has been uploaded successfully")){window.location.reload();}
+         }
+
+    })
+    return false;
+  })
+})
 $(document).ready(function() {
 
   $('#eventPost').submit(function(e) {
     e.preventDefault();
-    console.log("true");
     var submit = true;
     if (($("#eventTitle").val()==null) || ($("#description").val()==null)||($("#eventDate").val()==null)){
       submit = false;
