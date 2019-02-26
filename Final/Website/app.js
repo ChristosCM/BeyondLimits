@@ -702,7 +702,8 @@ app.post('/createEvent/:id', (req,res)=>{
 	console.log("Editing....");
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	eventUpload(req,res, function(err){
-		var pPath = req.file.path;
+
+		
 		//here also need to delete previous file, pull the event from the database and fs.unlink that file.
 	var eID = req.params.id;
 	var eventName = req.body.name;
@@ -714,7 +715,13 @@ app.post('/createEvent/:id', (req,res)=>{
 	var description = req.body.description;
 
 	//This should work but needs further testing.
-	var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, pPath = %6, description = %7, date = %8 WHERE idEvents = %9;", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale,pPath, description, date, eID);
+	if(req.file){
+			var pPath = req.file.path;
+			var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, pPath = %6, description = %7, date = %8 WHERE idEvents = "+ eID+ ";", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath, description, date);
+		} else {
+			var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, description = %6, date = %7 WHERE idEvents = "+ eID+ ";", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description, date); 
+		}
+	
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		con.end();
