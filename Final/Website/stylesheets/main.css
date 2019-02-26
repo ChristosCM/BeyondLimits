@@ -91,6 +91,8 @@ dt {
 }
 .cardit{
     width:100%;
+	height: 250px;
+	padding: 15px;
 }
 #blueblock{
     color:white;
@@ -105,10 +107,11 @@ dt {
 }
 .event-image{
     float:left;
-    width:150px;
-    height:150px;
+    width:220px;
+    height:220px;
+	object-fit: cover;
     border:1px solid black;
-    margin-right:10px;
+    margin-right:20px;
 }
 .text-container{
     float:right;
