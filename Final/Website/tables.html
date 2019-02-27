@@ -14,8 +14,14 @@
 		<script src = "js/databasePrint.js"></script>
 	</head>
 	<body>
-		<div id = "tables" style = "margin-left:10px">
+		<div style="display:inline-block; vertical-align: middle;">
 
+		<button class= "btn btn-info" onclick="printPage();">Print Tables</button>
+		<form action="/adminPage.html">
+			<input class="btn btn-success" type="submit" value="Back to Admin Page" />
+		</form>
+		</div>
+		<div id = "tables" style = "margin-left:10px">
 		</div>
 	</body>
 </html>

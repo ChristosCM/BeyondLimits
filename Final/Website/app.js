@@ -524,12 +524,14 @@ var testStorage = multer.diskStorage({
 var testUpload = multer({
 	storage: testStorage
 }).single("testImage");
+
+
 //This is the version for editing the testimonials.
 app.post('/testimonialsPost/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	//Implement picture upload. I have a copy of this on my PP coursework.
-	eventUpload(req,res, function(err){
-		//also need to unlink the previous testimonila photo from the folder
+	testUpload(req,res, function(err){
+
 	var picPath = req.file.path;
 	var tID = req.params.id;
 	var name = req.body.name;
@@ -553,7 +555,8 @@ app.post('/testimonialsPost/:id', (req,res)=>{
 app.post('/testimonialsPost', (req,res) =>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	//Implement picture upload. I have a copy of this on my PP coursework.
-	eventUpload(req,res, function(err){
+	testUpload(req,res, function(err){
+		console.log(req.file);
 		var picPath = req.file.path;
 	var name = req.body.name;
 	var content = req.body.content;
@@ -699,7 +702,6 @@ var eventUpload = multer({
 
 //This is the version for the editing events.
 app.post('/createEvent/:id', (req,res)=>{
-	console.log("Editing....");
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	eventUpload(req,res, function(err){
 
@@ -1032,7 +1034,7 @@ app.get('/home/carousel', (req,res)=>{
 //NEEDS authorisation
 app.post('/admin/addHomeCarousel', function(req,res){
   var index = req.body.index;
-  var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
+	var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
   if (validFileExtensions.includes(path.extname(req.file))){
     // Firstly rename all files of index i and above to maintain order
     fs.readdirSync('./images/home', function(err,files){

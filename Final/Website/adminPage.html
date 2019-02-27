@@ -308,15 +308,21 @@
             </table>
       </div>
       <p>Or ceate a new Testimonial Post!</p>
-      <form id = "testimonialForm" action = "/testimonialPost" enctype="multipart/form-data" method = "post">
+      <form id = "testimonialForm" action = "/testimonialsPost" enctype="multipart/form-data" method = "post">
         <div class = "form-group">
           <label class = "control-label">Name</label>
           <div class="col-3">          
               <input type="text" class="form-control" id="testname" name = "name" placeholder="Name" >
             </div>
-            <label class = "control-label" for="blog"><b>Text</b></label>
-        <textarea class="form-control" id="testeditor" name = "content" placeholder="Write testimonial post here"></textarea>
         </div>
+        <div class="form-group">
+           <label class = "control-label" for="blog"><b>Text</b></label>
+          <textarea class="form-control" id="testeditor" name = "content" rows="5" placeholder="Write testimonial post here"></textarea>
+        </div>
+        <div class="form-group">
+            <label class = "control-label" for="testImage">Image for Testimonial</label>
+            <input type="file" class="form-control-file" name = "testImage" id="testImage">
+          </div>
         <button type="submit" id = "submitTestForm" class="btn btn-primary" value="Submit">Post</button>
 
       </form>
@@ -360,6 +366,15 @@
     <div id="database" class="tab-pane fade container">
       <h3>Database functions</h3>
       <p>Here all database queries and functions will be accessible</p>
+      <div class = "row">
+      <div class = "col-4"></div>
+      <div class="col-2">
+      <form action="/tables.html">
+        <input class="btn btn-success" type="submit" value="See all tables" />
+      </form>
+      </div>
+      <div class="col-2"><button class = "btn btn-info" onclick = "printShown()">Print tables shown below</button></div>
+      </div>
       <form action="/query" method="get" id="query">
       <div class="form-group">
         <label for="tables">Select Table</label>
@@ -382,8 +397,11 @@
         </select>
       </div>
       </form>
+      <p><i>Don't need to click the button to update results</i></p>
+      <button class = "btn btn-info" onclick="showCol()">Show Results</button>
       <hr class="half-rule">
       <div id="data"></div>
+      <hr class="half-rule">
       <div id="typeForm"></div>
       <div id="dataQ"></div>
     </div>

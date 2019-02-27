@@ -58,7 +58,7 @@ $(document).ready(function(){
           data: {"title": title, "content": content},
           datatype: "json",
           success(){
-              alert("New Blog Post has been posted");
+            if(!alert("New blog post has been uploaded")){window.location.reload();}
           },
           error(){
               alert("There was an error posting the blog")
@@ -67,25 +67,24 @@ $(document).ready(function(){
       });
   });
 });
-$(document).ready(function(){
-  $("#testimonialForm").submit(function(e){
-      e.preventDefault();
-        $("#testimonialForm").ajaxSubmit({
-          error: function(err){
-            alert("There was an Error"+ err);
-          },
-          success: function(){
-            if(!alert("The testimonial has been edited successfully")){window.location.reload();}
-      
-          }
-        })
-      });
-    });
     function printChange(value){
       console.log(value);
         $("#pos").empty().text(value);
     }
-
+$(document).ready(function(){
+  $("#testimonialForm").submit(function(e){
+    e.preventDefault();
+    $(this).ajaxSubmit({
+      error: function(err){
+        alert("There was an error: "+ err);
+      },
+      success: function(){
+        if(!alert("The testimonial has been uploaded successfully")){window.location.reload();}
+      }
+    })
+    return false;
+  })
+})
 // $(document).ready(function(){
 //   $("#testimonialForm").submit(function(e){
 //       e.preventDefault();
@@ -108,7 +107,6 @@ $(document).ready(function(){
 // });
 $(document).ready(function(){
   $("#newCarousel").submit(function(e){
-    console.log("working...");
     e.preventDefault();
     $(this).ajaxSubmit({
       error: function(xhr) {
@@ -156,13 +154,14 @@ $(document).ready(function() {
           if(!alert("The event has been created successfully")){window.location.reload();}
          }
  });
+  }else{
+    alert("Please check the details again");
   }
      //Very important line, it disable the page refresh.
  return false;
  });    
 });
 function eventEditPost(id){
-  console.log(id);
   $("#eventPost").ajaxSubmit({url: '/createEvent/'+id,
     error: function(err){
       alert("There was an Error"+ err);
@@ -339,7 +338,7 @@ function testimonialsDelete(id){
 }
 function testimonialsEdit(id){
   $.ajax({
-    url:'http://localhost:80/testimonialsShow',
+    url:'/testimonialsShow',
     type : 'GET',
     datatype : 'json',
     success: (posts) => {
@@ -358,9 +357,7 @@ function testimonialsEdit(id){
   });
 }
 function testEditPost(id){
-  var options = { url: '/testimonialsPost/'+id}
-  $("#testimonialForm").ajaxForm(options);
-        $("#testimonialForm").ajaxSubmit({
+        $("#testimonialForm").ajaxSubmit({url: '/testimonialsPost/'+id,
           error: function(err){
             alert("There was an Error"+ err);
           },
@@ -371,7 +368,6 @@ function testEditPost(id){
         })
         return false;
       }
-    
 // function testEditPost(id){
 //   var title =  $("#testname").val();
 //   var content = $("#testeditor").val();
