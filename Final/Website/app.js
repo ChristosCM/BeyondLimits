@@ -705,7 +705,7 @@ app.post('/createEvent/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	eventUpload(req,res, function(err){
 
-		
+
 		//here also need to delete previous file, pull the event from the database and fs.unlink that file.
 	var eID = req.params.id;
 	var eventName = req.body.name;
@@ -721,9 +721,9 @@ app.post('/createEvent/:id', (req,res)=>{
 			var pPath = req.file.path;
 			var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, pPath = %6, description = %7, date = %8 WHERE idEvents = "+ eID+ ";", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath, description, date);
 		} else {
-			var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, description = %6, date = %7 WHERE idEvents = "+ eID+ ";", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description, date); 
+			var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, description = %6, date = %7 WHERE idEvents = "+ eID+ ";", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description, date);
 		}
-	
+
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		con.end();
@@ -1034,7 +1034,7 @@ app.get('/home/carousel', (req,res)=>{
 //NEEDS authorisation
 app.post('/admin/addHomeCarousel', function(req,res){
   var index = req.body.index;
-	var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
+  var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
   if (validFileExtensions.includes(path.extname(req.file))){
     // Firstly rename all files of index i and above to maintain order
     fs.readdirSync('./images/home', function(err,files){
@@ -1050,87 +1050,90 @@ app.post('/admin/addHomeCarousel', function(req,res){
         }
       });
       var upload = multer({ storage: storage });
-      next();
+      //new file is added to folder with index.fileExtension filename
+      upload.single('newFile', function(){
+        //REWRITE INFO.JSON
+        var newInfo = [];//new json
+        fs.readFile('./images/home/info.json', function(err, data){
+          if (err) throw err;
+          oldInfo = JSON.parse(data);
+          for (i=0; i<=oldInfo.length; i++){
+            if (i<index){//filename will be the same
+              var file = oldInfo[i];
+              newInfo.append(file);
+            }
+            else if (i==index) {
+              var newFilename = index + path.extname(file.originalname);
+              var newColor = req.body.color;
+              var newTitle = req.body.title;
+              var newSubtitle = req.body.subtitle;
+              var newFile ={
+                file: newFilename,
+                color: newColor,
+                title: newTitle,
+                subtitle: newSubtitle
+              };
+              newInfo.append(newFile);
+            }
+            else{
+              var updatedFilename = i + oldInfo[i].file.slice(0);
+              var file ={
+                file: updatedFilename,
+                color: oldInfo[i].color,
+                title: oldInfo[i].title,
+                subtitle: oldInfo[i].subtitle
+              };
+              newInfo.append(file);
+            };
+          };
+          var newInfoJSON = JSON.stringify(newInfo);
+          fs.writeFile("/images/home/info.json", newInfoJSON, function(err) {
+            if (err) throw err;
+            res.sendStatus(200);
+          });
+        });
+      });
     });
   }
   else{
     res.status(400).send('This file type is not supported, try ".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"'); //filetype not supported
   }
-}, function(req,res){
-  //new file is added to folder with index.fileExtension filename
-  upload.single('newFile', function(){
-    //REWRITE INFO.JSON
-    var newInfo = [];
-    var newFilename = index + path.extname(file.originalname);
-    var newColor = req.body.color;
-    var newTitle = req.body.title;
-    var newSubtitle = req.body.subtitle;
-    var newFile ={
-      file: newFilename,
-      color: newColor,
-      title: newTitle,
-      subtitle: newSubtitle
-    }
-    newInfo.append(newFile);
-    fs.readFile('./images/home/info.json', function(err, data){
-      if (err) throw err;
-      info = JSON.parse(data);
-      info.splice(index);
-      for (i=0; i<=info.length; i++){
-        if (i<index){//filename will be the same
-          var file = info[i];
-          newInfo.append(file);
-        }
-        else{
-          var updatedFilename = i + info[i].file.slice(0)
-          var file ={
-            file: updatedFilename,
-            color: info[i].color,
-            title: info[i].title,
-            subtitle: info[i].subtitle
-          }
-          newInfo.append(file);
-          next();
-        }
-      }
-    },function(){
-      var newInfoJSON = JSON.stringify(newInfo);
-      fs.writeFile("/images/home/info.json", newInfoJSON, function(err) {
-        if (err) throw err;
-      });
-    });
-  });
-  res.sendStatus(200);
 });
 
 //Delete(index) - delete content at index
 //NEEDS authorisation
 app.post('/admin/deleteHomeCarousel', function(req,res){
-	var index = req.headers.index;
-  fs.readdirSync('./images/home', function(err, files){
+	var index = req.body.index;
+  fs.readdir('./images/home', function(err, files){
+    console.log(files);
     //files contains NumberOfPics + info.json
-    if (index>=files.length || index<0){
+    if (index>files.length-2 || index<0){
       res.status(400).send("No file at index: " + index);
+      console.log("bad index");
     }
     else{
-      fs.unlink(files[i], function(){
+      fs.unlink('./images/home/' + files[index], function(){
+        console.log("file deletion block");
         //Rename all files of index i and above to maintain order.
-        for (i = index; i < files.length(); i++){
+        console.log(index);
+        for (var i = index; i < files.length-1; i++){
           var curFile = files[i];
-          fs.renameSync(curFile,i-1 + '.' + path.extname(curFile));
+          console.log("renaming: " + curFile + "to:" + i-1 + path.extname(curFile));
+          fs.renameSync("./images/home/" + curFile,"./images/home/" + i-1 + path.extname(curFile));
         };
-        //Update info.json THIS IS NOT FINISHED
-        var info = [];
-        fs.readdirSync('./images/home', function(err, files){
-          for (i=0; i < files.length(); i++){
-            var curFile = files[i];
-            info.append(curFile);
-          };
-          then();
-        },function(err){
+        //Update info.json
+        var info = JSON.parse(fs.readFileSync('./images/home/info.json', 'utf8'));
+        console.log(info);
+        //delete record of file at index
+        info.splice(index, 1);
+        //info.length changes after splice
+        //update record of files above index
+        for (var i=index; i < info.length; i++) {
+          info[i].file = i + path.extname(info[i]);
+        };
+        fs.writeFile('./images/home/info.json', JSON.stringify(info), function (err) {
           if (err) throw err;
-          fs.writeFile(info.json, JSON.stringify(info));
-          res.sendStatus(200);
+          console.log('Replaced info.json');
         });
       });
     }
