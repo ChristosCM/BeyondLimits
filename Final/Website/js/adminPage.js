@@ -17,7 +17,12 @@ $.ajax({
     success: (images)=>{
       $("#sliderIm").html('<label class = "control-label" for="index">Pick the position that the image is going to be added (see table below)</label><input type="range" min="0" value="0" max="'+(images.length)+'"class="slider" name="index"id="index" oninput="printChange(this.value);" ></input><p>Position: <span id="pos">0</span></p>')
       for (i=0; i<images.length; i++){
-        $("#carTable").append('<tr><td>'+images[i].file+'</td><td><img width="100px" height="100px"src="images/home/'+images[i].file+'"</td><td><button onclick = "carDelete('+i+')" class="btn btn-danger">Delete</button><div class = "divider1"></div></tr>');
+        var fileType = images[i].file.slice(images[i].file.indexOf(".") + 1);
+        if (fileType == "mp4") {
+          $("#carTable").append('<tr><td>'+images[i].file+'</td><td><video class="video-fluid"  width="100" height="100" autoplay loop muted>	<source src="images/home/'+images[i].file+'" type="video/mp4" /></video></td><td><button onclick = "carDelete('+i+')" class="btn btn-danger">Delete</button><div class = "divider1"></div></td></tr>')
+        }else{
+        $("#carTable").append('<tr><td>'+images[i].file+'</td><td><img width="100px" height="100px"src="images/home/'+images[i].file+'"</td><td><button onclick = "carDelete('+i+')" class="btn btn-danger">Delete</button><div class = "divider1"></div></td></tr>');
+        }
       }
     },
     error: (err)=>{
