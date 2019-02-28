@@ -60,10 +60,6 @@ iframe {
 	height: 670px;
 }
 
-video {
-	width: 100%;
-}
-
 h1{
     padding: 0px;
     background-color: white;
@@ -182,6 +178,7 @@ ul.timeline > li:before {
 
 .carousel-item video {
 	object-fit: cover;
+	height: 670px;
 }
 
 .events{

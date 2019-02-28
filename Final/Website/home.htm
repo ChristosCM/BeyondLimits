@@ -13,7 +13,7 @@
 	function loadCarousel() {
 		$.get('/home/carousel', function (data) {
 			var html = "";
-			html += '<div class="carousel-inner">';
+			html += '<div class="carousel-inner" style="background-color:black">';
 			jQuery.each(data, function(index, element) {
 
 				if (index == 0) {
@@ -25,12 +25,12 @@
 				var fileType = element.file.slice(element.file.indexOf(".") + 1);
 				if (fileType == "mp4") {
 					//html += '<iframe width="100%" height="670" src="images/home/'+element.file+'" frameborder="0" allowfullscreen></iframe>';
-					html += '	<video class="video-fluid" width = "100%" height = "670px" autoplay loop muted>';
+					html += '	<video class="video-fluid" autoplay loop muted>';
 					html += '		<source src="images/home/'+element.file+'" type="video/mp4" />';
 					html += '	</video>';
 				}
 				else {
-					html += '	<img class="d-block w-100" height = "670px" src="images/home/'+element.file+'" alt="Slide '+index+'">';
+					html += '	<img class="d-block w-100" height="670px" src="images/home/'+element.file+'" alt="Slide '+index+'">';
 				}
 				html += '	<div class="carousel-caption">';
 				html += '		<h3 style="font-size:50px"><font color="'+element.color+'">'+element.title+'</font></h3>';
@@ -89,6 +89,7 @@
       </ul>
     </div>
   </nav>
+  
   <div class = "container-fluid">
     <div class="container">
       <h1 class="blueH" style="font-size:150px;text-align:center;line-height:1.25;"><b>Beyond Limits</b></h1>
