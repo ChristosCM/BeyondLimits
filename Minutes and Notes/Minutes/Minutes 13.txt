@@ -1,0 +1,37 @@
+Minutes 13
+
+Meeting next Wednesday
+Tasks:
+
+Chris:
+Finalize draft of User Manual
+Donation Button admin page
+(maybe footer) if I have time 
+Take out Volunteer Events
+fix testimonials
+fix insert check
+proof read testcases
+proof read section 3
+concise
+
+
+
+Jake:
+Accounts addition hash
+proof read testcases
+testcases section 1
+
+Frank:
+Fix auth
+Routing 
++ tables.html added to admin page
+footer front end in admin page 
+proof read user manual
+
+Matt:
+fix testimonials on blog page
+transfer to seperate js files
+mobile support
+fix title on events
+start on presentation
+start on presentation
