@@ -10,6 +10,17 @@ $(window).on("load",function(){
     })
 })
 $(window).on("load",function(){
+    $.ajax({
+        url: "/volMore",
+        type: "GET",
+        datatype:"json",
+        success(data){
+            $("#volMoreText").html('<p>'+data+'</p>');
+        }
+        
+    })
+})
+$(window).on("load",function(){
     $("#volEmail").submit(function(e){
         e.preventDefault();
         var fname = $("#fname").val();

@@ -9,6 +9,18 @@ $(window).on("load",function(){
         
     })
 })
+$(window).on("load",function(){
+    $.ajax({
+        url: "/howMore",
+        type: "GET",
+        datatype:"json",
+        success(data){
+            $("#howMoreText").html('<h3>About Our Services</h3>'+'<p>'+data+'</p>');
+        }
+        
+    })
+})
+
 
 $(window).on("load",function(){
     $("#helpEmail").submit(function(e){
@@ -19,7 +31,7 @@ $(window).on("load",function(){
 		var county = $("#county").val();
         var info = $("#info").val();
         $.ajax({
-            url: "/volunteerEmail",
+            url: "/helpEmail",
             type: "post",
             data: {"fname": fname, "lname": lname, "email": email, "county": county, "info": info},
             success(){
