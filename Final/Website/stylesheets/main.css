@@ -56,7 +56,6 @@ iframe {
 
 video {
 	width: 100%;
-	height: 670px;
 }
 
 h1{
@@ -171,6 +170,14 @@ ul.timeline > li:before {
     overflow-x: hidden;
 }
 
+.carousel-item img {
+	object-fit: cover;
+}
+
+.carousel-item video {
+	object-fit: cover;
+}
+
 .events{
     height:250px;
     /*width:300px;*/
@@ -183,6 +190,8 @@ ul.timeline > li:before {
     /*margin-bottom: 20px;*/
 }
 
+.
+
 #collapseButton {
 	position: absolute;
 	bottom: 8px;
@@ -191,7 +200,7 @@ ul.timeline > li:before {
 
 .collapsing {
     -webkit-transition: none;
-    transition: none;
+    transition: height 1s;
     display: none;
 }
 
