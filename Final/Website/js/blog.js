@@ -27,21 +27,20 @@ function readMoreTest(id){
     moreText.style.display = "inline";
   }
 }
-$(document).ready(function(){
+$(window).on("load",function(){
     $.ajax({
         url:'http://localhost:80/blogShow',
         type: 'GET',
         datatype: 'json',
         success: (posts)=>{
             for (i=0; i<posts.length; i++){
-                console.log(posts[i]);
                 var id = posts[i].idposts;
                 var btnid = "btn"+id;
                 var moreid = "more"+id;
                 var dotsid = "dots"+id;
                 var preview = posts[i].content.substr(0,20);
                 var rest = posts[i].content.substr(20,);
-                $("#blist").append('<li><a target="_blank" href="#">'+posts[i].title+ '</a><a href="#" class="float-right">'+posts[i].date+'</a><p>'+preview+'<span id="'+dotsid+'"style="display: inline;">...</span><span id="'+moreid+'"style="display: none;">'+rest+'</span></p><button onclick="readMore('+id+')" id="'+btnid+'">Read more</button></li>');
+                $("#blist").append('<li><a target="_blank" href="#">'+posts[i].title+ '</a><a href="#" class="float-right">'+posts[i].date+'</a><p>'+preview+'<span id="'+dotsid+'"style="display: inline;">...</span><span id="'+moreid+'"style="display: none;">'+rest+'</span></p><button class="btn btn-default btn-sm"onclick="readMore('+id+')" id="'+btnid+'">Read more</button></li>');
             }
         }
     });
@@ -58,7 +57,7 @@ $(document).ready(function(){
                 var preview = posts[i].content.substr(0,20);
                 var rest = posts[i].content.substr(20,);
 
-                $("#testlist").append('<li><div class="media" style = "float:bottom;"><div class="media-left media-middle"><a href="#"><img class="media-object mr-3" src="'+posts[i].photo+'" alt="Picture User" height = 100, width = 100></a></div><div class="media-body"><h4 class="media-heading"><a target="_blank" href="#">'+posts[i].name+ '</a></h4><p>'+preview+'<span id="'+dotsid+'"style="display: inline;">...</span><span id="'+moreid+'"style="display: none;">'+rest+'</span></p><button onclick="readMoreTest('+id+')" id="'+btnid+'">Read more</button></div></li>');
+                $("#testlist").append('<div class="media" style = "float:left;"><div class="media-left media-middle"><a href="#"><img class="img-circle" src="'+posts[i].photo+'" alt="Testimonial" height = 100, width = 100></a></div></div><div class="media-body"><h4 class="media-heading"><li><a target="_blank" href="#">'+posts[i].name+ '</a></h4><p>'+preview+'<span id="'+dotsid+'"style="display: inline;">...</span><span id="'+moreid+'"style="display: none;">'+rest+'</span></p><button class="btn btn-info btn-sm"onclick="readMoreTest('+id+')" id="'+btnid+'">Read more</button></div></li>');
             }
         }
     });

@@ -1,4 +1,4 @@
-$(function(){
+$(window).on("load",function(){
   var hash = window.location.hash;
   hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 
@@ -9,37 +9,37 @@ $(function(){
     $('html,body').scrollTop(scrollmem);
   });
 });
-$(document).ready(function () {
+$(window).on("load",function(){
     $("#editoraboutus").editor({
       uiLibrary: 'bootstrap4'
     });
   });
-  $(document).ready(function () {
+  $(window).on("load",function() {
     $("#editorhome").editor({
       uiLibrary: 'bootstrap4'
     });
   });
-  $(document).ready(function () {
+  $(window).on("load",function(){
     $("#editorHowWe").editor({
       uiLibrary: 'bootstrap4'
     });
   });
-  $(document).ready(function () {
+  $(window).on("load",function(){
     $("#editorMore").editor({
       uiLibrary: 'bootstrap4'
     });
   });
-  $(document).ready(function () {
+  $(window).on("load",function(){
     $("#editorVol").editor({
       uiLibrary: 'bootstrap4'
     });
   });
-  $(document).ready(function () {
+  $(window).on("load",function() {
     $("#editorVolMore").editor({
       uiLibrary: 'bootstrap4'
     });
   });
-  $(document).ready(function(){
+  $(window).on("load",function(){
     $.ajax({
         url: "/howWeCanHelpText",
         type: "get",
@@ -71,7 +71,7 @@ $(document).ready(function () {
         }
     })
 })
-$(document).ready(function(){
+$(window).on("load",function(){
     $.ajax({
         url: "/aboutUsText",
         type: "get",
@@ -83,7 +83,7 @@ $(document).ready(function(){
         }
     })
 })
-$(document).ready(function(){
+$(window).on("load",function(){
     $.ajax({
         url: "/howDoIApplyText",
         type: "get",
@@ -97,7 +97,7 @@ $(document).ready(function(){
 })
 
   //aboutUSupload
-  $(document).ready(function(){
+  $(window).on("load",function(){
       $("#aboutUpload").submit(function(e){
           e.preventDefault();
           var text = $("#editoraboutus").val();
@@ -119,7 +119,7 @@ $(document).ready(function(){
       });
   });
   //how we can help upload
-  $(document).ready(function(){
+  $(window).on("load",function(){
     $("#howWeUpload").submit(function(e){
         e.preventDefault();
         var text = $("#editorHowWe").val();
@@ -140,7 +140,7 @@ $(document).ready(function(){
     }
     });
 });
-$(document).ready(function(){
+$(window).on("load",function(){
     $("#howMoreUpload").submit(function(e){
         e.preventDefault();
         var text = $("#editorMore").val();
@@ -162,7 +162,7 @@ $(document).ready(function(){
     });
 });
 //volunteer upload
-$(document).ready(function(){
+$(window).on("load",function(){
     $("#volUpload").submit(function(e){
         e.preventDefault();
         var text = $("#editorVol").val();
@@ -183,7 +183,7 @@ $(document).ready(function(){
     }
     });
 });
-$(document).ready(function(){
+$(window).on("load",function(){
     $("#volMoreUpload").submit(function(e){
         e.preventDefault();
         var text = $("#editorVolMore").val();

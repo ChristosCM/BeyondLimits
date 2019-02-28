@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(window).on("load",function() {
     $.ajax({
         url: "/aboutUsText",
         type: "GET",

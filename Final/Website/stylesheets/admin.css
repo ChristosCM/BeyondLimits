@@ -12,4 +12,4 @@ div[role=body]{
 }
 /* following are settings to try to make the database look better */
 table {border-collapse:collapse; table-layout:fixed; width:100%; margin-left: 0px;}
-table td {border:solid 1px #fab; width:100px; word-wrap:break-word;}
+table td {word-wrap:break-word;}

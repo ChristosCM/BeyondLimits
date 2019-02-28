@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(window).on("load",function(){
     $.ajax({
         url: "/howDoIApplyText",
         type: "GET",
@@ -9,7 +9,7 @@ $(document).ready(function() {
         
     })
 })
-$(document).ready(function() {
+$(window).on("load",function(){
     $("#volEmail").submit(function(e){
         e.preventDefault();
         var fname = $("#fname").val();

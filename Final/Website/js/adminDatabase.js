@@ -66,7 +66,7 @@ function deleteFn(array){
     $("#typeForm").html(temp);
 }
 function insert(array){
-    table = '<h4>Insert Values</h4><form id="insertForm" ><table class="table table-hover"><thead class="thead-light"><tr>';
+    table = '<h4>Insert Values</h4><form id="insertForm" ><table class="table-responsive"><thead class="thead-light"><tr>';
     for (i=0; i<array.length; i++){
         table+='<th>'+array[i]+'</th>';
     }
@@ -138,10 +138,16 @@ function query(){
                 array = data[tableNorm];
                 var fields = document.forms["insertForm"].getElementsByTagName("input").length;
             var values = [];
+            var counter = fields;
             for (i=0; i<fields; i++){
-                values.push($("#insertText"+i).val());
+                if ($("#insertText"+i).val().length>0){
+                    counter -= 1;
+                    values.push($("#insertText"+i).val());
+                }else{
+                    $("#insertText"+i).val().select();
+                }
             }
-            //maybe need to add the fields to the values
+            if (counter = 0){
             if (confirm("Are you sure you want to Insert information in: "+tableNorm+" ?")){
             $.ajax({
                 url: "/query",
@@ -155,6 +161,9 @@ function query(){
                 }
             })
         }
+    }else{
+        alert("Please fill out all the fields before inserting")
+    }
 
             }
         });
@@ -243,7 +252,7 @@ function query(){
 // })
 //these functions have to do with the graphs in statistics 
 //initialising the options
-$(document).ready(function(){
+$(window).on("load",function(){
    $("#monthsDrop").attr("selected","selected");
    $("#p1").removeAttr("disabled","disabled");
     $("#p5").removeAttr("disabled","disabled");

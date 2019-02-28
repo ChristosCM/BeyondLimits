@@ -156,6 +156,8 @@ ul.timeline > li:before {
     height: 20px;
     z-index: 400;
 }
+
+
 .hdivider{
     width: 10px;
     height: 10px;
@@ -193,7 +195,6 @@ ul.timeline > li:before {
     /*margin-bottom: 20px;*/
 }
 
-.
 
 #collapseButton {
 	position: absolute;

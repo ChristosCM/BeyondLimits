@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(window).on("load",function(){
     $.ajax({
         url: "/howWeCanHelpText",
         type: "GET",
@@ -10,7 +10,7 @@ $(document).ready(function() {
     })
 })
 
-$(document).ready(function() {
+$(window).on("load",function(){
     $("#helpEmail").submit(function(e){
         e.preventDefault();
         var fname = $("#fname").val();

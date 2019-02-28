@@ -1,5 +1,5 @@
 //showing the events
-$(document).ready(function(){
+$(window).on("load",function(){
 $.ajax({
 	url:'/eventsAll',
 	type: 'GET',
@@ -46,7 +46,7 @@ $.ajax({
 });
 });
 //ajax to post the blog from the admin tab: Blog
-$(document).ready(function(){
+$(window).on("load",function(){
   $("#blogForm").submit(function(e){
       e.preventDefault();
       var title =  $("#beditort").val();
@@ -71,7 +71,7 @@ $(document).ready(function(){
       console.log(value);
         $("#pos").empty().text(value);
     }
-$(document).ready(function(){
+    $(window).on("load",function(){
   $("#testimonialForm").submit(function(e){
     e.preventDefault();
     $(this).ajaxSubmit({
@@ -105,7 +105,7 @@ $(document).ready(function(){
 //       });
 //   });
 // });
-$(document).ready(function(){
+$(window).on("load",function(){
   $("#newCarousel").submit(function(e){
     e.preventDefault();
     $(this).ajaxSubmit({
@@ -121,7 +121,7 @@ $(document).ready(function(){
     return false;
   })
 })
-$(document).ready(function() {
+$(window).on("load",function() {
 
   $('#eventPost').submit(function(e) {
     e.preventDefault();
