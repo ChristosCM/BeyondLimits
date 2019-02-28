@@ -16,6 +16,7 @@ body::after{
 .container, #container{
 	position:relative;
 }
+
 .page-footer {
     position:absolute;
     color: whitesmoke;
@@ -27,7 +28,12 @@ body::after{
 	padding-bottom: 0px;
     /* padding-block-start: 20px; */
 }
-
+.slider::-webkit-slider-thumb {
+    cursor: pointer; /* Cursor on hover */
+  }
+  .slider::-moz-range-thumb {
+    cursor: pointer; /* Cursor on hover */
+  }
 .page-footer a{
     padding: 11px;
     color: whitesmoke;

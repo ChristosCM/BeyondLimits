@@ -524,12 +524,14 @@ var testStorage = multer.diskStorage({
 var testUpload = multer({
 	storage: testStorage
 }).single("testImage");
+
+
 //This is the version for editing the testimonials.
 app.post('/testimonialsPost/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	//Implement picture upload. I have a copy of this on my PP coursework.
-	eventUpload(req,res, function(err){
-		//also need to unlink the previous testimonila photo from the folder
+	testUpload(req,res, function(err){
+
 	var picPath = req.file.path;
 	var tID = req.params.id;
 	var name = req.body.name;
@@ -553,7 +555,8 @@ app.post('/testimonialsPost/:id', (req,res)=>{
 app.post('/testimonialsPost', (req,res) =>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	//Implement picture upload. I have a copy of this on my PP coursework.
-	eventUpload(req,res, function(err){
+	testUpload(req,res, function(err){
+		console.log(req.file);
 		var picPath = req.file.path;
 	var name = req.body.name;
 	var content = req.body.content;
@@ -701,7 +704,8 @@ var eventUpload = multer({
 app.post('/createEvent/:id', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	eventUpload(req,res, function(err){
-		var pPath = req.file.path;
+
+		
 		//here also need to delete previous file, pull the event from the database and fs.unlink that file.
 	var eID = req.params.id;
 	var eventName = req.body.name;
@@ -709,10 +713,17 @@ app.post('/createEvent/:id', (req,res)=>{
 	var volunteerTotal = req.body.vTotal;
 	var volunteerMale = req.body.vMale;
 	var volunteerFemale = req.body.vFemale;
-	var date = req.body.date;s
+	var date = req.body.date;
 	var description = req.body.description;
+
 	//This should work but needs further testing.
-	var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, pPath = %6', description = %7, date = %8 WHERE idEvents = %9;", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale,pPath, description, date, eID);
+	if(req.file){
+			var pPath = req.file.path;
+			var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, pPath = %6, description = %7, date = %8 WHERE idEvents = "+ eID+ ";", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath, description, date);
+		} else {
+			var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, description = %6, date = %7 WHERE idEvents = "+ eID+ ";", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description, date); 
+		}
+	
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
 		con.end();
@@ -728,7 +739,6 @@ app.post('/createEvent', (req,res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	eventUpload(req,res, function(err){
 		var pPath = req.file.path;
-		console.log(pPath);
 	var eventName = req.body.name;
 	var attendance = req.body.attendance;
 	var volunteerTotal = req.body.vTotal;
@@ -736,7 +746,7 @@ app.post('/createEvent', (req,res)=>{
 	var volunteerFemale = req.body.vFemale;
 	var date = req.body.date;
 	//added this if in case there is no upload
-	var pPath;
+	console.log(req.body);
 	var description = req.body.description;
 	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (null,%1,%2,%3,%4,%5,%6,%7,%8)",eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale,pPath, description,date);
 	console.log(sql);
@@ -753,18 +763,19 @@ app.post('/createEvent', (req,res)=>{
 app.post('/deleteEvent/:id', (req, res)=>{
 	var con = setupConnection("localhost", "root", "password", "blDB");
 	var eID = req.params.id;
+	console.log(eID);
 	//Delete the event by ID
 	var sql = format("SELECT * FROM events WHERE idEvents = %1", parseInt(eID));
 	queryDB(con, sql, function(err,result){
 		if(err) throw err;
-		var eventName = result.eventName;
-		var attendance = result.attendance;
-		var volunteerTotal = result.volunteerTotal;
-		var volunteerMale = result.volunteerMale;
-		var volunteerFemale = result.volunteerFemale;
-		var pPath = result.pPath;
-		var description = result.description;
-		var date = result.date
+		var eventName = result[0].eventName;
+		var attendance = result[0].attendance;
+		var volunteerTotal = result[0].volunteerTotal;
+		var volunteerMale = result[0].volunteerMale;
+		var volunteerFemale = result[0].volunteerFemale;
+		var pPath = result[0].pPath;
+		var description = result[0].description;
+		var date = result[0].date
 		var sql1 = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath,description);
 		queryDB(con, sql1, function(err1, result1){
 			if(err1) throw err1;
@@ -1023,7 +1034,7 @@ app.get('/home/carousel', (req,res)=>{
 //NEEDS authorisation
 app.post('/admin/addHomeCarousel', function(req,res){
   var index = req.body.index;
-  var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
+	var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
   if (validFileExtensions.includes(path.extname(req.file))){
     // Firstly rename all files of index i and above to maintain order
     fs.readdirSync('./images/home', function(err,files){
@@ -1095,7 +1106,7 @@ app.post('/admin/addHomeCarousel', function(req,res){
 //Delete(index) - delete content at index
 //NEEDS authorisation
 app.post('/admin/deleteHomeCarousel', function(req,res){
-  var index = req.headers.index;
+	var index = req.headers.index;
   fs.readdirSync('./images/home', function(err, files){
     //files contains NumberOfPics + info.json
     if (index>=files.length || index<0){

@@ -30,3 +30,10 @@ $.ajax({
         alert("There was an error processing your request");
     }
 })
+function printPage(){
+	var restorepage = $('body').html();
+	var printcontent = $('#tables').clone();
+	$('body').empty().html(printcontent);
+	window.print();
+	$('body').html(restorepage);
+}

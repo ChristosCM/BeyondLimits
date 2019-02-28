@@ -8,6 +8,13 @@ function createTable(array) {
     $("#data").show();
 
 }
+function printShown(){
+	var restorepage = $('body').html();
+	var printcontent = $('#dataQ').clone();
+	$('body').empty().html(printcontent);
+	window.print();
+	$('body').html(restorepage);
+}
 function selectRes(array) {
     if (array.length){
         table = '<hr class="half-rule"><h4>Items matching your search:</h4><table class="table table-hover"><thead class="thead-light"><tr>';
@@ -32,30 +39,30 @@ function selectRes(array) {
 
 }
 function select(array){
-    temp = '<form id="selectForm"><select class="form-control" id="selectOptions1">';
+    temp = '<form id="selectForm"><div class="row"><div class="col-2"><select class="form-control" id="selectOptions1">';
     for (i=0; i<array.length; i++){
         temp += '<option>'+array[i]+'</option>';
     }
-    temp += '</select><input type="text" id="selectText">';
-    temp += '<select class="form-control" id="selectOptions2">';
+    temp += '</select></div><div class="col-2"><input type="text" id="selectText"></div></div>';
+    temp += '<div class="row"><div class="col-2"><select class="form-control" id="selectOptions2">';
     for (i=0; i<array.length; i++){
         temp += '<option>'+array[i]+'</option>';
     }
-    temp +='</select><select form="selectForm" id="selectOperator" class="form-control"><option value="AND">AND</option><option selected value="OR">OR</option></select><input type="text" id="selectText2"><button type="button" class="btn btn-info" onclick="query()">Search</button></form>';
+    temp +='</select></div><div class="col-2"><select form="selectForm" id="selectOperator" class="form-control"><option value="AND">AND</option><option selected value="OR">OR</option></select></div><div class="col-2"><input type="text" id="selectText2"></div></div><button type="button" class="btn btn-info" style="margin-top: 10px" onclick="query()">Search</button></form>';
     $("#typeForm").html(temp);
 }
 function deleteFn(array){
-    temp = '<form id="deleteForm"><select class="form-control" id="deleteOptions1">';
+    temp = '<form id="deleteForm"><div class="row"><div class="col-2"><select class="form-control" id="deleteOptions1">';
     for (i=0; i<array.length; i++){
         temp += '<option>'+array[i]+'</option>';
     }
-    temp += '</select><input type="text" id="deleteText" >';
-    temp += '<select class="form-control" id="deleteOptions2">';
+    temp += '</select></div><div class="col-2"><input type="text" id="deleteText" ></div></div>';
+    temp += '<div class="row"><div class="col-2"><select class="form-control" id="deleteOptions2">';
 
     for (i=0; i<array.length; i++){
         temp += '<option>'+array[i]+'</option>';
     }
-    temp+= '</select><select form="deleteForm" id="deleteOperator" class="form-control"><option selected value="AND">AND</option><option value="OR">OR</option></select><input type="text" id="deleteText2"><button type="button" class="btn btn-danger" onclick="query()">Delete</button></form>';
+    temp+= '</select></div><div class="col-2"><select form="deleteForm" id="deleteOperator" class="form-control"><option selected value="AND">AND</option><option value="OR">OR</option></select></div><div class="col-2"><input type="text" id="deleteText2"></div></div><button type="button" class="btn btn-danger" style="margin-top: 10px" onclick="query()">Delete</button></form>';
     $("#typeForm").html(temp);
 }
 function insert(array){

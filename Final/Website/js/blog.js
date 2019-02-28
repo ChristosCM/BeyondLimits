@@ -46,7 +46,7 @@ $(document).ready(function(){
         }
     });
     $.ajax({
-        url:'http://localhost:80/testimonialsShow',
+        url:'/testimonialsShow',
         type: 'GET',
         datatype: 'json',
         success: (posts)=>{
@@ -57,9 +57,8 @@ $(document).ready(function(){
                 var dotsid = "Tdots"+id;
                 var preview = posts[i].content.substr(0,20);
                 var rest = posts[i].content.substr(20,);
-                console.log(posts[i])
 
-                $("#testlist").append('<li><div class="media-body"><h4 class="media-heading"><a target="_blank" href="#">'+posts[i].name+ '</a></h4><p>'+preview+'<span id="'+dotsid+'"style="display: inline;">...</span><span id="'+moreid+'"style="display: none;">'+rest+'</span></p><button onclick="readMoreTest('+id+')" id="'+btnid+'">Read more</button></div></li>');
+                $("#testlist").append('<li><div class="media" style = "float:bottom;"><div class="media-left media-middle"><a href="#"><img class="media-object mr-3" src="'+posts[i].photo+'" alt="Picture User" height = 100, width = 100></a></div><div class="media-body"><h4 class="media-heading"><a target="_blank" href="#">'+posts[i].name+ '</a></h4><p>'+preview+'<span id="'+dotsid+'"style="display: inline;">...</span><span id="'+moreid+'"style="display: none;">'+rest+'</span></p><button onclick="readMoreTest('+id+')" id="'+btnid+'">Read more</button></div></li>');
             }
         }
     });

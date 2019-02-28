@@ -15,6 +15,7 @@ $.ajax({
     type: 'GET',
     datatype:'json',
     success: (images)=>{
+      $("#sliderIm").html('<label class = "control-label" for="index">Pick the position that the image is going to be added (see table below)</label><input type="range" min="0" value="0" max="'+(images.length)+'"class="slider" name="index"id="index" oninput="printChange(this.value);" ></input><p>Position: <span id="pos">0</span></p>')
       for (i=0; i<images.length; i++){
         $("#carTable").append('<tr><td>'+images[i].file+'</td><td><img width="100px" height="100px"src="images/home/'+images[i].file+'"</td><td><button onclick = "carDelete('+i+')" class="btn btn-danger">Delete</button><div class = "divider1"></div></tr>');
       }
@@ -57,7 +58,7 @@ $(document).ready(function(){
           data: {"title": title, "content": content},
           datatype: "json",
           success(){
-              alert("New Blog Post has been posted");
+            if(!alert("New blog post has been uploaded")){window.location.reload();}
           },
           error(){
               alert("There was an error posting the blog")
@@ -66,20 +67,24 @@ $(document).ready(function(){
       });
   });
 });
+    function printChange(value){
+      console.log(value);
+        $("#pos").empty().text(value);
+    }
 $(document).ready(function(){
   $("#testimonialForm").submit(function(e){
-      e.preventDefault();
-        $("#testimonialForm").ajaxSubmit({
-          error: function(err){
-            alert("There was an Error"+ err);
-          },
-          success: function(){
-            if(!alert("The testimonial has been edited successfully")){window.location.reload();}
-      
-          }
-        })
-      });
-    });
+    e.preventDefault();
+    $(this).ajaxSubmit({
+      error: function(err){
+        alert("There was an error: "+ err);
+      },
+      success: function(){
+        if(!alert("The testimonial has been uploaded successfully")){window.location.reload();}
+      }
+    })
+    return false;
+  })
+})
 // $(document).ready(function(){
 //   $("#testimonialForm").submit(function(e){
 //       e.preventDefault();
@@ -100,10 +105,26 @@ $(document).ready(function(){
 //       });
 //   });
 // });
+$(document).ready(function(){
+  $("#newCarousel").submit(function(e){
+    e.preventDefault();
+    $(this).ajaxSubmit({
+      error: function(xhr) {
+        alert('There was an error: ' + xhr.status);
+         },
 
+         success: function() {
+          if(!alert("The image has been uploaded successfully")){window.location.reload();}
+         }
+
+    })
+    return false;
+  })
+})
 $(document).ready(function() {
 
   $('#eventPost').submit(function(e) {
+    e.preventDefault();
     var submit = true;
     if (($("#eventTitle").val()==null) || ($("#description").val()==null)||($("#eventDate").val()==null)){
       submit = false;
@@ -123,8 +144,8 @@ $(document).ready(function() {
       submit = false;
     }
     if (submit){
-     $('#eventPost').ajaxSubmit({
-
+     $(this).ajaxSubmit({
+        
          error: function(xhr) {
         alert('Error: ' + xhr.status);
          },
@@ -133,15 +154,15 @@ $(document).ready(function() {
           if(!alert("The event has been created successfully")){window.location.reload();}
          }
  });
+  }else{
+    alert("Please check the details again");
   }
      //Very important line, it disable the page refresh.
  return false;
  });    
 });
 function eventEditPost(id){
-  var options = {url: '/createEvent/'+id}
-  $("#eventPost").ajaxForm(options);
-  $("#eventPost").ajaxSubmit({
+  $("#eventPost").ajaxSubmit({url: '/createEvent/'+id,
     error: function(err){
       alert("There was an Error"+ err);
     },
@@ -219,7 +240,7 @@ function eventDelete(id){
 
     },
     error(xhr){
-      console.log(xhr.status);
+      if(!alert("There was an error while deleting the event, please try again.")){window.location.reload();}
     }
 
   })
@@ -317,7 +338,7 @@ function testimonialsDelete(id){
 }
 function testimonialsEdit(id){
   $.ajax({
-    url:'http://localhost:80/testimonialsShow',
+    url:'/testimonialsShow',
     type : 'GET',
     datatype : 'json',
     success: (posts) => {
@@ -336,9 +357,7 @@ function testimonialsEdit(id){
   });
 }
 function testEditPost(id){
-  var options = { url: '/testimonialsPost/'+id}
-  $("#testimonialForm").ajaxForm(options);
-        $("#testimonialForm").ajaxSubmit({
+        $("#testimonialForm").ajaxSubmit({url: '/testimonialsPost/'+id,
           error: function(err){
             alert("There was an Error"+ err);
           },
@@ -349,7 +368,6 @@ function testEditPost(id){
         })
         return false;
       }
-    
 // function testEditPost(id){
 //   var title =  $("#testname").val();
 //   var content = $("#testeditor").val();
@@ -388,7 +406,7 @@ function blogPost(){
   function blogDelete(blogID){
     if (confirm('Are you sure you want to save this thing into the database?')) {
       $.ajax({
-        url:'http://localhost:80/blogDelete/'+blogID, 
+        url:'/blogDelete/'+blogID, 
         type: 'POST',
         datatype: 'json',
         success: function(result) {
@@ -402,7 +420,7 @@ function blogPost(){
       }
   $("upload").click(function(){
     $.ajax({
-      url:'http://localhost:80/fileUpload',
+      url:'/fileUpload',
       type: 'POST',
       datatype: 'json'
     })

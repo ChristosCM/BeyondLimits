@@ -18,7 +18,7 @@
 
 </head>
 <body>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script src = "activeWorkaround.js"></script>
@@ -67,28 +67,36 @@
 
     <div id="home" class="tab-pane fade show active container">
       <h3>Home</h3>
-      <textarea id="editorhome">
-        <div style="text-align: center;">Welcome to beyond limits</div>
-        </div>
-      </textarea>
-      <script type="text/javascript">
-        $(document).ready(function () {
-          $("#editorhome").editor({
-            uiLibrary: 'bootstrap4'
-          });
-        });
-      </script>
-      <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
-      <form action = "/fileUpload" method = "post">
+      <form id="newCarousel" action = "/admin/addHomeCarousel" enctype="multipart/form-data" method = "post">
+        <div class="form-group">
+
+      <label class = "control-label" for="title">Title of image</label>
+          <input type="text" class="col-3" name = "title" id="title">
+          </div>
+          <div class="form-group">
+          <label class = "control-label" for="subtitle">Subtitle of image</label>
+          <input type="text" class="col-3" name = "subtitle" id="subtitle">
+            </div>
+
+            <div class="form-group">
+              <label class = "control-label" for="subtitle">Colour of Text</label>
+              <select name="colour">
+                <option value="#000000">Black</option>
+                <option value="#ffffff">White</option>
+                <option value="#A9A9A9">Dark Grey</option>
+              </select>
+                </div>
+     
         <div class="form-group">
           <label class = "control-label" for="carousel">Image to be added to carousel</label>
-          <input type="file" class="form-control-file" id="file-select">
-          <div class = "hdivider"></div>
-          <div>
-          <button class = "btn btn-primary" id="upload">Upload</button></div>
+          <input type="file" class="form-control-file" name = "carImage" id="carImage">
+          <div class="slidecontainer" id="sliderIm">
+
+          </div>
         </div>
         <button type="submit" name = "submit" class="btn btn-success " value="Submit">Submit</button>
       </form>
+      <hr class=half-rule>
       <div id="deleteCarousel">
         <table class="table table-hover">
           <thead class="thead-light">
@@ -300,15 +308,21 @@
             </table>
       </div>
       <p>Or ceate a new Testimonial Post!</p>
-      <form id = "testimonialForm" action = "/testimonialPost" enctype="multipart/form-data" method = "post">
+      <form id = "testimonialForm" action = "/testimonialsPost" enctype="multipart/form-data" method = "post">
         <div class = "form-group">
           <label class = "control-label">Name</label>
           <div class="col-3">          
               <input type="text" class="form-control" id="testname" name = "name" placeholder="Name" >
             </div>
-            <label class = "control-label" for="blog"><b>Text</b></label>
-        <textarea class="form-control" id="testeditor" name = "content" placeholder="Write testimonial post here"></textarea>
         </div>
+        <div class="form-group">
+           <label class = "control-label" for="blog"><b>Text</b></label>
+          <textarea class="form-control" id="testeditor" name = "content" rows="5" placeholder="Write testimonial post here"></textarea>
+        </div>
+        <div class="form-group">
+            <label class = "control-label" for="testImage">Image for Testimonial</label>
+            <input type="file" class="form-control-file" name = "testImage" id="testImage">
+          </div>
         <button type="submit" id = "submitTestForm" class="btn btn-primary" value="Submit">Post</button>
 
       </form>
@@ -352,6 +366,15 @@
     <div id="database" class="tab-pane fade container">
       <h3>Database functions</h3>
       <p>Here all database queries and functions will be accessible</p>
+      <div class = "row">
+      <div class = "col-4"></div>
+      <div class="col-2">
+      <form action="/tables.html">
+        <input class="btn btn-success" type="submit" value="See all tables" />
+      </form>
+      </div>
+      <div class="col-2"><button class = "btn btn-info" onclick = "printShown()">Print tables shown below</button></div>
+      </div>
       <form action="/query" method="get" id="query">
       <div class="form-group">
         <label for="tables">Select Table</label>
@@ -374,8 +397,11 @@
         </select>
       </div>
       </form>
+      <p><i>Don't need to click the button to update results</i></p>
+      <button class = "btn btn-info" onclick="showCol()">Show Results</button>
       <hr class="half-rule">
       <div id="data"></div>
+      <hr class="half-rule">
       <div id="typeForm"></div>
       <div id="dataQ"></div>
     </div>
