@@ -142,6 +142,7 @@ $(window).on("load",function(){
 });
 $(window).on("load",function(){
     $("#howMoreUpload").submit(function(e){
+        console.log(1);
         e.preventDefault();
         var text = $("#editorMore").val();
         //maybe add if for empty, but they might want it empty
@@ -194,7 +195,7 @@ $(window).on("load",function(){
             type: "post",
             data: {"mainText": text},
             success(){
-                if(!alert("More Information (on How Do I Help) section has been altered")){window.location.reload();}
+                if(!alert("More Information (on Volunteer) section has been altered")){window.location.reload();}
                 if(!alert()){window.location.reload();}
                 
             },
