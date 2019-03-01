@@ -889,7 +889,11 @@ app.all('/query', (req,res)=>{
 		var s = squel.insert();
 		s.into(table);
 		for(var i = 0; i<values.length; i++){
-			s.set(fields[i], values[i]);
+      if(table == "accounts" && fields[i] == "password"){
+        s.set(fields[i], saltHashPassword(values[i]));
+      } else {
+        s.set(fields[i], values[i]);
+      }
 		}
 		return s.toString();
 	}
