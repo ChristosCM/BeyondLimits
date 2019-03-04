@@ -15,6 +15,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 const crypto = require('crypto');
+const path = require('path');//used in handling filesystem
 
 
 //*********************************************************SETUP*************************************************************
@@ -1107,7 +1108,7 @@ app.post('/admin/addHomeCarousel', function(req,res){
 //Delete(index) - delete content at index
 //NEEDS authorisation
 app.post('/admin/deleteHomeCarousel', function(req,res){
-	var index = req.body.index;
+	var index = parseInt(req.body.index);
   fs.readdir('./images/home', function(err, files){
     console.log(files);
     //files contains NumberOfPics + info.json
@@ -1120,10 +1121,11 @@ app.post('/admin/deleteHomeCarousel', function(req,res){
         console.log("file deletion block");
         //Rename all files of index i and above to maintain order.
         console.log(index);
-        for (var i = index; i < files.length-1; i++){
-          var curFile = files[i];
-          console.log("renaming: " + curFile + "to:" + i-1 + path.extname(curFile));
-          fs.renameSync("./images/home/" + curFile,"./images/home/" + i-1 + path.extname(curFile));
+        for (var i = index; i < files.length-2; i++){
+          console.log("renaming block");
+          var curFile = files[i+1];
+          console.log(curFile);
+          fs.renameSync("./images/home/" + curFile,"./images/home/" + i + path.extname(curFile));
         };
         //Update info.json
         var info = JSON.parse(fs.readFileSync('./images/home/info.json', 'utf8'));
@@ -1133,7 +1135,7 @@ app.post('/admin/deleteHomeCarousel', function(req,res){
         //info.length changes after splice
         //update record of files above index
         for (var i=index; i < info.length; i++) {
-          info[i].file = i + path.extname(info[i]);
+          info[i].file = i + path.extname(info[i].file);
         };
         fs.writeFile('./images/home/info.json', JSON.stringify(info), function (err) {
           if (err) throw err;

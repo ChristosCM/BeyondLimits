@@ -150,7 +150,7 @@ $(window).on("load",function() {
     }
     if (submit){
      $(this).ajaxSubmit({
-        
+
          error: function(xhr) {
         alert('Error: ' + xhr.status);
          },
@@ -164,7 +164,7 @@ $(window).on("load",function() {
   }
      //Very important line, it disable the page refresh.
  return false;
- });    
+ });
 });
 function eventEditPost(id){
   $("#eventPost").ajaxSubmit({url: '/createEvent/'+id,
@@ -278,15 +278,12 @@ function carDelete(index){
   $.ajax({
     url:'/admin/deleteHomeCarousel',
     method: 'post',
-    beforeSend: function(request) {
-      request.setRequestHeader("index", index);
-    },
+		datatype : 'json',
+    data:{index: index},
     success: () => {
       if(!alert("The Carousel Image has been deleted")){window.location.reload();}
-      
     }
-
-  })
+  });
 }
  function blogEdit(id){
   $.ajax({
@@ -311,7 +308,7 @@ function blogEditPost(id){
   var title =  $("#beditort").val();
   var content = $("#beditor").val();
   $.ajax({
-    url:'/blogPost/'+id, 
+    url:'/blogPost/'+id,
     type: 'POST',
     data: {"title": title, "content": content},
     datatype: 'json',
@@ -327,7 +324,7 @@ function blogEditPost(id){
 }
 function testimonialsDelete(id){
   if (confirm('Are you sure you want to delete this testimonial post from the website?')) {
-    
+
   $.ajax({
     url:'/testimonialsDelete/'+id ,
     type: 'POST',
@@ -368,7 +365,7 @@ function testEditPost(id){
           },
           success: function(){
             if(!alert("The testimonial has been edited successfully")){window.location.reload();}
-      
+
           }
         })
         return false;
@@ -377,7 +374,7 @@ function testEditPost(id){
 //   var title =  $("#testname").val();
 //   var content = $("#testeditor").val();
 //   $.ajax({
-//     url:'/testimonialsPost/'+id, 
+//     url:'/testimonialsPost/'+id,
 //     type: 'POST',
 //     data: {"name": title, "content": content},
 //     datatype: 'json',
@@ -394,7 +391,7 @@ function blogPost(){
   var title =  $("#beditort").val();
   var content = $("#beditor").val();
   $.ajax({
-    url:'http://localhost:80/blogPost/', 
+    url:'http://localhost:80/blogPost/',
     type: 'POST',
     data: {"title": title, "content": content},
     datatype: 'json',
@@ -407,11 +404,11 @@ function blogPost(){
   });
 
 }
-  
+
   function blogDelete(blogID){
     if (confirm('Are you sure you want to save this thing into the database?')) {
       $.ajax({
-        url:'/blogDelete/'+blogID, 
+        url:'/blogDelete/'+blogID,
         type: 'POST',
         datatype: 'json',
         success: function(result) {
@@ -430,4 +427,3 @@ function blogPost(){
       datatype: 'json'
     })
   })
-
