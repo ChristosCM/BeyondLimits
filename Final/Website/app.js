@@ -106,6 +106,59 @@ app.use(session({
   },
   rolling: true
 }));
+//*********************************************************WEBPAGE ROUTES*************************************************************
+app.get('/', function(req,res){
+	return res.sendFile(__dirname+'/home.htm');
+});
+app.get('/home', function (req,res){
+	return res.sendFile(__dirname+'/home.htm');
+});
+app.get('/aboutus', function (req,res){
+	return res.sendFile(__dirname+'/aboutus.htm');
+});
+app.get('/events', function (req,res){
+	return res.sendFile(__dirname+'/events.html');
+});
+app.get('/howwecanhelp', function (req,res){
+	return res.sendFile(__dirname+'/wehelp.htm');
+});
+app.get('/volunteer', function (req,res){
+	return res.sendFile(__dirname+'/volunteer.htm');
+});
+app.get('/blog', function (req,res){
+	return res.sendFile(__dirname+'/blog.html');
+});
+app.get('/login', function (req,res){
+	return res.sendFile(__dirname+'/login.htm');
+});
+app.get('/admin', function (req,res){
+  auth(req,res,function(){
+    return res.sendFile(__dirname+'/adminPage.html');
+  });
+});
+app.get('/tables', function (req,res){
+  auth(req,res,function(){
+  	return res.sendFile(__dirname+'/tables.html');
+  });
+});
+//this should stop access to the static file for the admin page
+// app.get('/adminPage.html', function (req,res){
+//   auth(req,res,function(){
+//     return res.sendFile(__dirname+'/adminPage.html');
+//   });
+// });
+app.get('/adminPage', function (req,res){
+  auth(req,res,function(){
+    return res.sendFile(__dirname+'/adminPage.html');
+  });
+});
+app.get('/tables.html', function (req,res){
+  auth(req,res,function(){
+  	return res.sendFile(__dirname+'/tables.html');
+  });
+});
+
+
 //*********************************************************AUTHORISATION/AUTHENTICATION*************************************************************
 //To be called by any function requiring authentication
 function auth(req, res, next) {
@@ -115,9 +168,6 @@ function auth(req, res, next) {
     return res.redirect('/login');
 };
 
-app.get('/login', function (req,res){
-	return res.sendFile(__dirname+'/login.htm');
-});
 
 app.post('/login', function (req, res) {
   console.log(req.body);
@@ -131,7 +181,7 @@ app.post('/login', function (req, res) {
     if(res.password == passHash) {
       req.session.user = username;
       req.session.admin = true;
-      res.redirect('/adminPage.html');
+      res.redirect('/admin');
     }
     else{
       res.sendStatus(403);
@@ -147,11 +197,7 @@ app.get('/logout', function (req, res) {
 app.get('/user', function(req,res){
 	res.send(req.session.username);
 });
-app.get('/adminPage', function (req,res){
-  auth(req,res,function(){
-    return res.sendFile(__dirname+'/adminPage.html');
-  });
-});
+
 //*********************************************************STATISTICS*************************************************************
 function randRGB(i){
 	var colours = []
@@ -431,76 +477,82 @@ app.get('/blogShow', (req,res)=>{
 });
 //This is the version for the editing blog post.
 app.post('/blogPost/:id', (req,res)=>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
+  auth(req,res,function(){
+  	var con = setupConnection("localhost", "root", "password", "blDB");
 
-	var bID = req.params.id;
-	var title = req.body.title;
-	var content = req.body.content;
-	console.log(bID,title,content);
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth()+1; //January is 0!
-	var yyyy = today.getFullYear();
+  	var bID = req.params.id;
+  	var title = req.body.title;
+  	var content = req.body.content;
+  	console.log(bID,title,content);
+  	var today = new Date();
+  	var dd = today.getDate();
+  	var mm = today.getMonth()+1; //January is 0!
+  	var yyyy = today.getFullYear();
 
-	if(dd<10) {
-	    dd = '0'+dd
-	}
+  	if(dd<10) {
+  	    dd = '0'+dd
+  	}
 
-	if(mm<10) {
-	    mm = '0'+mm
-	}
+  	if(mm<10) {
+  	    mm = '0'+mm
+  	}
 
-	today = dd + '/' + mm + '/' + yyyy;
-	var sql = format("DELETE FROM posts WHERE idPosts = %1;", bID);
-	queryDB(con, sql, function(err,result){
-		if(err) throw err;
-		con.end();
-		var con1 = setupConnection("localhost", "root", "password", "blDB");
-		var sql = format("INSERT INTO posts (idposts,title,content,date) VALUES (%1,%2,%3,%4)", bID, title, content, today);
-		queryDB(con1,sql,function(err1,result1){
-			if(err1) throw err1;
-			con1.end();
-		});
-		//Using this on the client side could create JS to iterate over all posts.
+  	today = dd + '/' + mm + '/' + yyyy;
+  	var sql = format("DELETE FROM posts WHERE idPosts = %1;", bID);
+  	queryDB(con, sql, function(err,result){
+  		if(err) throw err;
+  		con.end();
+  		var con1 = setupConnection("localhost", "root", "password", "blDB");
+  		var sql = format("INSERT INTO posts (idposts,title,content,date) VALUES (%1,%2,%3,%4)", bID, title, content, today);
+  		queryDB(con1,sql,function(err1,result1){
+  			if(err1) throw err1;
+  			con1.end();
+  		});
+  		//Using this on the client side could create JS to iterate over all posts.
 
-		return res.status(200).sendFile(__dirname + '/adminPage.html');
-	});
+  		return res.status(200).sendFile(__dirname + '/admin');
+  	});
+  });
 });
 app.post('/blogPost', (req,res) =>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	var title = req.body.title;
-	var content = req.body.content;
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth()+1; //January is 0!
-	var yyyy = today.getFullYear();
+  auth(req,res,function(){
+  	var con = setupConnection("localhost", "root", "password", "blDB");
+  	var title = req.body.title;
+  	var content = req.body.content;
+  	var today = new Date();
+  	var dd = today.getDate();
+  	var mm = today.getMonth()+1; //January is 0!
+  	var yyyy = today.getFullYear();
 
-	if(dd<10) {
-	    dd = '0'+dd
-	}
+  	if(dd<10) {
+  	    dd = '0'+dd
+  	}
 
-	if(mm<10) {
-	    mm = '0'+mm
-	}
+  	if(mm<10) {
+  	    mm = '0'+mm
+  	}
 
-	today = dd + '/' + mm + '/' + yyyy;
-	var sql = format("INSERT INTO posts (title, content, date) VALUES (%1,%2,%3)", title,content,today);
-	queryDB(con, sql, function(err, result){
-		if(err) throw err;
-		con.end();
-	});
-	return res.status(200).sendFile(__dirname + '/adminPage.html');
+  	today = dd + '/' + mm + '/' + yyyy;
+  	var sql = format("INSERT INTO posts (title, content, date) VALUES (%1,%2,%3)", title,content,today);
+  	queryDB(con, sql, function(err, result){
+  		if(err) throw err;
+  		con.end();
+  	});
+  	return res.status(200).sendFile(__dirname + '/admin');
+  });
 });
 //This would be triggered by clicking on the post in a list on the admin page. Scrollable region???
 app.post('/blogDelete/:postID', (req,res)=>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	var pID = req.params.postID;
-	var sql = format("DELETE FROM posts WHERE idposts = %1;", pID);
-	queryDB(con, sql, function(err, result){
-		if(err) throw err;
-		con.end();
-	});
-	return res.status(200).sendFile(__dirname + '/adminPage.html');
+  auth(req,res,function(){
+  	var con = setupConnection("localhost", "root", "password", "blDB");
+  	var pID = req.params.postID;
+  	var sql = format("DELETE FROM posts WHERE idposts = %1;", pID);
+  	queryDB(con, sql, function(err, result){
+  		if(err) throw err;
+  		con.end();
+  	});
+  	return res.status(200).sendFile(__dirname + '/admin');
+  });
 });
 
 //*********************************************************TESTIMONIALS*************************************************************
@@ -529,56 +581,62 @@ var testUpload = multer({
 
 //This is the version for editing the testimonials.
 app.post('/testimonialsPost/:id', (req,res)=>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	//Implement picture upload. I have a copy of this on my PP coursework.
-	testUpload(req,res, function(err){
+  auth(req,res,function(){
+  	var con = setupConnection("localhost", "root", "password", "blDB");
+  	//Implement picture upload. I have a copy of this on my PP coursework.
+  	testUpload(req,res, function(err){
 
-	var picPath = req.file.path;
-	var tID = req.params.id;
-	var name = req.body.name;
-	var content = req.body.content;
-	var sql = format("DELETE FROM testimonials WHERE idtestimonials = %1;", tID);
-	queryDB(con, sql, function(err,result){
-		if(err) throw err;
-		con.end();
-		var con1 = setupConnection("localhost", "root", "password", "blDB");
-		var sql = format("INSERT INTO testimonials (idtestimonials,name,content,photo) VALUES (%1,%2,%3,%4)", tID, name, content, picPath);
-		queryDB(con1,sql,function(err1,result1){
-			if(err1) throw err1;
-			con1.end();
-		});
-		//Using this on the client side could create JS to iterate over all posts.
+  	var picPath = req.file.path;
+  	var tID = req.params.id;
+  	var name = req.body.name;
+  	var content = req.body.content;
+  	var sql = format("DELETE FROM testimonials WHERE idtestimonials = %1;", tID);
+  	queryDB(con, sql, function(err,result){
+  		if(err) throw err;
+  		con.end();
+  		var con1 = setupConnection("localhost", "root", "password", "blDB");
+  		var sql = format("INSERT INTO testimonials (idtestimonials,name,content,photo) VALUES (%1,%2,%3,%4)", tID, name, content, picPath);
+  		queryDB(con1,sql,function(err1,result1){
+  			if(err1) throw err1;
+  			con1.end();
+  		});
+  		//Using this on the client side could create JS to iterate over all posts.
 
-		return res.status(200).sendFile(__dirname + '/adminPage.html')
-	});
+  		return res.status(200).sendFile(__dirname + '/admin')
+  	});
+  });
 });
 });
 app.post('/testimonialsPost', (req,res) =>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	//Implement picture upload. I have a copy of this on my PP coursework.
-	testUpload(req,res, function(err){
-		console.log(req.file);
-		var picPath = req.file.path;
-	var name = req.body.name;
-	var content = req.body.content;
-	var sql = format("INSERT INTO testimonials (name,content,photo) VALUES (%1,%2,%3)", name, content, picPath);
-	queryDB(con, sql, function(err, result){
-		if(err) throw err;
-		con.end();
-	});
-	return res.status(200).sendFile(__dirname + '/adminPage.html');
+  auth(req,res,function(){
+  	var con = setupConnection("localhost", "root", "password", "blDB");
+  	//Implement picture upload. I have a copy of this on my PP coursework.
+  	testUpload(req,res, function(err){
+  		console.log(req.file);
+  		var picPath = req.file.path;
+  	var name = req.body.name;
+  	var content = req.body.content;
+  	var sql = format("INSERT INTO testimonials (name,content,photo) VALUES (%1,%2,%3)", name, content, picPath);
+  	queryDB(con, sql, function(err, result){
+  		if(err) throw err;
+  		con.end();
+  	});
+  	return res.status(200).sendFile(__dirname + '/admin');
+  });
 });
 });
 //This would be triggered by clicking on the post in a list on the admin page. Scrollable region???
 app.post('/testimonialsDelete/:id', (req,res)=>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	var tID = req.params.id;
-	var sql = format("DELETE FROM testimonials WHERE idtestimonials = %1;", tID);
-	queryDB(con, sql, function(err, result){
-		if(err) throw err;
-		con.end();
-	});
-	return res.status(200).sendFile(__dirname + '/adminPage.html');
+  auth(req,res,function(){
+  	var con = setupConnection("localhost", "root", "password", "blDB");
+  	var tID = req.params.id;
+  	var sql = format("DELETE FROM testimonials WHERE idtestimonials = %1;", tID);
+  	queryDB(con, sql, function(err, result){
+  		if(err) throw err;
+  		con.end();
+  	});
+  	return res.status(200).sendFile(__dirname + '/admin');
+  });
 });
 
 /*app.post('/fileUpload', (req,res) => {
@@ -661,7 +719,7 @@ app.get('/eventsAll', (req, res)=>{
 		return res.send(result);
 	});
 });
-
+//Not entirely sure how this works so I've not added auth to them yet - Frank
 function fileUpload(con,file,id,editStatus){
 	if(String(file.mimetypes).includes("image")){
 		var fileName = file.name;
@@ -685,7 +743,7 @@ function fileUpload(con,file,id,editStatus){
 			}
 		});
 	} else {
-		return res.redirect(403,'/adminPage.htm');
+		return res.redirect(403,'/admin');
 	}
 }
 //This is the code for uploading pictures for the events
@@ -703,91 +761,97 @@ var eventUpload = multer({
 
 //This is the version for the editing events.
 app.post('/createEvent/:id', (req,res)=>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	eventUpload(req,res, function(err){
+  auth(req,res,function(){
+  	var con = setupConnection("localhost", "root", "password", "blDB");
+  	eventUpload(req,res, function(err){
 
 
-		//here also need to delete previous file, pull the event from the database and fs.unlink that file.
-	var eID = req.params.id;
-	var eventName = req.body.name;
-	var attendance = req.body.attendance;
-	var volunteerTotal = req.body.vTotal;
-	var volunteerMale = req.body.vMale;
-	var volunteerFemale = req.body.vFemale;
-	var date = req.body.date;
-	var description = req.body.description;
+  		//here also need to delete previous file, pull the event from the database and fs.unlink that file.
+  	var eID = req.params.id;
+  	var eventName = req.body.name;
+  	var attendance = req.body.attendance;
+  	var volunteerTotal = req.body.vTotal;
+  	var volunteerMale = req.body.vMale;
+  	var volunteerFemale = req.body.vFemale;
+  	var date = req.body.date;
+  	var description = req.body.description;
 
-	//This should work but needs further testing.
-	if(req.file){
-			var pPath = req.file.path;
-			var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, pPath = %6, description = %7, date = %8 WHERE idEvents = "+ eID+ ";", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath, description, date);
-		} else {
-			var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, description = %6, date = %7 WHERE idEvents = "+ eID+ ";", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description, date);
-		}
+  	//This should work but needs further testing.
+  	if(req.file){
+  			var pPath = req.file.path;
+  			var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, pPath = %6, description = %7, date = %8 WHERE idEvents = "+ eID+ ";", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath, description, date);
+  		} else {
+  			var sql = format("UPDATE events SET eventName = %1, attendance = %2, volunteerTotal = %3, volunteerMale = %4, volunteerFemale = %5, description = %6, date = %7 WHERE idEvents = "+ eID+ ";", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, description, date);
+  		}
 
-	queryDB(con, sql, function(err,result){
-		if(err) throw err;
-		con.end();
-		//Using this on the client side could create JS to iterate over all posts.
+  	queryDB(con, sql, function(err,result){
+  		if(err) throw err;
+  		con.end();
+  		//Using this on the client side could create JS to iterate over all posts.
 
-		return res.sendStatus(200);
-	});
+  		return res.sendStatus(200);
+  	});
+  });
 });
 });
 
 //This is the version for creating events.
 app.post('/createEvent', (req,res)=>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	eventUpload(req,res, function(err){
-		var pPath = req.file.path;
-	var eventName = req.body.name;
-	var attendance = req.body.attendance;
-	var volunteerTotal = req.body.vTotal;
-	var volunteerMale = req.body.vMale;
-	var volunteerFemale = req.body.vFemale;
-	var date = req.body.date;
-	//added this if in case there is no upload
-	console.log(req.body);
-	var description = req.body.description;
-	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (null,%1,%2,%3,%4,%5,%6,%7,%8)",eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale,pPath, description,date);
-	console.log(sql);
-	//add this: pPath.name, in sql before description
-	queryDB(con, sql, function(err,result){
-		if(err) throw err;
-		//Using this on the client side could create JS to iterate over all posts.
-		con.end()
-		return res.sendStatus(200);
-	})
-	});
+  auth(req,res,function(){
+  	var con = setupConnection("localhost", "root", "password", "blDB");
+  	eventUpload(req,res, function(err){
+  		var pPath = req.file.path;
+  	var eventName = req.body.name;
+  	var attendance = req.body.attendance;
+  	var volunteerTotal = req.body.vTotal;
+  	var volunteerMale = req.body.vMale;
+  	var volunteerFemale = req.body.vFemale;
+  	var date = req.body.date;
+  	//added this if in case there is no upload
+  	console.log(req.body);
+  	var description = req.body.description;
+  	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (null,%1,%2,%3,%4,%5,%6,%7,%8)",eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale,pPath, description,date);
+  	console.log(sql);
+  	//add this: pPath.name, in sql before description
+  	queryDB(con, sql, function(err,result){
+  		if(err) throw err;
+  		//Using this on the client side could create JS to iterate over all posts.
+  		con.end()
+  		return res.sendStatus(200);
+  	})
+  	});
+  });
 });
 
 app.post('/deleteEvent/:id', (req, res)=>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	var eID = req.params.id;
-	console.log(eID);
-	//Delete the event by ID
-	var sql = format("SELECT * FROM events WHERE idEvents = %1", parseInt(eID));
-	queryDB(con, sql, function(err,result){
-		if(err) throw err;
-		var eventName = result[0].eventName;
-		var attendance = result[0].attendance;
-		var volunteerTotal = result[0].volunteerTotal;
-		var volunteerMale = result[0].volunteerMale;
-		var volunteerFemale = result[0].volunteerFemale;
-		var pPath = result[0].pPath;
-		var description = result[0].description;
-		var date = result[0].date
-		var sql1 = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath,description);
-		queryDB(con, sql1, function(err1, result1){
-			if(err1) throw err1;
-			var sql2 = format("DELETE FROM events WHERE idEvents = %1", parseInt(eID));
-			queryDB(con, sql2, function(err2,result2){
-				if(err2) throw err2;
-				con.end();
-				return res.sendStatus(200);
-			});
-		});
-	});
+  auth(req,res,function(){
+  	var con = setupConnection("localhost", "root", "password", "blDB");
+  	var eID = req.params.id;
+  	console.log(eID);
+  	//Delete the event by ID
+  	var sql = format("SELECT * FROM events WHERE idEvents = %1", parseInt(eID));
+  	queryDB(con, sql, function(err,result){
+  		if(err) throw err;
+  		var eventName = result[0].eventName;
+  		var attendance = result[0].attendance;
+  		var volunteerTotal = result[0].volunteerTotal;
+  		var volunteerMale = result[0].volunteerMale;
+  		var volunteerFemale = result[0].volunteerFemale;
+  		var pPath = result[0].pPath;
+  		var description = result[0].description;
+  		var date = result[0].date
+  		var sql1 = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath,description);
+  		queryDB(con, sql1, function(err1, result1){
+  			if(err1) throw err1;
+  			var sql2 = format("DELETE FROM events WHERE idEvents = %1", parseInt(eID));
+  			queryDB(con, sql2, function(err2,result2){
+  				if(err2) throw err2;
+  				con.end();
+  				return res.sendStatus(200);
+  			});
+  		});
+  	});
+  });
 });
 
 //*********************************************************DATABASE*************************************************************
@@ -796,43 +860,45 @@ app.post('/deleteEvent/:id', (req, res)=>{
 //1st element is the list of tables in order
 //2nd element is the list of columns in the respective tables.
 app.get('/colSQL', (req, res)=>{
-	var cols = []
-	function addToCols(x){
-		cols.push(x);
-	}
-	function viewCols(){
-		return cols;
-	}
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	var tableSQL = "SHOW TABLES;"
-	queryDB(con, tableSQL, function(err,result,connection){
-		if(err) throw err;
-		var tables = []
-		for(var object in result){
-			tables.push(result[object]['Tables_in_bldb']);
-		}
-		var i = 1;
-		for(var object in tables){
-			var colSQL = "SHOW COLUMNS FROM " + tables[object];
-			//queryDB(con, colSQL, function(err1,result1){
-			connection.query(colSQL, function(err1,rows,fields){
-				if(err1) throw err1;
-				var columns = [];
-				for(var object1 in rows){
-					columns.push(rows[object1]['Field']);
-				}
-				addToCols(columns);
-				if(i == tables.length){
-					var finalCols = viewCols();
-					var result = {};
-					tables.forEach((table, i) => result[table] = finalCols[i]);
-					return res.status(200).send(result);
-				}
-				i+=1;
-			});
-		}
-		con.end()
-	});
+  auth(req,res,function(){
+  	var cols = []
+  	function addToCols(x){
+  		cols.push(x);
+  	}
+  	function viewCols(){
+  		return cols;
+  	}
+  	var con = setupConnection("localhost", "root", "password", "blDB");
+  	var tableSQL = "SHOW TABLES;"
+  	queryDB(con, tableSQL, function(err,result,connection){
+  		if(err) throw err;
+  		var tables = []
+  		for(var object in result){
+  			tables.push(result[object]['Tables_in_bldb']);
+  		}
+  		var i = 1;
+  		for(var object in tables){
+  			var colSQL = "SHOW COLUMNS FROM " + tables[object];
+  			//queryDB(con, colSQL, function(err1,result1){
+  			connection.query(colSQL, function(err1,rows,fields){
+  				if(err1) throw err1;
+  				var columns = [];
+  				for(var object1 in rows){
+  					columns.push(rows[object1]['Field']);
+  				}
+  				addToCols(columns);
+  				if(i == tables.length){
+  					var finalCols = viewCols();
+  					var result = {};
+  					tables.forEach((table, i) => result[table] = finalCols[i]);
+  					return res.status(200).send(result);
+  				}
+  				i+=1;
+  			});
+  		}
+  		con.end()
+  	});
+  });
 });
 //Called from a form and would take the following data:
 //* Type of query; INSERT, SELECT, UPDATE, DELETE,... (Use the form name: qType)
@@ -859,126 +925,129 @@ app.get('/colSQL', (req, res)=>{
 //The UPDATE query is very similar in setup to the INSERT query and should be supplied with
 //the data in the same way.
 app.all('/query', (req,res)=>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	//***QUERYBUILDERS***
-	//Conditions may be a JSON object which is passed to the function from the switch.
-	function selectQ(conditions){
-		//Table to perform the query on
-		var table = req.body.qtable;
-		var operators = req.body.operators;
-		var s = squel.select();
-		s.from(table);
-		//s.field(...)
-		//This for loop will give away the desired structurefor conditions.
-		var whereStream = ""
-		var i = 0;
-		for(var cond in conditions){
-			//Supply conditions in one list. Make sure the conditions are safe, legal statements on client-side.
-			//If more than one condition then second list "operators" will not be empty.
-			//This list will specify AND or OR between conditions.
-			if(conditions.length>1 && i > 0){
-				whereStream += " " + operators + " ";
-			}
-			whereStream += conditions[cond];
-			i+=1;
-		}
-		s.where(whereStream);
-		return s.toString();
-	}
-	function insertQ(fields, values){
-		var table = req.body.qtable;
-		var s = squel.insert();
-		s.into(table);
-		for(var i = 0; i<values.length; i++){
-      if(table == "accounts" && fields[i] == "password"){
-        s.set(fields[i], saltHashPassword(values[i]));
-      } else {
-        s.set(fields[i], values[i]);
-      }
-		}
-		return s.toString();
-	}
+  auth(req,res,function(){
+  	var con = setupConnection("localhost", "root", "password", "blDB");
+  	//***QUERYBUILDERS***
+  	//Conditions may be a JSON object which is passed to the function from the switch.
+  	function selectQ(conditions){
+  		//Table to perform the query on
+  		var table = req.body.qtable;
+  		var operators = req.body.operators;
+  		var s = squel.select();
+  		s.from(table);
+  		//s.field(...)
+  		//This for loop will give away the desired structurefor conditions.
+  		var whereStream = ""
+  		var i = 0;
+  		for(var cond in conditions){
+  			//Supply conditions in one list. Make sure the conditions are safe, legal statements on client-side.
+  			//If more than one condition then second list "operators" will not be empty.
+  			//This list will specify AND or OR between conditions.
+  			if(conditions.length>1 && i > 0){
+  				whereStream += " " + operators + " ";
+  			}
+  			whereStream += conditions[cond];
+  			i+=1;
+  		}
+  		s.where(whereStream);
+  		return s.toString();
+  	}
+  	function insertQ(fields, values){
+  		var table = req.body.qtable;
+  		var s = squel.insert();
+  		s.into(table);
+  		for(var i = 0; i<values.length; i++){
+        if(table == "accounts" && fields[i] == "password"){
+          s.set(fields[i], saltHashPassword(values[i]));
+        } else {
+          s.set(fields[i], values[i]);
+        }
+  		}
+  		return s.toString();
+  	}
 
-	function deleteQ(conditions){
-		var table = req.body.qtable;
-		var operators = req.body.operators;
-		var s = squel.delete();
-		s.from(table);
-		//This for loop will give away the desired structure for conditions.
-		var whereStream = ""
-		var i = 0;
-		for(var cond in conditions){
-			//Supply conditions in one list. Make sure the conditions are safe, legal statements on client-side.
-			//If more than one condition then second list "operators" will not be empty.
-			//This list will specify AND or OR between conditions.
-			if(conditions.length>1 && i > 0){
-				whereStream += " " + operators + " ";
-			}
-			whereStream += conditions[cond];
-			i+=1;
-		}
-		s.where(whereStream);
-		return s.toString();
-	}
-	function updateQ(fields, values, whereStream){
-		var table = req.body.qtable;
-		var s = squel.update();
-		s.table(table);
-		for(var i = 0; i<values.length; i++){
-			s.set(fields[i], values[i]);
-		}
-		s.where(whereStream);
-		return s.toString();
-	}
+  	function deleteQ(conditions){
+  		var table = req.body.qtable;
+  		var operators = req.body.operators;
+  		var s = squel.delete();
+  		s.from(table);
+  		//This for loop will give away the desired structure for conditions.
+  		var whereStream = ""
+  		var i = 0;
+  		for(var cond in conditions){
+  			//Supply conditions in one list. Make sure the conditions are safe, legal statements on client-side.
+  			//If more than one condition then second list "operators" will not be empty.
+  			//This list will specify AND or OR between conditions.
+  			if(conditions.length>1 && i > 0){
+  				whereStream += " " + operators + " ";
+  			}
+  			whereStream += conditions[cond];
+  			i+=1;
+  		}
+  		s.where(whereStream);
+  		return s.toString();
+  	}
+  	function updateQ(fields, values, whereStream){
+  		var table = req.body.qtable;
+  		var s = squel.update();
+  		s.table(table);
+  		for(var i = 0; i<values.length; i++){
+  			s.set(fields[i], values[i]);
+  		}
+  		s.where(whereStream);
+  		return s.toString();
+  	}
 
 
-	//Type of query is passed
-	var type = req.body.qtype;
-	//Switch based on type
-	switch(type){
-		case "SELECT":
-			//Get all the conditions together on the client side. The format required
-			//is given above in the selectQ function.
-			var conditions = req.body.conditions;
-			var query = selectQ(conditions);
-			queryDB(con, query, function(err,result){
-				return res.status(200).send(result);
-				con.end();
-			});
-			break;
-		case "INSERT":
-			//req.body.conditions is a list of lists
-			var fields = req.body.conditions[0];
-			var values = req.body.conditions[1];
-			var query = insertQ(fields, values);
-			queryDB(con, query, function(err,result){
-				return res.sendStatus(200);
-				con.end();
-			});
-			break;
-		case "UPDATE":
-			//req.body.conditions is a list of lists
-			var fields = req.body.conditions[0];
-			var values = req.body.conditions[1];
-			var withStream = req.body.conditions[2];
-			var query = updateQ(fields, values, withStream);
-			queryDB(con, query, function(err,result){
-				return res.sendStatus(200);
-				con.end();
-			});
-			break;
-		case "DELETE":
-			var conditions = req.body.conditions;
-			var query = deleteQ(conditions);
-			queryDB(con, query, function(err,result){
-				return res.sendStatus(200);
-				con.end();
-			});
-			break;
-	}
+  	//Type of query is passed
+  	var type = req.body.qtype;
+  	//Switch based on type
+  	switch(type){
+  		case "SELECT":
+  			//Get all the conditions together on the client side. The format required
+  			//is given above in the selectQ function.
+  			var conditions = req.body.conditions;
+  			var query = selectQ(conditions);
+  			queryDB(con, query, function(err,result){
+  				return res.status(200).send(result);
+  				con.end();
+  			});
+  			break;
+  		case "INSERT":
+  			//req.body.conditions is a list of lists
+  			var fields = req.body.conditions[0];
+  			var values = req.body.conditions[1];
+  			var query = insertQ(fields, values);
+  			queryDB(con, query, function(err,result){
+  				return res.sendStatus(200);
+  				con.end();
+  			});
+  			break;
+  		case "UPDATE":
+  			//req.body.conditions is a list of lists
+  			var fields = req.body.conditions[0];
+  			var values = req.body.conditions[1];
+  			var withStream = req.body.conditions[2];
+  			var query = updateQ(fields, values, withStream);
+  			queryDB(con, query, function(err,result){
+  				return res.sendStatus(200);
+  				con.end();
+  			});
+  			break;
+  		case "DELETE":
+  			var conditions = req.body.conditions;
+  			var query = deleteQ(conditions);
+  			queryDB(con, query, function(err,result){
+  				return res.sendStatus(200);
+  				con.end();
+  			});
+  			break;
+  	}
+  });
 });
 
 //*********************************************************ACCOUNTS*************************************************************
+//Not entirely sure how these work so I've not added auth to them yet - Frank
 app.post('/changePass', (req,res)=>{
 	if(typeof req.session.user !== "undefined"){
 		var con = setupConnection("localhost", "root", "password", "blDB");
@@ -1017,10 +1086,12 @@ app.get('/randomNonce', (req,res)=>{
 });
 //*************************************************************PRINT FUNCTION*******************************************************************************
 app.get('/tablesAll', (req, res) =>{
-	var con = setupConnection("localhost", "root", "password", "blDB");
-	getAllData(con, function(td){
-		res.status(200).send(td);
-	});
+  auth(req,res,function(){
+  	var con = setupConnection("localhost", "root", "password", "blDB");
+  	getAllData(con, function(td){
+  		res.status(200).send(td);
+  	});
+  });
 });
 //*********************************************************HOMEPAGE*************************************************************
 //CAROUSEL:View,add,delete content
@@ -1038,63 +1109,65 @@ app.get('/home/carousel', (req,res)=>{
 //parameter index and the file to be uploaded.
 //NEEDS authorisation
 app.post('/admin/addHomeCarousel', function(req,res){
-  var index = req.body.index;
-  var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
-  if (validFileExtensions.includes(path.extname(req.file))){
-    // Firstly rename all files of index i and above to maintain order
-    fs.readdirSync('./images/home', function(err,files){
-      for (i = files.length()-1; i <= index; i--){
-        var curFile = files[i];
-        fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
-      };
-      //set file upload name and path
-      var storage = multer.diskStorage({
-        destination: 'images/home/',
-        filename: function (req, file, cb) {
-          cb(null, index + path.extname(file.originalname));
-        }
-      });
-      var upload = multer({ storage: storage });
-      //new file is added to folder with index.fileExtension filename
-      upload.single('newFile', function(){
-        //REWRITE INFO.JSON
-        var newInfo = [];//new json
-        fs.readFile('./images/home/info.json', function(err, data){
-          if (err) throw err;
-          oldInfo = JSON.parse(data);
-          for (i=0; i<=oldInfo.length; i++){
-            if (i<index){//filename will be the same
-              var file = oldInfo[i];
-              newInfo.append(file);
-            }
-            else if (i==index) {
-              var newFilename = index + path.extname(file.originalname);
-              var newColor = req.body.color;
-              var newTitle = req.body.title;
-              var newSubtitle = req.body.subtitle;
-              var newFile ={
-                file: newFilename,
-                color: newColor,
-                title: newTitle,
-                subtitle: newSubtitle
-              };
-              newInfo.append(newFile);
-            }
-            else{
-              var updatedFilename = i + oldInfo[i].file.slice(0);
-              var file ={
-                file: updatedFilename,
-                color: oldInfo[i].color,
-                title: oldInfo[i].title,
-                subtitle: oldInfo[i].subtitle
-              };
-              newInfo.append(file);
-            };
-          };
-          var newInfoJSON = JSON.stringify(newInfo);
-          fs.writeFile("/images/home/info.json", newInfoJSON, function(err) {
+  auth(req,res,function(){
+    var index = req.body.index;
+    var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
+    if (validFileExtensions.includes(path.extname(req.file))){
+      // Firstly rename all files of index i and above to maintain order
+      fs.readdirSync('./images/home', function(err,files){
+        for (i = files.length()-1; i <= index; i--){
+          var curFile = files[i];
+          fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
+        };
+        //set file upload name and path
+        var storage = multer.diskStorage({
+          destination: 'images/home/',
+          filename: function (req, file, cb) {
+            cb(null, index + path.extname(file.originalname));
+          }
+        });
+        var upload = multer({ storage: storage });
+        //new file is added to folder with index.fileExtension filename
+        upload.single('newFile', function(){
+          //REWRITE INFO.JSON
+          var newInfo = [];//new json
+          fs.readFile('./images/home/info.json', function(err, data){
             if (err) throw err;
-            res.sendStatus(200);
+            oldInfo = JSON.parse(data);
+            for (i=0; i<=oldInfo.length; i++){
+              if (i<index){//filename will be the same
+                var file = oldInfo[i];
+                newInfo.append(file);
+              }
+              else if (i==index) {
+                var newFilename = index + path.extname(file.originalname);
+                var newColor = req.body.color;
+                var newTitle = req.body.title;
+                var newSubtitle = req.body.subtitle;
+                var newFile ={
+                  file: newFilename,
+                  color: newColor,
+                  title: newTitle,
+                  subtitle: newSubtitle
+                };
+                newInfo.append(newFile);
+              }
+              else{
+                var updatedFilename = i + oldInfo[i].file.slice(0);
+                var file ={
+                  file: updatedFilename,
+                  color: oldInfo[i].color,
+                  title: oldInfo[i].title,
+                  subtitle: oldInfo[i].subtitle
+                };
+                newInfo.append(file);
+              };
+            };
+            var newInfoJSON = JSON.stringify(newInfo);
+            fs.writeFile("/images/home/info.json", newInfoJSON, function(err) {
+              if (err) throw err;
+              res.sendStatus(200);
+            });
           });
         });
       });
@@ -1108,42 +1181,44 @@ app.post('/admin/addHomeCarousel', function(req,res){
 //Delete(index) - delete content at index
 //NEEDS authorisation
 app.post('/admin/deleteHomeCarousel', function(req,res){
-	var index = parseInt(req.body.index);
-  fs.readdir('./images/home', function(err, files){
-    console.log(files);
-    //files contains NumberOfPics + info.json
-    if (index>files.length-2 || index<0){
-      res.status(400).send("No file at index: " + index);
-      console.log("bad index");
-    }
-    else{
-      fs.unlink('./images/home/' + files[index], function(){
-        console.log("file deletion block");
-        //Rename all files of index i and above to maintain order.
-        console.log(index);
-        for (var i = index; i < files.length-2; i++){
-          console.log("renaming block");
-          var curFile = files[i+1];
-          console.log(curFile);
-          fs.renameSync("./images/home/" + curFile,"./images/home/" + i + path.extname(curFile));
-        };
-        //Update info.json
-        var info = JSON.parse(fs.readFileSync('./images/home/info.json', 'utf8'));
-        console.log(info);
-        //delete record of file at index
-        info.splice(index, 1);
-        //info.length changes after splice
-        //update record of files above index
-        for (var i=index; i < info.length; i++) {
-          info[i].file = i + path.extname(info[i].file);
-        };
-        fs.writeFile('./images/home/info.json', JSON.stringify(info), function (err) {
-          if (err) throw err;
-          console.log('Replaced info.json');
+  auth(req,res,function(){
+  	var index = parseInt(req.body.index);
+    fs.readdir('./images/home', function(err, files){
+      console.log(files);
+      //files contains NumberOfPics + info.json
+      if (index>files.length-2 || index<0){
+        res.status(400).send("No file at index: " + index);
+        console.log("bad index");
+      }
+      else{
+        fs.unlink('./images/home/' + files[index], function(){
+          console.log("file deletion block");
+          //Rename all files of index i and above to maintain order.
+          console.log(index);
+          for (var i = index; i < files.length-2; i++){
+            console.log("renaming block");
+            var curFile = files[i+1];
+            console.log(curFile);
+            fs.renameSync("./images/home/" + curFile,"./images/home/" + i + path.extname(curFile));
+          };
+          //Update info.json
+          var info = JSON.parse(fs.readFileSync('./images/home/info.json', 'utf8'));
+          console.log(info);
+          //delete record of file at index
+          info.splice(index, 1);
+          //info.length changes after splice
+          //update record of files above index
+          for (var i=index; i < info.length; i++) {
+            info[i].file = i + path.extname(info[i].file);
+          };
+          fs.writeFile('./images/home/info.json', JSON.stringify(info), function (err) {
+            if (err) throw err;
+            console.log('Replaced info.json');
+          });
         });
-      });
-    }
-  })
+      }
+    });
+  });
 });
 
 //*********************************************************ABOUT US*************************************************************
@@ -1158,9 +1233,11 @@ app.get('/aboutUsText', (req,res)=>{
 //Post request to update text
 //NEEDS authorisation
 app.post('/aboutUsText', (req,res)=>{
-	var content = fs.writeFile('./textContent/aboutUsText.txt', req.body.mainText, function(err, data) {
-  	if (err) throw err;
-    res.sendStatus(200);
+  auth(req,res,function(){
+  	var content = fs.writeFile('./textContent/aboutUsText.txt', req.body.mainText, function(err, data) {
+    	if (err) throw err;
+      res.sendStatus(200);
+    });
   });
 });
 //*********************************************************HOW WE CAN HELP*************************************************************
@@ -1182,16 +1259,20 @@ app.get('/howMore', (req,res)=>{
 //Post request to update text
 //NEEDS authorisation
 app.post('/howWeCanHelpText', (req,res)=>{
-	fs.writeFile('./textContent/howWeCanHelpText.txt', req.body.mainText, function(err, data) {
-  	if (err) throw err;
-    res.sendStatus(200);
-	});
+  auth(req,res,function(){
+  	fs.writeFile('./textContent/howWeCanHelpText.txt', req.body.mainText, function(err, data) {
+    	if (err) throw err;
+      res.sendStatus(200);
+  	});
+  });
 });
 app.post('/howMore', (req,res)=>{
-	fs.writeFile('./textContent/howWeCanHelpMoreText.txt', req.body.mainText, function(err, data) {
-  	if (err) throw err;
-    res.sendStatus(200);
-	});
+  auth(req,res,function(){
+  	fs.writeFile('./textContent/howWeCanHelpMoreText.txt', req.body.mainText, function(err, data) {
+    	if (err) throw err;
+      res.sendStatus(200);
+  	});
+  });
 });
 //*********************************************************VOLUNTEER*************************************************************
 //Get how do I apply tab text
@@ -1213,15 +1294,19 @@ app.get('/volMore', (req,res)=>{
 //Post request to update text
 //NEEDS authorisation
 app.post('/howDoIApplyText', (req,res)=>{
-	fs.writeFile('./textContent/howDoIApplyText.txt', req.body.mainText, function(err, data) {
-		if (err) throw err;
-    res.sendStatus(200);
-	});
+  auth(req,res,function(){
+  	fs.writeFile('./textContent/howDoIApplyText.txt', req.body.mainText, function(err, data) {
+  		if (err) throw err;
+      res.sendStatus(200);
+  	});
+  });
 });
 app.post('/volMore', (req,res)=>{
-	fs.writeFile('./textContent/volMore.txt', req.body.mainText, function(err, data) {
-  	if (err) throw err;
-    res.sendStatus(200);
+  auth(req,res,function(){
+  	fs.writeFile('./textContent/volMore.txt', req.body.mainText, function(err, data) {
+    	if (err) throw err;
+      res.sendStatus(200);
+    });
   });
 });
 //*********************************************************VIEW*************************************************************
@@ -1231,9 +1316,7 @@ var options = {
 	extensions:['css', 'js', 'png', 'json', 'html']
 };
 app.use(express.static('./', options));
-app.get('/', (req,res)=>{
-	return res.sendFile(__dirname+'/home.htm');
-});
+
 
 app.listen(80);
 module.exports = app;
