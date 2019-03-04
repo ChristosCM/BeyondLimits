@@ -176,10 +176,20 @@ ul.timeline > li:before {
 
 .carousel-item img {
 	object-fit: cover;
+	z-index: 4;
 }
 
 .carousel-item video {
 	object-fit: cover;
+	height: 670px;
+	z-index: -2;
+	left: 50%;
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, 0%);
+}
+
+.carousel-inner {
 	height: 670px;
 }
 
