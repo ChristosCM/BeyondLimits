@@ -1170,12 +1170,12 @@ app.post('/admin/addHomeCarousel', function(req,res){
             });
           });
         });
-      });
     });
   }
   else{
     res.status(400).send('This file type is not supported, try ".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"'); //filetype not supported
   }
+  });
 });
 
 //Delete(index) - delete content at index
