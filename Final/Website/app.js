@@ -176,7 +176,7 @@ app.post('/login', function (req, res) {
   var username = req.body.username;
   var con = setupConnection("localhost", "root", "password", "blDB");
   var sql = "SELECT * FROM accounts WHERE username='" + username + "';";
-  queryDB(con, sql, function(err, res){
+  queryDB(con, sql, function(err, resu){
     if(err) throw err;
     if(res.password == passHash) {
       req.session.user = username;
