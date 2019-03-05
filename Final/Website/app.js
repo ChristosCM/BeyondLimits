@@ -101,7 +101,7 @@ app.use(session({
   resave: true,
   saveUninitialized: false,
   cookie: {
-    secure: true,
+    secure: app.get('env') == 'production',
     maxAge: idleTimeoutSeconds * 1000
   },
   rolling: true
@@ -170,15 +170,13 @@ function auth(req, res, next) {
 
 
 app.post('/login', function (req, res) {
-  console.log(req.body);
-
   var passHash = saltHashPassword(req.body.password);
   var username = req.body.username;
   var con = setupConnection("localhost", "root", "password", "blDB");
   var sql = "SELECT * FROM accounts WHERE username='" + username + "';";
   queryDB(con, sql, function(err, resu){
     if(err) throw err;
-    if(resu.password == passHash) {
+    if(resu[0].password == passHash) {
       req.session.user = username;
       req.session.admin = true;
       res.redirect('/admin');
@@ -389,7 +387,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 //lookup alternative memory stores for production: MemoryStore() causes memory leak
-app.use(session({secret:"shhhhhhhhhhhh", resave:false, saveUninitialized:false, cookie: { secure: false }, user:{login:false, username: -1}}));
+//app.use(session({secret:"shhhhhhhhhhhh", resave:false, saveUninitialized:false, cookie: { secure: false }, user:{login:false, username: -1}}));
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 app.post('/volunteerEmail', (req, res)=>{
 	const transporter = nodemailer.createTransport({
