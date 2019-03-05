@@ -178,7 +178,7 @@ app.post('/login', function (req, res) {
   var sql = "SELECT * FROM accounts WHERE username='" + username + "';";
   queryDB(con, sql, function(err, resu){
     if(err) throw err;
-    if(res.password == passHash) {
+    if(resu.password == passHash) {
       req.session.user = username;
       req.session.admin = true;
       res.redirect('/admin');
