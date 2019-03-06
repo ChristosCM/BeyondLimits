@@ -1232,7 +1232,7 @@ app.get('/aboutUsText', (req,res)=>{
 //NEEDS authorisation
 app.post('/aboutUsText', (req,res)=>{
   auth(req,res,function(){
-  	var content = fs.writeFile('./textContent/aboutUsText.txt', req.body.mainText, function(err, data) {
+  	fs.writeFile('./textContent/aboutUsText.txt', req.body.mainText, function(err, data) {
     	if (err) throw err;
       res.sendStatus(200);
     });
