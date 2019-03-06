@@ -1308,6 +1308,34 @@ app.post('/volMore', (req,res)=>{
     });
   });
 });
+//*********************************************************FOOTER*************************************************************
+app.get('/footer', function(req,res){
+  fs.readFile('./textContent/footer.json', function(err, data){
+    object = JSON.parse(data);
+    res.json(object);
+    if (err) throw err;
+  });
+});
+
+app.post('/footer', function(req,res){
+  auth(req,res,function(){
+    var newMain = req.body.main;
+    var newEmail = req.body.email;
+    var newPhone = req.body.phone;
+    var newFacebook = req.body.facebook;
+    var newFile ={
+      main: newMain,
+      email: newEmail,
+      phone: newPhone,
+      facebook: newFacebook
+    };
+    var newJSON = JSON.stringify(newFile);
+    fs.writeFile("/textContent/footer.json", newJSON, function(err) {
+      if (err) throw err;
+      res.sendStatus(200);
+    });
+  });
+});
 //*********************************************************VIEW*************************************************************
 //Need to find a way to changepass page.
 app.set('view engine', 'html');

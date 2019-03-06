@@ -10,35 +10,40 @@ $(window).on("load",function(){
   });
 });
 $(window).on("load",function(){
-    $("#editoraboutus").editor({
-      uiLibrary: 'bootstrap4'
-    });
+  $("#editoraboutus").editor({
+    uiLibrary: 'bootstrap4'
   });
-  $(window).on("load",function() {
-    $("#editorhome").editor({
-      uiLibrary: 'bootstrap4'
-    });
+});
+$(window).on("load",function() {
+  $("#editorhome").editor({
+    uiLibrary: 'bootstrap4'
   });
-  $(window).on("load",function(){
-    $("#editorHowWe").editor({
-      uiLibrary: 'bootstrap4'
-    });
+});
+$(window).on("load",function(){
+  $("#editorHowWe").editor({
+    uiLibrary: 'bootstrap4'
   });
-  $(window).on("load",function(){
-    $("#editorMore").editor({
-      uiLibrary: 'bootstrap4'
-    });
+});
+$(window).on("load",function(){
+  $("#editorMore").editor({
+    uiLibrary: 'bootstrap4'
   });
-  $(window).on("load",function(){
-    $("#editorVol").editor({
-      uiLibrary: 'bootstrap4'
-    });
+});
+$(window).on("load",function(){
+  $("#editorVol").editor({
+    uiLibrary: 'bootstrap4'
   });
-  $(window).on("load",function() {
-    $("#editorVolMore").editor({
-      uiLibrary: 'bootstrap4'
-    });
+});
+$(window).on("load",function() {
+  $("#editorVolMore").editor({
+    uiLibrary: 'bootstrap4'
   });
+});
+$(window).on("load",function() {
+  $("#footerEditor").editor({
+    uiLibrary: 'bootstrap4'
+  });
+});
   $(window).on("load",function(){
     $.ajax({
         url: "/howWeCanHelpText",
@@ -197,7 +202,7 @@ $(window).on("load",function(){
             success(){
                 if(!alert("More Information (on Volunteer) section has been altered")){window.location.reload();}
                 if(!alert()){window.location.reload();}
-                
+
             },
             error(){
                 alert("There was an error updating the section")
@@ -206,4 +211,51 @@ $(window).on("load",function(){
         });
     }
     });
+});
+//populate current content of footer editor
+$(window).on("load",function() {
+  $.ajax({
+    url: "/footer",
+    type: "GET",
+    datatype:"json",
+    success(data){
+      var mainHTML = data.main;
+      var emailAddress = data.email;
+      var phoneNumber = data.phone;
+      var facebookLink = data.facebook;
+      $("#footerEditor").editor().content(mainHTML);
+      $("#footerEmail").val(emailAddress);
+      $("#footerPhone").val(phoneNumber);
+      $("#footerFacebook").val(facebookLink);
+    }
+  })
+});
+$(window).on("load",function(){
+  $("#submitFooterForm").submit(function(e){
+    console.log(1);
+    e.preventDefault();
+    var newMain = $("#footerEditor").val();
+    var newEmail = $("#footerEmail").val();
+    var newPhone = $("#footerPhone").val();
+    var newFacebook = $("#footerFacebook").val();
+    //maybe add if for empty, but they might want it empty
+    if (confirm('Are you sure you want to change the Footer section?')){
+      $.ajax({
+        url: "/footer",
+        type: "post",
+        data: {
+          main: newMain,
+          email: newEmail,
+          phone: newPhone,
+          facebook: newFacebook
+        },
+        success(){
+          if(!alert("Footer section has been altered")){window.location.reload();}
+        },
+        error(){
+          alert("There was an error updating the section")
+        }
+      });
+    }
+  });
 });
