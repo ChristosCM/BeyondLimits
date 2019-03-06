@@ -158,7 +158,6 @@ app.get('/tables.html', function (req,res){
   });
 });
 
-
 //*********************************************************AUTHORISATION/AUTHENTICATION*************************************************************
 //To be called by any function requiring authentication
 function auth(req, res, next) {
@@ -168,7 +167,6 @@ function auth(req, res, next) {
     return res.redirect('/login');
 };
 
-
 app.post('/login', function (req, res) {
   var passHash = saltHashPassword(req.body.password);
   var username = req.body.username;
@@ -176,6 +174,9 @@ app.post('/login', function (req, res) {
   var sql = "SELECT * FROM accounts WHERE username='" + username + "';";
   queryDB(con, sql, function(err, resu){
     if(err) throw err;
+    if (resu.length == 0){
+      res.sendStatus(403); //handles non existant usernames
+    };
     if(resu[0].password == passHash) {
       req.session.user = username;
       req.session.admin = true;
@@ -189,11 +190,11 @@ app.post('/login', function (req, res) {
 });
 app.get('/logout', function (req, res) {
   req.session.destroy();
-  res.send("Logout successful");
+  res.redirect('/login');
 });
 //Function to get current session username for the "Logged in as $ADMIN$" text
 app.get('/user', function(req,res){
-	res.send(req.session.username);
+	res.send(JSON.stringify(req.session.username));
 });
 
 //*********************************************************STATISTICS*************************************************************
