@@ -391,7 +391,7 @@ function blogPost(){
   var title =  $("#beditort").val();
   var content = $("#beditor").val();
   $.ajax({
-    url:'http://localhost:80/blogPost/',
+    url:'/blogPost/',
     type: 'POST',
     data: {"title": title, "content": content},
     datatype: 'json',

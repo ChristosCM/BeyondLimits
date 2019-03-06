@@ -29,7 +29,7 @@ function readMoreTest(id){
 }
 $(window).on("load",function(){
     $.ajax({
-        url:'http://localhost:80/blogShow',
+        url:'/blogShow',
         type: 'GET',
         datatype: 'json',
         success: (posts)=>{
