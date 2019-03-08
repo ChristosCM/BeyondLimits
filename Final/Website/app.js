@@ -1344,6 +1344,6 @@ var options = {
 };
 app.use(express.static('./', options));
 
-
-app.listen(80);
+var port = process.env.PORT || 80
+app.listen(port);
 module.exports = app;
