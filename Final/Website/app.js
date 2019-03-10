@@ -23,13 +23,16 @@ const path = require('path');//used in handling filesystem
 function setupConnection(host, user, password, database){
 	var con = mysql.createPool({
 		connectionLimit:10,
-		host: host,
-		user: user,
-		password: password,
-		database: database
+    database: 'bldb',
+		host: process.env.RDS_HOSTNAME,
+		user: process.env.RDS_USERNAME,
+		password: 'hellotest',//process.env.RDS_PASSWORD,
+    port: process.env.RDS_PORT
+		//database: database
 	});
 	return con;
 }
+
 
 
 function queryDB(con, sql, callback){
