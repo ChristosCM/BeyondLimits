@@ -144,12 +144,12 @@ app.get('/tables', function (req,res){
   	return res.sendFile(__dirname+'/tables.html');
   });
 });
-//this should stop access to the static file for the admin page
-// app.get('/adminPage.html', function (req,res){
-//   auth(req,res,function(){
-//     return res.sendFile(__dirname+'/adminPage.html');
-//   });
-// });
+// this should stop access to the static file for the admin page
+app.get('/adminPage.html', function (req,res){
+  auth(req,res,function(){
+    return res.sendFile(__dirname+'/adminPage.html');
+  });
+});
 app.get('/adminPage', function (req,res){
   auth(req,res,function(){
     return res.sendFile(__dirname+'/adminPage.html');
