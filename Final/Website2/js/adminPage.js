@@ -49,6 +49,15 @@ $.ajax({
 		}
 	}
 });
+$.ajax({
+	url:'/user',
+	type: 'GET',
+	datatype: 'json',
+	success: (username)=>{
+		console.log(username);
+		$("#logUsername").text("Logged in as " + username);
+	}
+});
 });
 //ajax to post the blog from the admin tab: Blog
 $(window).on("load",function(){

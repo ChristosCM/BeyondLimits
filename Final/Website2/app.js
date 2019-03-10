@@ -23,14 +23,16 @@ const path = require('path');//used in handling filesystem
 function setupConnection(host, user, password, database){
 	var con = mysql.createPool({
 		connectionLimit:10,
+    database: 'bldb',
 		host: process.env.RDS_HOSTNAME,
 		user: process.env.RDS_USERNAME,
-		password: process.env.RDS_PASSWORD,
+		password: 'hellotest',//process.env.RDS_PASSWORD,
     port: process.env.RDS_PORT
 		//database: database
 	});
 	return con;
 }
+
 
 
 function queryDB(con, sql, callback){
@@ -159,7 +161,6 @@ app.get('/tables.html', function (req,res){
   });
 });
 
-
 //*********************************************************AUTHORISATION/AUTHENTICATION*************************************************************
 //To be called by any function requiring authentication
 function auth(req, res, next) {
@@ -169,7 +170,6 @@ function auth(req, res, next) {
     return res.redirect('/login');
 };
 
-
 app.post('/login', function (req, res) {
   var passHash = saltHashPassword(req.body.password);
   var username = req.body.username;
@@ -177,6 +177,9 @@ app.post('/login', function (req, res) {
   var sql = "SELECT * FROM accounts WHERE username='" + username + "';";
   queryDB(con, sql, function(err, resu){
     if(err) throw err;
+    if (resu.length == 0){
+      res.sendStatus(403); //handles non existant usernames
+    };
     if(resu[0].password == passHash) {
       req.session.user = username;
       req.session.admin = true;
@@ -190,11 +193,11 @@ app.post('/login', function (req, res) {
 });
 app.get('/logout', function (req, res) {
   req.session.destroy();
-  res.send("Logout successful");
+  res.redirect('/login');
 });
 //Function to get current session username for the "Logged in as $ADMIN$" text
 app.get('/user', function(req,res){
-	res.send(req.session.username);
+	res.send(JSON.stringify(req.session.username));
 });
 
 //*********************************************************STATISTICS*************************************************************
@@ -1308,6 +1311,34 @@ app.post('/volMore', (req,res)=>{
     });
   });
 });
+//*********************************************************FOOTER*************************************************************
+app.get('/footer', function(req,res){
+  fs.readFile('./textContent/footer.json', function(err, data){
+    object = JSON.parse(data);
+    res.json(object);
+    if (err) throw err;
+  });
+});
+
+app.post('/footer', function(req,res){
+  auth(req,res,function(){
+    var newMain = req.body.main;
+    var newEmail = req.body.email;
+    var newPhone = req.body.phone;
+    var newFacebook = req.body.facebook;
+    var newFile ={
+      main: newMain,
+      email: newEmail,
+      phone: newPhone,
+      facebook: newFacebook
+    };
+    var newJSON = JSON.stringify(newFile);
+    fs.writeFile("/textContent/footer.json", newJSON, function(err) {
+      if (err) throw err;
+      res.sendStatus(200);
+    });
+  });
+});
 //*********************************************************VIEW*************************************************************
 //Need to find a way to changepass page.
 app.set('view engine', 'html');
@@ -1316,6 +1347,6 @@ var options = {
 };
 app.use(express.static('./', options));
 
-var port = process.env.PORT || 80
+var port = process.env.PORT || 8080
 app.listen(port);
 module.exports = app;
