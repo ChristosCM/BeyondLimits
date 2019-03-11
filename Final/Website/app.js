@@ -24,11 +24,11 @@ function setupConnection(host, user, password, database){
 	var con = mysql.createPool({
 		connectionLimit:10,
     database: 'bldb',
-		host: process.env.RDS_HOSTNAME,
-		user: process.env.RDS_USERNAME,
-		password: 'hellotest',//process.env.RDS_PASSWORD,
-    port: process.env.RDS_PORT
-		//database: database
+		host: host,
+		user: user,
+		password: password,
+    		port: 3306,
+		database: database
 	});
 	return con;
 }
@@ -1347,6 +1347,6 @@ var options = {
 };
 app.use(express.static('./', options));
 
-var port = process.env.PORT || 8080
+var port = 8080
 app.listen(port);
 module.exports = app;
