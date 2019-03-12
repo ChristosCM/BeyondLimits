@@ -1,0 +1,95 @@
+U1- Online help form
+A web-bound form filled in using text inputs (email address, name, age,
+comments) and tick boxes (for what help the user needs). Only one box may
+be ticked. The filled-in form will be automatically sent through email to the
+client when a “submit” button is pressed and an email confirming a
+successful submission will be sent to the email address given, if the email
+given is valid.
+
+Tick boxes were not used, instead a message box is used to send all the information of what someone might need from the charity
+
+
+
+U2- Access/Menu Bar
+A collection of links at the top of every webpage, featuring hyperlinks to all
+main public webpages (e.g. Home, FAQ, How we can help, etc.). Hyperlink
+text will change shade/colour when hovered over.
+
+Nav bar fully implemented, furthermore quick links are included in the footer
+
+
+
+U7- Donation Button
+A button that when pressed will take the user to a donation menu allowing
+them to choose their method of donation (e.g. PayPal).
+
+Only one method (PayPal) is implemented as it is safest to employ
+
+
+
+AD1- Add Record to Database
+The Admin will have the ability to add a new record to any table in the
+database.
+
+Fully implemented, adding an admin account add the hash of the password rather than plain text
+
+
+AD2- Delete Record to Database
+The Admin will have the ability to delete any record from either database.
+
+Fully implemented
+
+
+
+AD3- Database Table Search
+The Admin will have the ability to search in any given field, and will be
+presented with all records that match what they have searched for. They will
+be able to search using multiple table fields at once to make the search more
+specific.
+
+Fully implemented
+
+
+
+AD7- Database Edit
+The Admin will have the ability to edit any record in the database.
+
+Fully implemented, admin accounts can be edited from a separate interface for security reasons
+
+
+
+AW2- Add post (“upcoming events”)
+The Admin will be able to add posts to the “upcoming events” section of the
+website including text (necessary), image and video (if desired), and a date
+(necessary).
+
+Fully implemented
+
+
+
+AW3- Delete Post (“upcoming events”)
+The Admin will be able to delete posts from the “upcoming events” section
+of the website. Each post will include an “X” icon that when clicked will
+cause a message prompt asking if the admin is sure they want to deleted the
+post with the buttons “Yes” and “No”. If they press “Yes” the post is
+removed from the website and otherwise the post is kept on the website.
+
+Implemented, details slightly differ from requirements but achieve the same result
+
+
+
+AW8- Message Prompt
+When certain “high-risk” actions are being performed on the webpages, a
+message prompt will appear before they can proceed asking whether or not
+they are sure they want to proceed. Each Prompt will have two buttons;
+“yes” and “no”. By pressing “no” the activity is cancelled, by pressing “yes”
+the activity proceeds.
+
+Implemented, details slightly differ from requirements but achieve the same result
+
+NOT IMPLEMENTED
+AD4- Add Field to Database Table *
+AD5- Delete Field from Database Table *
+AD6- Database Table Sort * 
+AW4- Auto-delete (“upcoming events”)*
+AW5- Auto-sort (“upcoming events”)*

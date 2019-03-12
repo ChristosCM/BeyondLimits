@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const MemoryStore = require('memorystore')(session)
 const bodyParser = require('body-parser');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
@@ -107,6 +108,9 @@ app.use(session({
     secure: app.get('env') == 'production',
     maxAge: idleTimeoutSeconds * 1000
   },
+  store: new MemoryStore({
+      checkPeriod: idleTimeoutSeconds * 1000 //check to delete session periodically
+    }),
   rolling: true
 }));
 //*********************************************************WEBPAGE ROUTES*************************************************************
