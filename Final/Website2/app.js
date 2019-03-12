@@ -105,7 +105,8 @@ app.use(session({
   resave: true,
   saveUninitialized: false,
   cookie: {
-    secure: app.get('env') == 'production',
+    secure: false,
+    //app.get('env') == 'production',
     maxAge: idleTimeoutSeconds * 1000
   },
   store: new MemoryStore({
