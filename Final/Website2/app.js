@@ -107,7 +107,9 @@ app.use(session({
   cookie: {
     secure: false,
     //app.get('env') == 'production',
-    maxAge: idleTimeoutSeconds * 1000
+    maxAge: idleTimeoutSeconds * 1000,
+    user: null,
+    admin: null
   },
   store: new MemoryStore({
       checkPeriod: idleTimeoutSeconds * 1000 //check to delete session periodically
