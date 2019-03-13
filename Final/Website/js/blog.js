@@ -56,8 +56,14 @@ $(window).on("load",function(){
                 var dotsid = "Tdots"+id;
                 var preview = posts[i].content.substr(0,20);
                 var rest = posts[i].content.substr(20,);
+				if (posts[i].photo == "/img/src") {
+					$("#testlist").append('<li><div class="d-block container"><div class="media" style = "float:left;"><div class="media-left media-middle"><img class="rounded-circle" src="images/blog/ppexample.png" alt="Testimonial" height = 150px width = 150px></div></div><div class="media-body"><h4 class="media-heading"><a target="_blank" href="#">'+posts[i].name+ '</a></h4><p>'+preview+'<span id="'+dotsid+'"style="display: inline;">...</span><span id="'+moreid+'"style="display: none;">'+rest+'</span></p><button class="btn btn-info btn-sm"onclick="readMoreTest('+id+')" id="'+btnid+'">Read more</button></div></div></li>');
 
-                $("#testlist").append('<div class="media" style = "float:left;"><div class="media-left media-middle"><a href="#"><img class="img-circle" src="'+posts[i].photo+'" alt="Testimonial" height = 100, width = 100></a></div></div><div class="media-body"><h4 class="media-heading"><li><a target="_blank" href="#">'+posts[i].name+ '</a></h4><p>'+preview+'<span id="'+dotsid+'"style="display: inline;">...</span><span id="'+moreid+'"style="display: none;">'+rest+'</span></p><button class="btn btn-info btn-sm"onclick="readMoreTest('+id+')" id="'+btnid+'">Read more</button></div></li>');
+				}
+				else {
+					$("#testlist").append('<li><div class="d-block container"><div class="media" style = "float:left;"><div class="media-left media-middle"><img class="rounded-circle" src="'+posts[i].photo+'" alt="Testimonial" height = 150px width = 150px></div></div><div class="media-body"><h4 class="media-heading"><a target="_blank" href="#">'+posts[i].name+ '</a></h4><p>'+preview+'<span id="'+dotsid+'"style="display: inline;">...</span><span id="'+moreid+'"style="display: none;">'+rest+'</span></p><button class="btn btn-info btn-sm"onclick="readMoreTest('+id+')" id="'+btnid+'">Read more</button></div></div></li>');
+
+				}
             }
         }
     });

@@ -193,6 +193,21 @@ ul.timeline > li:before {
 	height: 670px;
 }
 
+#testlist img {
+	object-fit: cover;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+#testlist .d-block {
+	height: 150px;
+}
+
+#testlist button {
+	position: absolute;
+	margin-bottom: 5px;
+}
+
 .events{
     height:250px;
     /*width:300px;*/
