@@ -4,10 +4,10 @@ const nodemailer = require('nodemailer');
 const express = require('express');
 const app = express();
 const session = require('express-session');
-const MemoryStore = require('memorystore')(session)
+const MemoryStore = require('memorystore')(session);
 const bodyParser = require('body-parser');
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 const mysql = require('mysql');
 const squel = require("squel");
 const fs = require('fs');
@@ -140,10 +140,14 @@ app.get('/login', function (req,res){
   if (req.session.cookie.admin){
     return res.redirect('/admin');
   }
-	return res.sendFile(__dirname+'/login.htm');
+  else{
+  	return res.sendFile(__dirname+'/login.htm');
+  }
 });
 app.get('/admin', function (req,res){
+  console.log(req.session);
   auth(req,res,function(){
+    console.log("inside auth " + req.session);
     return res.sendFile(__dirname+'/adminPage.html');
   });
 });
@@ -1341,7 +1345,7 @@ app.post('/footer', function(req,res){
       facebook: newFacebook
     };
     var newJSON = JSON.stringify(newFile);
-    fs.writeFile("/textContent/footer.json", newJSON, function(err) {
+    fs.writeFile("./textContent/footer.json", newJSON, function(err) {
       if (err) throw err;
       res.sendStatus(200);
     });
