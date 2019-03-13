@@ -137,6 +137,9 @@ app.get('/blog', function (req,res){
 	return res.sendFile(__dirname+'/blog.html');
 });
 app.get('/login', function (req,res){
+  if (req.session.cookie.admin){
+    return res.redirect('/admin');
+  }
 	return res.sendFile(__dirname+'/login.htm');
 });
 app.get('/admin', function (req,res){
@@ -169,7 +172,7 @@ app.get('/tables.html', function (req,res){
 //*********************************************************AUTHORISATION/AUTHENTICATION*************************************************************
 //To be called by any function requiring authentication
 function auth(req, res, next) {
-  if (req.session.admin)
+  if (req.session.cookie.admin)
     return next();
   else
     return res.redirect('/login');
@@ -186,8 +189,8 @@ app.post('/login', function (req, res) {
       res.sendStatus(403); //handles non existant usernames
     };
     if(resu[0].password == passHash) {
-      req.session.user = username;
-      req.session.admin = true;
+      req.session.cookie.user = username;
+      req.session.cookie.admin = true;
       res.redirect('/admin');
     }
     else{
@@ -202,7 +205,7 @@ app.get('/logout', function (req, res) {
 });
 //Function to get current session username for the "Logged in as $ADMIN$" text
 app.get('/user', function(req,res){
-	res.send(JSON.stringify(req.session.username));
+	res.send(JSON.stringify(req.session.cookie.user));
 });
 
 //*********************************************************STATISTICS*************************************************************
@@ -1056,7 +1059,7 @@ app.all('/query', (req,res)=>{
 //*********************************************************ACCOUNTS*************************************************************
 //Not entirely sure how these work so I've not added auth to them yet - Frank
 app.post('/changePass', (req,res)=>{
-	if(typeof req.session.user !== "undefined"){
+	if(typeof req.session.cookie.user !== "undefined"){
 		var con = setupConnection("localhost", "root", "password", "blDB");
 		var op = req.headers.op;
 		var np = req.headers.np;
