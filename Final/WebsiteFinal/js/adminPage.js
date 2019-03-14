@@ -247,6 +247,7 @@ function eventEdit(id){
       $('#volunteersFemale').val(event.volunteerFemale);
       $("#eventSubmit").hide();
       $('#divEventEdit').html('<button class="btn btn-info" onclick="eventEditPost('+id+')">Edit Event</button>');
+      $("#eventsCreate").collapse('show');
 
     }
   })
