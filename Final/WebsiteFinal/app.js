@@ -1141,7 +1141,7 @@ var upload = multer({
   //   }
   //   cb(null, true)
   // }
-});
+}).single('carImage');
 app.post('/admin/addHomeCarousel', function(req,res){
   //set file upload name and path
 
@@ -1155,7 +1155,7 @@ app.post('/admin/addHomeCarousel', function(req,res){
         fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
       };
       //new file is added to folder with index.fileExtension filename
-      upload.single('carImage', function(){
+      upload.single(req,res, function(err){
         //REWRITE INFO.JSON
         var newInfo = [];//new json
         fs.readFile('./images/home/info.json', function(err, data){
