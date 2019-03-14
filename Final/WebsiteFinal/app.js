@@ -1145,12 +1145,12 @@ app.post('/admin/addHomeCarousel', function(req,res){
       });
       var upload = multer({
         storage: storage,
-        fileFilter: function (req, file, cb) {
-          if (!validFileExtensions.includes(path.extname(file.originalname))){
-            return cb(new Error('Only ".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4" files are allowed'))
-          }
-          cb(null, true)
-        }
+        // fileFilter: function (req, file, cb) {
+        //   if (!validFileExtensions.includes(path.extname(file.originalname))){
+        //     return cb(new Error('Only ".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4" files are allowed'))
+        //   }
+        //   cb(null, true)
+        // }
       });
       //new file is added to folder with index.fileExtension filename
       upload.single('newFile', function(){
