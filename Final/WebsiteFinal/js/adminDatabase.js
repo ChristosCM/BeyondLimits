@@ -84,7 +84,7 @@ function query(){
     var table = "`"+$("#tables").val()+"`";
     var type = $("#type").val();
 
- 
+
     if (type=="SELECT"){
         var column = ["`"+$("#selectOptions1").val()+"`","`"+$("#selectOptions2").val()+"`"];
         var text1 = $("#selectText").val();
@@ -108,7 +108,7 @@ function query(){
                 values.push(column[1]+"='"+text2+"'");
             }else{
                 values.push(column[1]+'='+text2);
-            }        
+            }
         }
 
         $.ajax({
@@ -147,7 +147,7 @@ function query(){
                     $("#insertText"+i).val().select();
                 }
             }
-            if (counter = 0){
+            if (counter == 0){
             if (confirm("Are you sure you want to Insert information in: "+tableNorm+" ?")){
             $.ajax({
                 url: "/query",
@@ -168,7 +168,7 @@ function query(){
             }
         });
 
-        
+
         //if delete is selected as the type
     }else if (type =="DELETE"){
 
@@ -192,7 +192,7 @@ function query(){
                 values.push(column[1]+"='"+text2+"'");
             }else{
                 values.push(column[1]+'='+text2);
-            }        
+            }
         }
         if (confirm('Are you sure you want to delete from the database?')) {
             $.ajax({
@@ -201,22 +201,22 @@ function query(){
                 data: {"qtable": table,"qtype": type,"operators": operator, "conditions": values},
                 success(content){
                     if(!alert("The items have been deleted")){window.location.reload();}
-            
+
                 },
                 error(err){
                     console.log(err);
                     alert("There was an error processing your request");
                 }
-    
-    
+
+
             })
         } else {
             // Do nothing!
         }
 
-        
+
     }
-                
+
     //need to add the delete function
 }
 //function to get table columns from the database and call the appropriate functon based on the type of query that they want to run
@@ -235,12 +235,12 @@ function query(){
                 deleteFn(data[table]);
             }else if (type == "INSERT"){
                 insert(data[table]);
-            } 
+            }
         },
         error(error){
             alert("There was an error: "+ error);
         }
-    
+
     })
 }
 // $(document).ready(function(){
@@ -250,7 +250,7 @@ function query(){
 //         query()
 //     })
 // })
-//these functions have to do with the graphs in statistics 
+//these functions have to do with the graphs in statistics
 //initialising the options
 $(window).on("load",function(){
    $("#monthsDrop").attr("selected","selected");
@@ -260,7 +260,7 @@ $(window).on("load",function(){
     $("#p2").attr("disabled","disabled");
     $("#p3").attr("disabled","disabled");
     $("#p4").attr("disabled","disabled");
-    
+
 
     plotSet();
 });
@@ -273,7 +273,7 @@ function plotSet(){
         $("#p2").attr("disabled","disabled");
         $("#p3").attr("disabled","disabled");
         $("#p4").attr("disabled","disabled");
-        
+
 
     }else if($("#eventsDrop").prop("selected")){
         $("#p1").removeAttr("disabled","disabled");

@@ -854,7 +854,7 @@ app.post('/deleteEvent/:id', (req, res)=>{
   		var pPath = result[0].pPath;
   		var description = result[0].description;
   		var date = result[0].date
-  		var sql1 = format("INSERT INTO eventsArchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath,description);
+  		var sql1 = format("INSERT INTO eventsarchive (eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (%1,%2,%3,%4,%5,%6,%7,%8)", eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale, pPath,description);
   		queryDB(con, sql1, function(err1, result1){
   			if(err1) throw err1;
   			var sql2 = format("DELETE FROM events WHERE idEvents = %1", parseInt(eID));

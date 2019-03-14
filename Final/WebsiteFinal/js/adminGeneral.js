@@ -232,7 +232,6 @@ $(window).on("load",function() {
 });
 $(window).on("load",function(){
   $("#submitFooterForm").submit(function(e){
-    console.log(1);
     e.preventDefault();
     var newMain = $("#footerEditor").val();
     var newEmail = $("#footerEmail").val();
