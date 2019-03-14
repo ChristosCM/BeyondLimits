@@ -1130,69 +1130,72 @@ app.post('/admin/addHomeCarousel', function(req,res){
   auth(req,res,function(){
     var index = req.body.index;
     var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
-    if (validFileExtensions.includes(path.extname(req.file))){
-      // Firstly rename all files of index i and above to maintain order
-      fs.readdirSync('./images/home', function(err,files){
-        for (i = files.length()-1; i <= index; i--){
-          var curFile = files[i];
-          fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
-        };
-        //set file upload name and path
-        var storage = multer.diskStorage({
-          destination: 'images/home/',
-          filename: function (req, file, cb) {
-            cb(null, index + path.extname(file.originalname));
+    // Firstly rename all files of index i and above to maintain order
+    fs.readdirSync('./images/home', function(err,files){
+      for (i = files.length()-1; i <= index; i--){
+        var curFile = files[i];
+        fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
+      };
+      //set file upload name and path
+      var storage = multer.diskStorage({
+        destination: 'images/home/',
+        filename: function (req, file, cb) {
+          cb(null, index + path.extname(file.originalname));
+        }
+      });
+      var upload = multer({
+        storage: storage,
+        fileFilter: function (req, file, cb) {
+          if (!validFileExtensions.includes(path.extension(file.originalname))){
+            return cb(new Error('Only pdfs are allowed'))
           }
-        });
-        var upload = multer({ storage: storage });
-        //new file is added to folder with index.fileExtension filename
-        upload.single('newFile', function(){
-          //REWRITE INFO.JSON
-          var newInfo = [];//new json
-          fs.readFile('./images/home/info.json', function(err, data){
-            if (err) throw err;
-            oldInfo = JSON.parse(data);
-            for (i=0; i<=oldInfo.length; i++){
-              if (i<index){//filename will be the same
-                var file = oldInfo[i];
-                newInfo.append(file);
-              }
-              else if (i==index) {
-                var newFilename = index + path.extname(file.originalname);
-                var newColor = req.body.color;
-                var newTitle = req.body.title;
-                var newSubtitle = req.body.subtitle;
-                var newFile ={
-                  file: newFilename,
-                  color: newColor,
-                  title: newTitle,
-                  subtitle: newSubtitle
-                };
-                newInfo.append(newFile);
-              }
-              else{
-                var updatedFilename = i + oldInfo[i].file.slice(0);
-                var file ={
-                  file: updatedFilename,
-                  color: oldInfo[i].color,
-                  title: oldInfo[i].title,
-                  subtitle: oldInfo[i].subtitle
-                };
-                newInfo.append(file);
+          cb(null, true)
+        }
+      });
+      //new file is added to folder with index.fileExtension filename
+      upload.single('newFile', function(){
+        //REWRITE INFO.JSON
+        var newInfo = [];//new json
+        fs.readFile('./images/home/info.json', function(err, data){
+          if (err) throw err;
+          oldInfo = JSON.parse(data);
+          for (i=0; i<=oldInfo.length; i++){
+            if (i<index){//filename will be the same
+              var file = oldInfo[i];
+              newInfo.append(file);
+            }
+            else if (i==index) {
+              var newFilename = index + path.extname(file.originalname);
+              var newColor = req.body.color;
+              var newTitle = req.body.title;
+              var newSubtitle = req.body.subtitle;
+              var newFile ={
+                file: newFilename,
+                color: newColor,
+                title: newTitle,
+                subtitle: newSubtitle
               };
+              newInfo.append(newFile);
+            }
+            else{
+              var updatedFilename = i + oldInfo[i].file.slice(0);
+              var file ={
+                file: updatedFilename,
+                color: oldInfo[i].color,
+                title: oldInfo[i].title,
+                subtitle: oldInfo[i].subtitle
+              };
+              newInfo.append(file);
             };
-            var newInfoJSON = JSON.stringify(newInfo);
-            fs.writeFile("./images/home/info.json", newInfoJSON, function(err) {
-              if (err) throw err;
-              res.sendStatus(200);
-            });
+          };
+          var newInfoJSON = JSON.stringify(newInfo);
+          fs.writeFile("./images/home/info.json", newInfoJSON, function(err) {
+            if (err) throw err;
+            res.sendStatus(200);
           });
         });
+      });
     });
-  }
-  else{
-    res.status(400).send('This file type is not supported, try ".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"'); //filetype not supported
-  }
   });
 });
 
