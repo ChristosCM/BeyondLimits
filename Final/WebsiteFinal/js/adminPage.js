@@ -136,27 +136,34 @@ $(window).on("load",function(){
   })
 })
 $(window).on("load",function() {
-
   $('#eventPost').submit(function(e) {
     e.preventDefault();
     var submit = true;
-    if (($("#eventTitle").val()==null) || ($("#description").val()==null)||($("#eventDate").val()==null)){
+    if (($("#eventTitle").val().length==0) || ($("#description").val()==null)||($("#eventDate").val()==null)){
       submit = false;
       alert("Please fill out all the fields");
+    }
+    if (($("#attendance").val().length==0)||($("#attendance").val()>("99999999999"))){
+      submit = false;
+    }
+    if (($("#volunteersTotal").val().length==0)||($("#volunteersTotal").val()>("99999999999"))){
+      submit = false;
+    }
+    if (($("#volunteersMale").val().length==0)||($("#volunteersMale").val()>("99999999999"))){
+      submit = false;
+    }
+    if (($("#volunteersFemale").val().length==0)||($("#volunteersFemale").val()>("99999999999"))){
+      submit = false;
+    }
+    if(document.getElementsByName("eventImage")[0].files[0].size){
+      var size = document.getElementsByName("eventImage")[0].files[0].size;
+      if (size > 999999){
+        alert("The file you have submitted is too big");
+        submit = false;
+      }
+    }
+    
 
-    }
-    if (($("#attendance").val()==null)||($("#attendance").val()>("99999999999"))){
-      submit = false;
-    }
-    if (($("#volunteersTotal").val()==null)||($("#volunteersTotal").val()>("99999999999"))){
-      submit = false;
-    }
-    if (($("#volunteersMale").val()==null)||($("#volunteersMale").val()>("99999999999"))){
-      submit = false;
-    }
-    if (($("#volunteersFemale").val()==null)||($("#volunteersFemale").val()>("99999999999"))){
-      submit = false;
-    }
     if (submit){
      $(this).ajaxSubmit({
 
