@@ -30,7 +30,7 @@ function loadEvents() {
 					if (index % 3 == 2 || index == data.length - 1) {
 						html += '</div>';
 						html += '<div class = "row">';
-						html += '	<div class = "cardit col-md-auto">';
+						html += '	<div class = "cardit col-md-auto" style="width:100%">';
 						html += currentCollapse;
 						html += '	</div>';
 						html += '</div>';
