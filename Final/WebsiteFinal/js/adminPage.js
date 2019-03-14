@@ -123,8 +123,8 @@ $(window).on("load",function(){
   $("#newCarousel").submit(function(e){
     e.preventDefault();
     submit = true;
-  if(document.getElementsByName("eventImage")[0].files[0].size){
-    var size = document.getElementsByName("eventImage")[0].files[0].size;
+  if(document.getElementsByName("carImage")[0].files[0].size){
+    var size = document.getElementsByName("carImage")[0].files[0].size;
     if (size > 999999){
       alert("The file you have submitted is too big");
       submit = false;
@@ -172,7 +172,7 @@ $(window).on("load",function() {
         submit = false;
       }
     }
-    
+
 
     if (submit){
      $(this).ajaxSubmit({
@@ -391,7 +391,7 @@ function testimonialsEdit(id){
 }
 function testEditPost(id){
         $("#testimonialForm").ajaxSubmit({url: '/testimonialsPost/'+id,
-          
+
           success: function(){
             if(!alert("The testimonial has been edited successfully")){window.location.reload();}
           },

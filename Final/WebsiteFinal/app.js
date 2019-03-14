@@ -1137,6 +1137,7 @@ app.post('/admin/addHomeCarousel', function(req,res){
     var upload = multer({ storage: storage });
 
     upload.single('newFile', function(){
+      console.log("Hi");
       var index = req.body.index;
       var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
       if (validFileExtensions.includes(path.extname(req.file))){
@@ -1186,13 +1187,14 @@ app.post('/admin/addHomeCarousel', function(req,res){
             var newInfoJSON = JSON.stringify(newInfo);
             fs.writeFile("/images/home/info.json", newInfoJSON, function(err) {
               if (err) throw err;
-              res.sendStatus(200);
+              return res.sendStatus(200);
             });
           });
         });
       };
     });
   });
+  return res.sendStatus(403);
 });
 //Delete(index) - delete content at index
 //NEEDS authorisation
