@@ -599,26 +599,18 @@ app.post('/testimonialsPost/:id', (req,res)=>{
   	var con = setupConnection("localhost", "root", "password", "blDB");
   	//Implement picture upload. I have a copy of this on my PP coursework.
   	testUpload(req,res, function(err){
-
+      var tID = req.params.id;
+    	var name = req.body.name;
+    	var content = req.body.content;
       if(req.file){
-        var picPath = req.file.path;
-      } else {
-        var picPath = "./images/blog/ppexample.png";
-      }
-  	var tID = req.params.id;
-  	var name = req.body.name;
-  	var content = req.body.content;
-  	var sql = format("DELETE FROM testimonials WHERE idtestimonials = %1;", tID);
+    			var pPath = req.file.path;
+    			var sql = format("UPDATE testimonials SET name = %1, content = %2, photo = %3 WHERE idtestimonials = "+ tID+ ";", name, content, pPath);
+    		} else {
+    			var sql = format("UPDATE testimonials SET name = %1, content = %2 WHERE idtestimonials = "+ tID+ ";", name, content);
+    		}
   	queryDB(con, sql, function(err,result){
   		if(err) throw err;
   		con.end();
-  		var con1 = setupConnection("localhost", "root", "password", "blDB");
-  		var sql = format("INSERT INTO testimonials (idtestimonials,name,content,photo) VALUES (%1,%2,%3,%4)", tID, name, content, picPath);
-  		queryDB(con1,sql,function(err1,result1){
-  			if(err1) throw err1;
-  			con1.end();
-  		});
-  		//Using this on the client side could create JS to iterate over all posts.
 
   		return res.status(200).sendFile(__dirname + '/admin')
   	});
