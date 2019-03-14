@@ -154,7 +154,7 @@ function query(){
                 type: "post",
                 data: {"qtable": table, "qtype": type, "conditions": [array,values]},
                 success(content){
-                    if(!alert("The items are now i the database")){window.location.reload();}
+                    if(!alert("The items are now in the database")){window.location.reload();}
                 },
                 error(error){
                     alert("There was an error: " + error);

@@ -122,6 +122,15 @@ $(window).on("load",function(){
 $(window).on("load",function(){
   $("#newCarousel").submit(function(e){
     e.preventDefault();
+    submit = true;
+  if(document.getElementsByName("eventImage")[0].files[0].size){
+    var size = document.getElementsByName("eventImage")[0].files[0].size;
+    if (size > 999999){
+      alert("The file you have submitted is too big");
+      submit = false;
+    }
+  }
+    if (submit == true){
     $(this).ajaxSubmit({
       error: function(xhr) {
         alert('There was an error: ' + xhr.status);
@@ -133,6 +142,7 @@ $(window).on("load",function(){
 
     })
     return false;
+  }
   })
 })
 $(window).on("load",function() {
@@ -292,15 +302,19 @@ function eventDelete(id){
 //   });
 // }
 function carDelete(index){
+  if (confirm('Are you sure you want to delete this item from carousel?')) {
+
   $.ajax({
-    url:'/admin/deleteHomeCarousel',
-    method: 'post',
-		datatype : 'json',
-    data:{index: index},
-    success: () => {
-      if(!alert("The Carousel Image has been deleted")){window.location.reload();}
-    }
-  });
+
+      url:'/admin/deleteHomeCarousel',
+      method: 'post',
+      datatype : 'json',
+      data:{index: index},
+      success: () => {
+        if(!alert("The Carousel Image has been deleted")){window.location.reload();}
+      }
+    });
+  }
 }
  function blogEdit(id){
   $.ajax({
@@ -377,12 +391,12 @@ function testimonialsEdit(id){
 }
 function testEditPost(id){
         $("#testimonialForm").ajaxSubmit({url: '/testimonialsPost/'+id,
-          error: function(err){
-            alert("There was an Error"+ err);
-          },
+          
           success: function(){
             if(!alert("The testimonial has been edited successfully")){window.location.reload();}
-
+          },
+          error: function(err){
+            alert("There was an Error"+ err);
           }
         })
         return false;
@@ -413,7 +427,7 @@ function blogPost(){
     data: {"title": title, "content": content},
     datatype: 'json',
     sucess(){
-          //right now the page gets resent so no use for these functions yet
+      if(!alert('the Blog Post has been added')){window.location.reload();}
     },
     error(err){
         console.log(error);
@@ -423,7 +437,7 @@ function blogPost(){
 }
 
   function blogDelete(blogID){
-    if (confirm('Are you sure you want to save this thing into the database?')) {
+    if (confirm('Are you sure you want to delete this post from the database?')) {
       $.ajax({
         url:'/blogDelete/'+blogID,
         type: 'POST',
