@@ -1127,25 +1127,28 @@ app.get('/home/carousel', (req,res)=>{
 //parameter index and the file to be uploaded.
 app.post('/admin/addHomeCarousel', function(req,res){
   auth(req,res,function(){
-    var index = req.body.index;
-    var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
-    if (validFileExtensions.includes(path.extname(req.file))){
-      // Firstly rename all files of index i and above to maintain order
-      fs.readdirSync('./images/home', function(err,files){
-        for (i = files.length-1; i <= index; i--){
-          var curFile = files[i];
-          fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
-        };
-        //set file upload name and path
-        var storage = multer.diskStorage({
-          destination: './images/home/',
-          filename: function (req, file, cb) {
-            cb(null, index + path.extname(file.originalname));
-          }
-        });
-        var upload = multer({ storage: storage });
-        //new file is added to folder with index.fileExtension filename
-        upload.single('newFile', function(){
+    var storage = multer.diskStorage({
+      destination: './images/home/',
+      filename: function (req, file, cb) {
+        cb(null, file.originalname);
+        // cb(null, index + path.extname(file.originalname));
+      }
+    });
+    var upload = multer({ storage: storage });
+
+    upload.single('newFile', function(){
+      var index = req.body.index;
+      var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
+      if (validFileExtensions.includes(path.extname(req.file))){
+        // Firstly rename all files of index i and above to maintain order
+        fs.readdir('./images/home', function(err,files){
+          for (i = files.length-1; i <= index; i--){
+            var curFile = files[i];
+            fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
+          };
+
+          fs.renameSync("./images/home/" + file.originalname,"./images/home/" + index + path.extname(file.originalname));
+
           //REWRITE INFO.JSON
           var newInfo = [];//new json
           fs.readFile('./images/home/info.json', function(err, data){
@@ -1187,14 +1190,10 @@ app.post('/admin/addHomeCarousel', function(req,res){
             });
           });
         });
+      };
     });
-  }
-  else{
-    res.status(400).send('This file type is not supported, try ".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"'); //filetype not supported
-  }
   });
 });
-
 //Delete(index) - delete content at index
 //NEEDS authorisation
 app.post('/admin/deleteHomeCarousel', function(req,res){
