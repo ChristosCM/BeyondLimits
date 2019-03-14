@@ -626,10 +626,13 @@ app.post('/testimonialsPost', (req,res) =>{
   	var con = setupConnection("localhost", "root", "password", "blDB");
   	//Implement picture upload. I have a copy of this on my PP coursework.
   	testUpload(req,res, function(err){
-  		console.log(req.file);
-  		var picPath = req.file.path;
   	var name = req.body.name;
   	var content = req.body.content;
+    if(req.file){
+      var picPath = req.file.path;
+    } else {
+      var picPath = "./images/blog/ppexample.png";
+    }
   	var sql = format("INSERT INTO testimonials (name,content,photo) VALUES (%1,%2,%3)", name, content, picPath);
   	queryDB(con, sql, function(err, result){
   		if(err) throw err;
@@ -814,7 +817,7 @@ app.post('/createEvent', (req,res)=>{
   auth(req,res,function(){
   	var con = setupConnection("localhost", "root", "password", "blDB");
   	eventUpload(req,res, function(err){
-  		var pPath = req.file.path;
+
   	var eventName = req.body.name;
   	var attendance = req.body.attendance;
   	var volunteerTotal = req.body.vTotal;
@@ -822,10 +825,16 @@ app.post('/createEvent', (req,res)=>{
   	var volunteerFemale = req.body.vFemale;
   	var date = req.body.date;
   	//added this if in case there is no upload
-  	console.log(req.body);
   	var description = req.body.description;
-  	var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (null,%1,%2,%3,%4,%5,%6,%7,%8)",eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale,pPath, description,date);
-  	console.log(sql);
+    if(req.file){
+      var pPath = req.file.path;
+      var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (null,%1,%2,%3,%4,%5,%6,%7,%8)",eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale,pPath, description,date);
+    } else {
+      var pPath = "./images/events/divineevent.png";
+      var sql = format("INSERT INTO events (idEvents,eventName,attendance,volunteerTotal,volunteerMale,volunteerFemale,pPath,description,date) VALUES (null,%1,%2,%3,%4,%5,%6,%7,%8)",eventName, attendance, volunteerTotal, volunteerMale, volunteerFemale,pPath, description,date);
+    }
+
+
   	//add this: pPath.name, in sql before description
   	queryDB(con, sql, function(err,result){
   		if(err) throw err;
@@ -841,7 +850,6 @@ app.post('/deleteEvent/:id', (req, res)=>{
   auth(req,res,function(){
   	var con = setupConnection("localhost", "root", "password", "blDB");
   	var eID = req.params.id;
-  	console.log(eID);
   	//Delete the event by ID
   	var sql = format("SELECT * FROM events WHERE idEvents = %1", parseInt(eID));
   	queryDB(con, sql, function(err,result){
