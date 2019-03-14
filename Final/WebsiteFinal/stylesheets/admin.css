@@ -106,11 +106,7 @@ dt {
     color:white;
 }
 
-.collapse.show div{
-    width:100%;
-	height: 250px;
-	padding: 15px;
-}
+
 #blueblock{
     color:white;
     background-color:#87CEEB;
