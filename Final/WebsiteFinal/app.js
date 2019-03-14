@@ -99,7 +99,7 @@ function getAllData(con, callback){
 	})
 }
 //Session setup
-var idleTimeoutSeconds = 1800; //30 min inactivity timeout
+var idleTimeoutSeconds = 3600; //60 min inactivity timeout
 app.use(session({
   secret: 'secretcodeofsomesort',
   resave: true,
