@@ -524,7 +524,7 @@ app.post('/blogPost/:id', (req,res)=>{
   		});
   		//Using this on the client side could create JS to iterate over all posts.
 
-  		return res.status(200).sendFile(__dirname + '/admin');
+  		return res.status(200).sendFile(__dirname + '/adminPage.html');
   	});
   });
 });
@@ -552,7 +552,7 @@ app.post('/blogPost', (req,res) =>{
   		if(err) throw err;
   		con.end();
   	});
-  	return res.status(200).sendFile(__dirname + '/admin');
+  	return res.status(200).sendFile(__dirname + '/adminPage.html');
   });
 });
 //This would be triggered by clicking on the post in a list on the admin page. Scrollable region???
@@ -565,7 +565,7 @@ app.post('/blogDelete/:postID', (req,res)=>{
   		if(err) throw err;
   		con.end();
   	});
-  	return res.status(200).sendFile(__dirname + '/admin');
+  	return res.status(200).sendFile(__dirname + '/adminPage.html');
   });
 });
 
@@ -612,7 +612,7 @@ app.post('/testimonialsPost/:id', (req,res)=>{
   		if(err) throw err;
   		con.end();
 
-  		return res.status(200).sendFile(__dirname + '/admin')
+  		return res.status(200).sendFile(__dirname + '/adminPage.html')
   	});
   });
 });
@@ -634,7 +634,7 @@ app.post('/testimonialsPost', (req,res) =>{
   		if(err) throw err;
   		con.end();
   	});
-  	return res.status(200).sendFile(__dirname + '/admin');
+  	return res.status(200).sendFile(__dirname + '/adminPage.html');
   });
 });
 });
@@ -648,7 +648,7 @@ app.post('/testimonialsDelete/:id', (req,res)=>{
   		if(err) throw err;
   		con.end();
   	});
-  	return res.status(200).sendFile(__dirname + '/admin');
+  	return res.status(200).sendFile(__dirname + '/adminPage.html');
   });
 });
 

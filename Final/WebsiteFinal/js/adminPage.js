@@ -292,15 +292,19 @@ function eventDelete(id){
 //   });
 // }
 function carDelete(index){
+  if (confirm('Are you sure you want to delete this item from carousel?')) {
+
   $.ajax({
-    url:'/admin/deleteHomeCarousel',
-    method: 'post',
-		datatype : 'json',
-    data:{index: index},
-    success: () => {
-      if(!alert("The Carousel Image has been deleted")){window.location.reload();}
-    }
-  });
+
+      url:'/admin/deleteHomeCarousel',
+      method: 'post',
+      datatype : 'json',
+      data:{index: index},
+      success: () => {
+        if(!alert("The Carousel Image has been deleted")){window.location.reload();}
+      }
+    });
+  }
 }
  function blogEdit(id){
   $.ajax({
@@ -377,12 +381,12 @@ function testimonialsEdit(id){
 }
 function testEditPost(id){
         $("#testimonialForm").ajaxSubmit({url: '/testimonialsPost/'+id,
-          error: function(err){
-            alert("There was an Error"+ err);
-          },
+          
           success: function(){
             if(!alert("The testimonial has been edited successfully")){window.location.reload();}
-
+          },
+          error: function(err){
+            alert("There was an Error"+ err);
           }
         })
         return false;
