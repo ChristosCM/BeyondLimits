@@ -1125,26 +1125,26 @@ app.get('/home/carousel', (req,res)=>{
 
 //Add content to carousel, multipart form comes in with
 //parameter index and the file to be uploaded.
-//NEEDS authorisation
+var storage = multer.diskStorage({
+  destination: function(req, file, callback){
+                  callback(null, "./images/home");
+                },
+  filename: function(req, file, callback){
+                  callback(null, index + path.extname(file.originalname));
+                }
+});
+var upload = multer({
+  storage: storage,
+  // fileFilter: function (req, file, cb) {
+  //   if (!validFileExtensions.includes(path.extname(file.originalname))){
+  //     return cb(new Error('Only ".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4" files are allowed'))
+  //   }
+  //   cb(null, true)
+  // }
+});
 app.post('/admin/addHomeCarousel', function(req,res){
   //set file upload name and path
-  var storage = multer.diskStorage({
-    destination: function(req, file, callback){
-                    callback(null, "./images/home");
-                  },
-    filename: function(req, file, callback){
-                    callback(null, index + path.extname(file.originalname));
-                  }
-  });
-  var upload = multer({
-    storage: storage,
-    // fileFilter: function (req, file, cb) {
-    //   if (!validFileExtensions.includes(path.extname(file.originalname))){
-    //     return cb(new Error('Only ".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4" files are allowed'))
-    //   }
-    //   cb(null, true)
-    // }
-  });
+
   auth(req,res,function(){
     var index = req.body.index;
     var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
@@ -1155,7 +1155,7 @@ app.post('/admin/addHomeCarousel', function(req,res){
         fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
       };
       //new file is added to folder with index.fileExtension filename
-      upload.single('newFile', function(){
+      upload.single('carImage', function(){
         //REWRITE INFO.JSON
         var newInfo = [];//new json
         fs.readFile('./images/home/info.json', function(err, data){
