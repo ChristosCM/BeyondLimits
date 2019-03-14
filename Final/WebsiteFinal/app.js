@@ -600,7 +600,11 @@ app.post('/testimonialsPost/:id', (req,res)=>{
   	//Implement picture upload. I have a copy of this on my PP coursework.
   	testUpload(req,res, function(err){
 
-  	var picPath = req.file.path;
+      if(req.file){
+        var picPath = req.file.path;
+      } else {
+        var picPath = "./images/blog/ppexample.png";
+      }
   	var tID = req.params.id;
   	var name = req.body.name;
   	var content = req.body.content;

@@ -352,7 +352,7 @@ function freqPlot(x,y,callback){
 				var ylabel = "#Volunteers"
 				var xlabel = "Months"
 				for (var object in res){
-					labels.push(monthNames[parseInt(res[object]['date'].split('/')[1])-1]);
+					labels.push(monthNames[parseInt(res[object]['date'].split('-')[1])-1]);
 					data.push(res[object]['volunteerTotal']);
 				}
 				var labelsEncountered = [];
