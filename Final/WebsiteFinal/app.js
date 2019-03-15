@@ -1134,15 +1134,15 @@ var storageC = multer.diskStorage({
 });
 var uploadC = multer({ storage: storageC });
 
-app.post('/admin/addHomeCarousel', uploadC.single('image'), function(req,res){
+app.post('/admin/addHomeCarousel', uploadC.single("carImage"), function(req,res){
   auth(req,res,function(err){
     if(err) {
       console.log(err);
       return res.end("Error uploading file.");
     } else {
-      console.log(req.body);
       var index = req.body.index;
       var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
+      console.log(req.file.path);
       if (validFileExtensions.includes(path.extname(req.file.path))){
         // Firstly rename all files of index i and above to maintain order
         fs.readdir('./images/home', function(err,files){
