@@ -1125,22 +1125,25 @@ app.get('/home/carousel', (req,res)=>{
 
 //Add content to carousel, multipart form comes in with
 //parameter index and the file to be uploaded.
-app.post('/admin/addHomeCarousel', function(req,res){
-  auth(req,res,function(){
-    var storage = multer.diskStorage({
-      destination: './images/home/',
-      filename: function (req, file, cb) {
-        cb(null, file.originalname);
-        // cb(null, index + path.extname(file.originalname));
-      }
-    });
-    var upload = multer({ storage: storage });
+var storageC = multer.diskStorage({
+  destination: './images/home/',
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+    // cb(null, index + path.extname(file.originalname));
+  }
+});
+var uploadC = multer({ storage: storageC });
 
-    upload.single('newFile', function(){
-      console.log("Hi");
+app.post('/admin/addHomeCarousel', uploadC.single('image'), function(req,res){
+  auth(req,res,function(err){
+    if(err) {
+      console.log(err);
+      return res.end("Error uploading file.");
+    } else {
+      console.log(req.body);
       var index = req.body.index;
       var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
-      if (validFileExtensions.includes(path.extname(req.file))){
+      if (validFileExtensions.includes(path.extname(req.file.path))){
         // Firstly rename all files of index i and above to maintain order
         fs.readdir('./images/home', function(err,files){
           for (i = files.length-1; i <= index; i--){
@@ -1191,11 +1194,14 @@ app.post('/admin/addHomeCarousel', function(req,res){
             });
           });
         });
+        res.end("File has been uploaded");
       };
-    });
+      res.end("Wrong filetype");
+    };
   });
   return res.sendStatus(403);
 });
+
 //Delete(index) - delete content at index
 //NEEDS authorisation
 app.post('/admin/deleteHomeCarousel', function(req,res){
