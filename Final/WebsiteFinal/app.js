@@ -1193,9 +1193,9 @@ app.post('/admin/addHomeCarousel', uploadC.single("carImage"), function(req,res)
             });
           });
         });
-        res.end("File has been uploaded");
+        res.sendStatus(200);
       };
-      res.end("Wrong filetype");
+      res.sendStatus(400);
     };
   });
   // res.sendStatus(403);
@@ -1207,7 +1207,6 @@ app.post('/admin/deleteHomeCarousel', function(req,res){
   auth(req,res,function(){
   	var index = parseInt(req.body.index);
     fs.readdir('./images/home', function(err, files){
-      console.log(files);
       //files contains NumberOfPics + info.json
       if (index>files.length-2 || index<0){
         res.status(400).send("No file at index: " + index);
@@ -1217,7 +1216,6 @@ app.post('/admin/deleteHomeCarousel', function(req,res){
         fs.unlink('./images/home/' + files[index], function(){
           console.log("file deletion block");
           //Rename all files of index i and above to maintain order.
-          console.log(index);
           for (var i = index; i < files.length-2; i++){
             console.log("renaming block");
             var curFile = files[i+1];
@@ -1237,6 +1235,7 @@ app.post('/admin/deleteHomeCarousel', function(req,res){
           fs.writeFile('./images/home/info.json', JSON.stringify(info), function (err) {
             if (err) throw err;
             console.log('Replaced info.json');
+            res.sendStatus(200);
           });
         });
       }
