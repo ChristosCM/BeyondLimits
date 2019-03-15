@@ -1142,7 +1142,6 @@ app.post('/admin/addHomeCarousel', uploadC.single("carImage"), function(req,res)
     } else {
       var index = req.body.index;
       var validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".mp4"];
-      console.log(req.file.path);
       if (validFileExtensions.includes(path.extname(req.file.path))){
         // Firstly rename all files of index i and above to maintain order
         fs.readdir('./images/home', function(err,files){
@@ -1151,7 +1150,7 @@ app.post('/admin/addHomeCarousel', uploadC.single("carImage"), function(req,res)
             fs.renameSync(curFile,i+1 + '.' + path.extname(curFile));
           };
 
-          fs.renameSync("./images/home/" + file.originalname,"./images/home/" + index + path.extname(file.originalname));
+          fs.renameSync("./images/home/" + req.file.originalname,"./images/home/" + index + path.extname(req.file.originalname));
 
           //REWRITE INFO.JSON
           var newInfo = [];//new json
@@ -1161,10 +1160,10 @@ app.post('/admin/addHomeCarousel', uploadC.single("carImage"), function(req,res)
             for (i=0; i<=oldInfo.length; i++){
               if (i<index){//filename will be the same
                 var file = oldInfo[i];
-                newInfo.append(file);
+                newInfo.push(file);
               }
               else if (i==index) {
-                var newFilename = index + path.extname(file.originalname);
+                var newFilename = index + path.extname(req.file.originalname);
                 var newColor = req.body.color;
                 var newTitle = req.body.title;
                 var newSubtitle = req.body.subtitle;
@@ -1174,7 +1173,7 @@ app.post('/admin/addHomeCarousel', uploadC.single("carImage"), function(req,res)
                   title: newTitle,
                   subtitle: newSubtitle
                 };
-                newInfo.append(newFile);
+                newInfo.push(newFile);
               }
               else{
                 var updatedFilename = i + oldInfo[i].file.slice(0);
@@ -1184,11 +1183,11 @@ app.post('/admin/addHomeCarousel', uploadC.single("carImage"), function(req,res)
                   title: oldInfo[i].title,
                   subtitle: oldInfo[i].subtitle
                 };
-                newInfo.append(file);
+                newInfo.push(file);
               };
             };
             var newInfoJSON = JSON.stringify(newInfo);
-            fs.writeFile("/images/home/info.json", newInfoJSON, function(err) {
+            fs.writeFile("./images/home/info.json", newInfoJSON, function(err) {
               if (err) throw err;
               return res.sendStatus(200);
             });
@@ -1199,7 +1198,7 @@ app.post('/admin/addHomeCarousel', uploadC.single("carImage"), function(req,res)
       res.end("Wrong filetype");
     };
   });
-  return res.sendStatus(403);
+  // res.sendStatus(403);
 });
 
 //Delete(index) - delete content at index
