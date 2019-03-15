@@ -1189,7 +1189,7 @@ app.post('/admin/addHomeCarousel', uploadC.single("carImage"), function(req,res)
             var newInfoJSON = JSON.stringify(newInfo);
             fs.writeFile("./images/home/info.json", newInfoJSON, function(err) {
               if (err) throw err;
-              return res.sendStatus(200);
+              // res.sendStatus(200);
             });
           });
         });
