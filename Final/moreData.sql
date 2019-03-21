@@ -1,5 +1,5 @@
-INSERT INTO bldb.events VALUES(null, "January Fundraiser", 100, 10, 5, 5, "/img/src", "A Fundraiser", "15/01/2019");
-INSERT INTO bldb.events VALUES(null, "Charity Event", 50, 3, 1, 2, "/img/src", "Another Event", "01/02/2019");
+INSERT INTO bldb.events VALUES(null, "January Fundraiser", 100, 10, 5, 5, "/images/events/divineevent.png", "A Fundraiser", "15/01/2019");
+INSERT INTO bldb.events VALUES(null, "Charity Event", 50, 3, 1, 2, "/images/events/winterbanner.jpg", "Another Event", "01/02/2019");
 INSERT INTO bldb.volunteer VALUES(null, "Jack", "Smith", "M", 23, "Newcastle University");
 INSERT INTO bldb.volunteer VALUES(null, "Jacky", "Stevens", "F", 30, "Newcastle University");
 INSERT INTO bldb.volunteer VALUES(null, "John", "Daim", "M", 26, "N/A");
